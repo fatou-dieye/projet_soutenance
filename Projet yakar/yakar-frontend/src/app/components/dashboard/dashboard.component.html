@@ -1,0 +1,133 @@
+<!-- dashboard.component.html -->
+<div class="page-container">
+  <div class="dashboard-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-title">
+        <img src="assets/yakar-logo.png" alt="Yakar Logo" class="logo">
+        <h1>Bienvenue {{ userName }}</h1>
+      </div>
+      <div class="user-name">
+        <!-- <span>{{ userRole }}</span> -->
+      </div>
+    </div>
+
+    <!-- Current Stats -->
+    <div class="current-stats">
+      <!-- Temperature Card -->
+      <div class="temp-card" [ngClass]="getTemperatureClass()">
+        <h2>Température actuelle</h2>
+        <div class="value-container">
+          <span class="value" [ngClass]="getTemperatureClass()">
+            {{ formatValue(currentTemp, 'temp') }}
+          </span>
+          <span class="icon">🌡️</span>
+        </div>
+        <span class="status" [ngClass]="getTemperatureClass()">
+          {{ getTemperatureStatus() }}
+        </span>
+      </div>
+      <!-- Humidity Card with Background -->
+      <div class="humidity-card" [ngClass]="getHumidityClass()">
+        <div class="card-background"></div>
+        <div class="card-content">
+          <h2>Humidité actuelle</h2>
+          <div class="value-container">
+            <span class="value" [ngClass]="getHumidityClass()">
+              {{ formatValue(currentHumidity, 'humidity') }}
+            </span>
+            <span class="icon">💧</span>
+          </div>
+          <span class="status" [ngClass]="getHumidityClass()">
+            {{ getHumidityStatus() }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Records -->
+    <div class="daily-records">
+      <div class="records-header">
+        Relevés journaliers
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Heure</th>
+            <th>Température</th>
+            <th>Humidité</th>
+            <th>État</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of dailyData">
+            <td>{{ data.heure }}</td>
+            <td>
+              <div class="value-with-icon">
+                {{ data.temperature }}°C
+                <span class="temp-icon">🌡️</span>
+              </div>
+            </td>
+            <td>
+              <div class="value-with-icon">
+                {{ data.humidite }}%
+                <span class="humidity-icon">💧</span>
+              </div>
+            </td>
+            <td>
+              <span [class]="'status-badge ' + data.etat.toLowerCase()">
+                {{ data.etat }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-container">
+      <div class="chart-box">
+        <canvas id="tempHumidityChart"></canvas>
+      </div>
+      <div class="averages-box">
+        <h3>Variations de la Moyenne de la journée</h3>
+        <div class="average-item">
+          <div class="average-label">
+            <span>Température</span>
+            <span>45°C</span>
+          </div>
+          <div class="average-bar">
+            <div class="progress-bar temp" style="width: 45%"></div>
+          </div>
+        </div>
+        <div class="average-item">
+          <div class="average-label">
+            <span>Humidité</span>
+            <span>56%</span>
+          </div>
+          <div class="average-bar">
+            <div class="progress-bar humidity" style="width: 56%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <button class="disconnect-btn" (click)="logout()">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             width="24" 
+             height="24" 
+             viewBox="0 0 24 24" 
+             fill="none" 
+             stroke="currentColor" 
+             class="disconnect-icon">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Déconnexion
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="login-container">
+    <div class="logo-container">
+      <img src="/Yakar.png" alt="Logo" />
+    </div>
+  
+    <div class="container">
+      <h2>Connexion</h2>
+      
+      <!-- Formulaire de connexion -->
+      <form (ngSubmit)="loginMode === 'email' ? onLogin() : checkCode()">
+        <!-- Connexion par Email et Mot de Passe -->
+        <div *ngIf="loginMode === 'email'">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email"
+              [(ngModel)]="email" 
+              name="email" 
+              placeholder="Entrez votre email" 
+              required 
+              (input)="validateEmail()"
+              [disabled]="isLoading"
+              [class.error-input]="emailError"
+            />
+            <p *ngIf="emailError" class="error-message">{{ emailError }}</p>
+          </div>
+  
+          <div class="form-group">
+            <label for="password">Mot de Passe</label>
+            <input 
+              type="password" 
+              id="password"
+              [(ngModel)]="mot_passe" 
+              name="mot_passe" 
+              placeholder="Entrez votre mot de passe" 
+              required 
+              (input)="validatePassword()"
+              [disabled]="isLoading"
+              [class.error-input]="passwordError"
+            />
+            <p *ngIf="passwordError" class="error-message">{{ passwordError }}</p>
+          </div>
+        </div>
+  
+        <!-- Connexion par Code Secret -->
+        <div *ngIf="loginMode === 'code'">
+          <label class="code-label">Entrer votre code secret</label>
+          <div class="code-inputs">
+            <input 
+              type="text"
+              maxlength="1"
+              [(ngModel)]="code1"
+              name="code1"
+              pattern="\d"
+              (input)="moveToNext($event, 'code2')"
+              [disabled]="isLoading"
+              autocomplete="off"
+              inputmode="numeric"
+            />
+            <input 
+              type="text"
+              maxlength="1"
+              [(ngModel)]="code2"
+              name="code2"
+              pattern="\d"
+              (input)="moveToNext($event, 'code3')"
+              [disabled]="isLoading"
+              autocomplete="off"
+              inputmode="numeric"
+            />
+            <input 
+              type="text"
+              maxlength="1"
+              [(ngModel)]="code3"
+              name="code3"
+              pattern="\d"
+              (input)="moveToNext($event, 'code4')"
+              [disabled]="isLoading"
+              autocomplete="off"
+              inputmode="numeric"
+            />
+            <input 
+              type="text"
+              maxlength="1"
+              [(ngModel)]="code4"
+              name="code4"
+              pattern="\d"
+              (input)="moveToNext($event, '')"
+              [disabled]="isLoading"
+              autocomplete="off"
+              inputmode="numeric"
+            />
+          </div>
+          <p *ngIf="codeError" class="error-message">{{ codeError }}</p>
+        </div>
+  
+        <!-- Messages d'erreur généraux -->
+        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  
+        <!-- Indicateur de chargement -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Connexion en cours...</p>
+        </div>
+  
+        <!-- Bouton de connexion pour Email -->
+        <button 
+          *ngIf="loginMode === 'email'" 
+          type="submit" 
+          [disabled]="isLoading || passwordError || emailError"
+          [class.loading]="isLoading"
+        >
+          {{ isLoading ? 'Connexion en cours...' : 'Se Connecter' }}
+        </button>
+  
+        <!-- Navigation entre les modes -->
+        <div class="mode-toggle">
+          <p 
+            *ngIf="loginMode === 'code'" 
+            class="toggle-mode" 
+            (click)="!isLoading && toggleLoginMode('email')"
+            [class.disabled]="isLoading"
+          >
+            Connexion par Email
+          </p>
+          <p 
+            *ngIf="loginMode === 'email'" 
+            class="toggle-mode" 
+            (click)="!isLoading && toggleLoginMode('code')"
+            [class.disabled]="isLoading"
+          >
+            Connexion par Code Secret
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>

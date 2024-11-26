@@ -1,0 +1,187 @@
+<!--modal utilsateur html-->
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <img src="/yakar-logo.png" alt="Yakar Logo" class="modal-logo">
+      <button class="close-button" (click)="closeModal()">✕</button>
+    </div>
+    
+    <h2 class="modal-title">Ajouter un utilisateur</h2>
+    
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="user-form">
+      <!--nom-->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nom">Nom<span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="nom"
+            [(ngModel)]="newUser.nom" 
+            name="nom" 
+            required 
+            minlength="2" 
+            maxlength="50" 
+            pattern="^[a-zA-ZÀ-ÿ]+(?:\s+[a-zA-ZÀ-ÿ]+)*$" 
+            #nomInput="ngModel" 
+            placeholder="Entrer votre nom"
+            (input)="onNomInput($event)"
+            [class.is-invalid]="nomInput.invalid && (nomInput.dirty || nomInput.touched)"
+          >
+          <div *ngIf="nomInput.invalid && (nomInput.dirty || nomInput.touched)" class="error-validation">
+            <small *ngIf="nomInput.errors?.['required']">{{ nomErrors.required }}</small>
+            <small *ngIf="nomInput.errors?.['minlength']">{{ nomErrors.minlength }}</small>
+            <small *ngIf="nomInput.errors?.['maxlength']">{{ nomErrors.maxlength }}</small>
+            <small *ngIf="nomInput.errors?.['pattern']">{{ nomErrors.pattern }}</small>
+            <small *ngIf="nomInput.errors?.['invalid']">{{ nomErrors.invalid }}</small>
+          </div>
+        </div>
+        <!--prenom-->
+        <div class="form-group">
+          <label for="prenom">Prénom<span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="prenom"
+            [(ngModel)]="newUser.prenom" 
+            name="prenom" 
+            required 
+            minlength="2" 
+            maxlength="50" 
+            pattern="^[a-zA-ZÀ-ÿ]+(?:\s+[a-zA-ZÀ-ÿ]+)*$" 
+            #prenomInput="ngModel" 
+            placeholder="Entrer votre prénom"
+            (input)="onPrenomInput($event)"
+            [class.is-invalid]="prenomInput.invalid && (prenomInput.dirty || prenomInput.touched)"
+          >
+          <div *ngIf="prenomInput.invalid && (prenomInput.dirty || prenomInput.touched)" class="error-validation">
+            <small *ngIf="prenomInput.errors?.['required']">{{ prenomErrors.required }}</small>
+            <small *ngIf="prenomInput.errors?.['minlength']">{{ prenomErrors.minlength }}</small>
+            <small *ngIf="prenomInput.errors?.['maxlength']">{{ prenomErrors.maxlength }}</small>
+            <small *ngIf="prenomInput.errors?.['pattern']">{{ prenomErrors.pattern }}</small>
+            <small *ngIf="prenomInput.errors?.['invalid']">{{ prenomErrors.invalid }}</small>
+          </div>
+        </div>
+      </div>
+      <!--email-->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email<span class="required">*</span></label>
+            <input 
+              type="email" 
+              [(ngModel)]="newUser.email" 
+              name="email" 
+              required 
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              #emailInput="ngModel" 
+              placeholder="Entrer votre email"
+            >
+          <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="error-validation">
+            <small *ngIf="emailInput.errors?.['required']">L'email est obligatoire.</small>
+            <small *ngIf="emailInput.errors?.['pattern']">Format d'email invalide.</small>
+          </div>
+        </div>
+        <!--mots de passe-->
+        <div class="form-group">
+          <label for="mot_passe">Mot de passe<span class="required">*</span></label>
+          <div class="password-input">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="mot_passe"
+              [(ngModel)]="newUser.mot_passe" 
+              name="mot_passe" 
+              required 
+              minlength="8"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?:{}|<>])[A-Za-z\d!@#$%^&*(),.?:{}|<>]{8,}$"
+              #motPasseInput="ngModel" 
+              placeholder="Entrer votre mot de passe"
+              [class.is-invalid]="motPasseInput.invalid && (motPasseInput.dirty || motPasseInput.touched)"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+            >
+            <img  src="/oeil.png" alt="Eye Icon" style="width: 24px; height: 24px;  opacity: 0.3;">
+            </button>
+          </div>
+          <div *ngIf="motPasseInput.invalid && (motPasseInput.dirty || motPasseInput.touched)" class="error-validation">
+            <small *ngIf="motPasseInput.errors?.['required']">Le mot de passe est obligatoire.</small>
+            <small *ngIf="motPasseInput.errors?.['minlength']">Le mot de passe doit avoir au moins 8 caractères.</small>
+            <small *ngIf="motPasseInput.errors?.['pattern']">Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.</small>
+          </div>
+        </div>
+      </div>
+<!--role-->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="role">Rôle<span class="required">*</span></label>
+          <select 
+            id="role"
+            [(ngModel)]="newUser.role" 
+            name="role" 
+            required 
+            #roleInput="ngModel"
+            [class.is-invalid]="roleInput.invalid && (roleInput.dirty || roleInput.touched)"
+          >
+            <option value="">Sélectionnez un rôle</option>
+            <option value="utilisateur">Utilisateur</option>
+            <option value="administrateur">Administrateur</option>
+          </select>
+          <div *ngIf="roleInput.invalid && (roleInput.dirty || roleInput.touched)" class="error-validation">
+            <small *ngIf="roleInput.errors?.['required']">Le rôle est obligatoire.</small>
+          </div>
+        </div>
+<!--code secret-->
+        <div class="form-group">
+          <label for="code_secret">Code secret<span class="required">*</span></label>
+          <div class="code-secret-input">
+            <input 
+              type="text"
+              id="code_secret" 
+              [(ngModel)]="newUser.code_secret" 
+              name="code_secret" 
+              required 
+              minlength="4" 
+              maxlength="4" 
+              pattern="^[0-9]{4}$" 
+              #codeSecretInput="ngModel" 
+              placeholder="Entrer un code secret"
+              [class.is-invalid]="codeSecretInput.invalid && (codeSecretInput.dirty || codeSecretInput.touched)"
+              autocomplete="off"
+            >
+            <button 
+              type="button" 
+              class="generate-code-btn" 
+              (click)="generateSecretCode()"
+              [disabled]="isGeneratingCode"
+              [attr.aria-label]="isGeneratingCode ? 'Génération en cours...' : 'Générer un code secret'"
+            >
+              {{ isGeneratingCode ? '...' : 'Générer' }}
+            </button>
+          </div>
+          <div *ngIf="isCheckingCode" class="info-message">
+            <small>Vérification du code...</small>
+          </div>
+          <div *ngIf="codeSecretInput.invalid && (codeSecretInput.dirty || codeSecretInput.touched)" class="error-validation">
+            <small *ngIf="codeSecretInput.errors?.['required']">Le code secret est obligatoire.</small>
+            <small *ngIf="codeSecretInput.errors?.['minlength'] || codeSecretInput.errors?.['maxlength']">Le code secret doit comporter exactement 4 chiffres.</small>
+            <small *ngIf="codeSecretInput.errors?.['pattern']">Le code secret doit contenir uniquement des chiffres.</small>
+          </div>
+        </div>
+      </div>
+<!--bouton ajouter-->
+      <button 
+        type="submit" 
+        class="submit-button" 
+        [disabled]="userForm.invalid || isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        <span>{{ isSubmitting ? 'Ajout en cours...' : 'Ajouter' }}</span>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-message" role="alert">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+</div>

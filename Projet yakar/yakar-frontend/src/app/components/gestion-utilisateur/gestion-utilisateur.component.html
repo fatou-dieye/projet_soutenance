@@ -1,0 +1,134 @@
+<!--gestion utilisateur html-->
+<div class="gestion-utilisateur">
+  <!-- En-tête avec titre et bouton d'ajout -->
+  <div class="header">
+    <h1>Liste des utilisateurs</h1>
+    <button class="add-button" (click)="openAddModal()">
+      <span>+</span>Ajouter un utilisateur
+    </button>
+  </div>
+
+  <!-- Message de succès -->
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
+  <!-- Status de role et recherche -->
+  <div class="stats-search">
+    <div class="stats">
+      <p>Nombre Administrateurs: {{ adminCount }}</p>
+      <p>Nombre Utilisateur: {{ userCount }}</p>
+    </div>
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchText" 
+        (input)="onSearch($event)" 
+        placeholder="Rechercher..." 
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+
+  <!-- Tableau des utilisateurs -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Nom et Prénom</th>
+          <th>Email</th>
+          <th>Matricule</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUtilisateurs">
+          <td>{{ user.nom }} {{ user.prenom }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.matricule }}</td>
+          <td>
+            <span [class]="user.role === 'administrateur' ? 'badge admin' : 'badge user'">
+              {{ user.role }}
+            </span>
+          </td>
+          <td class="actions">
+            <button 
+              class="action-btn role-toggle" 
+              *ngIf="user._id" 
+              (click)="toggleRole(user)" 
+              [title]="'Changer le rôle en ' + (user.role === 'administrateur' ? 'utilisateur' : 'administrateur')"
+            >
+              <img src="/double-fleche.png" alt="Icône double flèche" />
+            </button>
+            <button class="action-btn edit" *ngIf="user._id" (click)="editUser(user._id)">
+              🖍
+            </button>
+            <button class="action-btn delete" *ngIf="user._id" (click)="deleteUser(user._id)">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Pagination -->
+  <div class="pagination">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      ← Préc
+    </button>
+    
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <button 
+        [class.active]="currentPage === i + 1" 
+        (click)="changePage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      Suiv →
+    </button>
+  </div>
+</div>
+
+<!-- Modals -->
+<!-- Modal de confirmation changement de rôle -->
+<div class="modal-background" *ngIf="showConfirmationModal">
+  <div class="modal-container">
+    <h2>Confirmer le changement de rôle</h2>
+    <p>Êtes-vous sûr de vouloir changer le rôle de {{ userToChangeRole?.nom }} {{ userToChangeRole?.prenom }} ?</p>
+    <div class="modal-actions">
+      <button class="btn btn-blue" (click)="confirmRoleChange()">Modifier le rôle</button>
+      <button class="btn btn-red" (click)="closeConfirmationModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmation suppression -->
+<div class="modal-background" *ngIf="showDeleteConfirmModal">
+  <div class="modal-container">
+    <h2>Confirmer la suppression</h2>
+    <p>Êtes-vous sûr de vouloir supprimer {{ userToChangeRole?.nom }} {{ userToChangeRole?.prenom }} ?</p>
+    <div class="modal-actions">
+      <button class="btn btn-red" (click)="confirmDeleteUser()">Supprimer</button>
+      <button class="btn btn-blue" (click)="closeDeleteConfirmModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ajout utilisateur-->
+<app-modal-utilisateur 
+  *ngIf="showAddModal" 
+  (close)="closeAddModal()" 
+  (success)="handleSuccess($event)">
+</app-modal-utilisateur>
+
+<!-- Modal modifier utilisateur-->
+<app-modal-modification 
+  *ngIf="showEditModal" 
+  [userId]="selectedUserId!"
+  (close)="closeEditModal()">
+</app-modal-modification>

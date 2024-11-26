@@ -1,0 +1,572 @@
+// Variables
+$primary-blue: #3D78FB;
+$primary-green: #34A853;
+$text-dark: #000000;
+$text-gray: #050505;
+$danger: #EA4335;
+$status-normal-bg: #E8F5E9;
+$status-normal-color: #4CAF50;
+$status-high-bg: #FFF3E0;
+$status-high-color: #FF9800;
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+// Base Layout
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  background: #FFFFFF;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Sidebar
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  // position: fixed;
+  padding: 20px 0;
+}
+
+.logo {
+  padding: 0 20px;
+  // margin-bottom: 10px;
+  width: 30%;
+  position: relative;
+  left: 30px;
+
+  img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+.nav-menu {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #4B5563;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  margin: 0 6px;
+
+  &:hover {
+    background-color: #F3F4F6;
+    transform: translateX(2px);
+  }
+
+  &.active {
+    background-color: #2563EB;
+    color: white;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+
+    .nav-icon {
+      filter: brightness(0) invert(1);
+    }
+  }
+}
+
+.nav-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.logout {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 330px;
+  
+
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: none;
+    color: #FF4343;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+
+      .nav-icon {
+        transform: translateX(2px);
+      }
+    }
+  }
+}
+
+// Main Content
+.main-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: #F3F4F6;
+}
+
+// Metrics Grid
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+// Temperature Card
+.temp-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow;
+
+  &.high {
+    background: linear-gradient(to right, rgba(255, 68, 68, 0.1), rgba(255, 68, 68, 0.2));
+    border: 1px solid rgba(255, 68, 68, 0.2);
+  }
+
+  h2 {
+    font-size: 16px;
+    color: $text-gray;
+    margin: 0 0 1rem 0;
+  }
+
+  .value-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .value {
+      font-size: 24px;
+      font-weight: 500;
+      color: $primary-blue;
+
+      &.high {
+        color: #FF4444;
+      }
+    }
+  }
+
+  .status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+
+    &.normal {
+      background-color: $status-normal-bg;
+      color: $status-normal-color;
+    }
+
+    &.high {
+      background-color: #FFEBEE;
+      color: #D32F2F;
+    }
+  }
+}
+
+// Humidity Card
+.humidity-card {
+  position: relative;
+  overflow: hidden;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow;
+
+  .card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  &.high .card-background {
+    background-image: url('../../../assets/humidityhumide.png');
+  }
+
+  &.low .card-background {
+    background-image: url('../../../assets/humidityseche.png');
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  h2 {
+    font-size: 16px;
+    color: $text-gray;
+    margin: 0 0 1rem 0;
+  }
+
+  .value-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .value {
+      font-size: 24px;
+      font-weight: 500;
+      color: $primary-green;
+    }
+  }
+
+  .status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+
+    &.high {
+      background-color: $status-high-bg;
+      color: $status-high-color;
+    }
+
+    &.low {
+      background-color: $status-normal-bg;
+      color: $status-normal-color;
+    }
+  }
+}
+
+// Fan Control
+.fan-control {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow;
+
+  h2 {
+    font-size: 16px;
+    color: $text-gray;
+    margin: 0 0 1rem 0;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.btn-on {
+        background: $primary-green;
+        color: white;
+
+        &:not(.active) {
+          background: $status-normal-bg;
+          color: $primary-green;
+        }
+      }
+
+      &.btn-off {
+        background: $danger;
+        color: white;
+
+        &:not(.active) {
+          background: #fce8e6;
+          color: $danger;
+        }
+      }
+    }
+  }
+}
+
+// Daily Records
+.daily-records {
+  background: $primary-blue;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: $shadow;
+
+  .records-header {
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+
+    th, td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .value-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .temp-icon,
+      .humidity-icon {
+        font-size: 16px;
+      }
+    }
+
+    .status-pill {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+
+      &.normal {
+        background-color: $status-normal-bg;
+        color: $status-normal-color;
+      }
+
+      &.high {
+        background-color: $status-high-bg;
+        color: $status-high-color;
+      }
+    }
+  }
+}
+
+// Charts Section
+.charts-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow;
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      font-size: 16px;
+      color: $text-gray;
+      margin: 0;
+    }
+
+    .period-buttons {
+      display: flex;
+      gap: 0.5rem;
+
+      .period {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+
+        &.active {
+          background: #e8f0fe;
+          color: $primary-blue;
+          border-color: $primary-blue;
+        }
+      }
+    }
+  }
+}
+
+.variations {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow;
+
+  h3 {
+    font-size: 16px;
+    color: $text-gray;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .progress-container {
+    .progress-item {
+      margin-bottom: 1rem;
+
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        color: $text-gray;
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #e8f0fe;
+        border-radius: 4px;
+        overflow: hidden;
+
+        .progress {
+          height: 100%;
+          background: $primary-blue;
+          border-radius: 4px;
+          transition: width 0.3s ease;
+        }
+
+        &.humidity .progress {
+          background: $primary-green;
+        }
+      }
+    }
+  }
+}
+
+// Alert Messages
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+
+  &.alert-success {
+    background-color: $status-normal-bg;
+    color: $status-normal-color;
+  }
+
+  &.alert-error {
+    background-color: #FFEBEE;
+    color: $danger;
+  }
+}
+
+
+// Add these new styles at the beginning after variables
+.dashboard-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #E5E7EB;
+  padding: 0.5rem 2rem;
+  margin: -2rem -2rem 2rem -2rem;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #111827;
+    margin: 0;
+  }
+
+  .admin-profile {
+    position: relative;
+
+    .profile-button {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+      .admin-name {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      
+        small {
+          font-size: 0.8em;
+          color: #666;
+        }
+      }
+
+      .settings-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        color: #6B7280;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: #374151;
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .profile-menu {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      min-width: 200px;
+      z-index: 50;
+      overflow: hidden;
+
+      button.profile-action {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: none;
+        background: none;
+        color: #3D78FB;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        svg {
+          color: #3D78FB;
+        }
+
+        &:hover {
+          background-color: #F3F4F6;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<!-- src/app/components/protected/protected.component.html -->
+<div class="protected-container">
+    <div class="protected-card">
+      <div class="logo-section">
+        <img src="assets/Yakar.png" alt="Yakar Logo" class="logo">
+      </div>
+  
+      <div class="content-section">
+        <div class="header">
+          <h1>Tableau de bord</h1>
+          <button class="logout-btn" (click)="logout()">Déconnexion</button>
+        </div>
+  
+        <div class="user-info" *ngIf="userData">
+          <h2>Informations utilisateur</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Nom</label>
+              <p>{{ userData.nom }}</p>
+            </div>
+            <!-- Autres informations utilisateur -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

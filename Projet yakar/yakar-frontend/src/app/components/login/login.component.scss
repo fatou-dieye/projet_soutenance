@@ -1,0 +1,226 @@
+/* Styles de base pour le conteneur de connexion */
+
+
+/* Styles pour le conteneur du logo */
+
+.logo-container {
+  width: 33.33%;
+  /* Réduit la largeur du conteneur à un tiers */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.logo-container img {
+  width: 1000px;
+  /* Réduit encore légèrement la taille de l'image */
+  height: 550px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.login-container {
+  display: flex;
+  width: 1000px;
+  height: 600px;
+  margin: 150px auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+
+/* Styles de base pour le conteneur */
+
+.container {
+  width: 500px;
+  height: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  font-family: 'Arial', sans-serif;
+}
+
+
+/* Styles pour le titre */
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 45px;
+}
+
+
+/* Styles pour les labels */
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+
+/* Styles pour les champs de saisie */
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 35px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+
+/* Effet au focus sur les champs de saisie */
+
+input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+
+/* Styles pour le message d'erreur */
+
+.error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+
+/* Styles pour le bouton de soumission */
+
+button {
+  width: 95%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007BFF;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+/* Effet au hover sur le bouton */
+
+button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Styles pour les textes cliquables */
+
+.toggle-mode {
+  color: #007BFF;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 50px;
+  transition: color 0.3s;
+}
+
+
+/* Effet au hover sur les textes cliquables */
+
+.toggle-mode:hover {
+  color: #0056b3;
+}
+
+.code-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 100px;
+  /* Augmenter l'espacement en bas des blocs */
+}
+
+.code-inputs input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  margin: 0 1px;
+  /* Petite marge entre les blocs */
+  border: 1px solid #ccc;
+  /* Bordure légère pour le style */
+  border-radius: 4px;
+  /* Coins arrondis */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  /* Ombre */
+  transition: box-shadow 0.3s;
+  /* Transition douce pour l'effet */
+}
+
+.code-inputs input:focus {
+  box-shadow: 0 0 8px rgba(0, 0, 255, 0.5);
+  /* Ombre plus marquée au focus */
+  outline: none;
+  /* Supprimer l'outline par défaut */
+}
+
+.code-label {
+  font-size: 1.5em;
+  /* Augmenter la taille du texte */
+  text-align: center;
+  /* Centrer le texte */
+  margin-bottom: 10px;
+  /* Espacement sous le label */
+  display: block;
+  /* S'assurer que le label s'affiche comme un bloc */
+}
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 40px;
+  /* Espace pour l'icône */
+}
+
+.password-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
+  user-select: none;
+  /* Empêche la sélection du texte */
+}
+
+.password-icon i {
+  pointer-events: none;
+  /* Empêche l'interaction avec l'icône directement */
+}
+
+.password-icon:hover {
+  color: #333;
+}
+
+
+/* Styles responsives */
+
+@media (max-width: 480px) {
+  .container {
+      padding: 15px;
+  }
+  button {
+      font-size: 14px;
+  }
+  input {
+      font-size: 14px;
+  }
+}

@@ -1,0 +1,387 @@
+*{
+
+  font-family: "Poppin", sans-serif;
+}
+.page-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    width: 250px;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+  
+  .logo {
+    padding: 0 20px;
+    margin-bottom: 30px;
+   
+   
+  }
+  
+  .logo img {
+    width: 120px;
+    height: 120px;
+    
+    margin-left: 40px;
+
+  border-radius: 50%; /* Si vous voulez un effet circulaire */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6); /* Ombre douce */
+
+  }
+  
+  .nav-menu {
+    flex-grow: 1;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #666;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+  }
+  
+  .nav-item:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .nav-item.active {
+    background-color: #2563EB;
+    color: white;
+    border-radius: 6px;
+  }
+  
+  .nav-icon {
+    margin-right: 12px;
+    font-size: 18px;
+   
+  }
+  .nav-icon img{
+
+    width: 24px; /* Largeur des icônes */
+  height: 24px; /* Hauteur des icônes */
+  margin-right: 12px;
+  font-size: 18px;
+ 
+  }
+  .logout {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+   
+  }
+  
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: none;
+    color: #FF4343;
+    cursor: pointer;
+  }
+  
+  .logout-btn:hover {
+    color: #2b0404;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    flex-grow: 1;
+    background-color: #f3f4f6;
+    padding: 20px;
+  }
+  
+  .container {
+    padding: 24px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .header h1 {
+    font-size: 30px;
+    font-weight: 600;
+  }
+  
+  .add-button {
+    background-color: #2563EB;
+    color: white;
+    padding: 12px 20px; /* Augmenter l'espace interne */
+    font-size: 16px; /* Augmenter la taille du texte */
+    border-radius: 8px; /* Arrondir un peu plus les bords si souhaité */
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Ajustez l'espacement entre les éléments internes */
+    cursor: pointer;
+  }
+  
+  .add-button span {
+    font-size: 18px;
+  }
+  
+  .stats-search {
+    margin-bottom: 24px;
+  }
+  
+  .stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 16px;
+  }
+  
+  .search-container {
+    position: relative;
+    width: fit-content;
+  }
+  
+  .search-container input {
+    width: 256px;
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  th {
+    font-weight: 500;
+  }
+  
+  .badge {
+    display: inline-block; /* Pour garantir le comportement de bloc */
+  width: 130px; /* Ajustez cette largeur à vos besoins */
+  text-align: center; /* Centre le texte horizontalement */
+  padding: 4px 12px; /* Ajuste l'espacement interne */
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  }
+  
+  .badge.admin {
+    background-color: #01BA8F;
+   
+  }
+  
+  .badge.user {
+    background-color: #2563EB;
+   
+  }
+  
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .action-btn {
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .action-btn.view {
+    background-color: #01BA8F;
+  }
+  
+  .action-btn.edit {
+    background-color: #FFBD32;
+  }
+  
+  .action-btn.delete {
+    background-color: #FF4343;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .pagination button {
+    padding: 4px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .pagination button.active {
+    background-color: #2563EB;
+    color: white;
+    border-color: #2563EB;
+  }
+  
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-container {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+  
+    .main-content {
+      padding: 10px;
+    }
+  
+    .header {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .stats {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .search-container input {
+      width: 100%;
+    }
+    
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+  .action-btn.role-toggle {
+    background: #01BA8F; /* Fond vert clair */
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    img {
+      width: 20px; /* Ajustez la taille si nécessaire */
+      height: 20px;
+      transition: transform 0.3s ease;
+    }
+  
+    &:hover {
+      background: #4abd6a; /* Fond plus foncé au survol */
+  
+      img {
+        transform: scale(1.1); /* Zoom au survol */
+      }
+    }
+  }
+  
+  /* Modal de confirmation  inverser role*/
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-blue {
+  background-color:  #2563EB;
+  color: white;
+}
+
+.btn-red {
+  background-color:  #FF4343;
+  color: white;
+}
+
+//confirmation de l'ajout
+.success-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #01BA8F;
+  color: white;
+  padding: 15px;
+  border-radius: 4px;
+  z-index: 1000;
+  animation: slideDown 0.5s ease-out;
+  text-align: center;
+  min-width: 300px; /* Pour garantir une largeur minimum */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Ajoute une ombre légère */
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%) translateX(-50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+}
