@@ -194,7 +194,7 @@ module.exports = router;
 // Lister tous les utilisateurs
 router.get('/users', verifyToken, verifyRole(['administrateur']), async (req, res) => {
     try {
-        const utilisateurs = await Utilisateur.find().select('-mot_passe -code_secret');
+        const utilisateurs = await Utilisateur.find().select('-mot_passe ');
         res.json(utilisateurs);
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs', error: error.message });
@@ -204,7 +204,7 @@ router.get('/users', verifyToken, verifyRole(['administrateur']), async (req, re
 // Récupérer un utilisateur par ID
 router.get('/users/:id', verifyToken, async (req, res) => {
     try {
-        const utilisateur = await Utilisateur.findById(req.params.id).select('-mot_passe -code_secret');
+        const utilisateur = await Utilisateur.findById(req.params.id).select('-mot_passe ');
         if (!utilisateur) {
             return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
