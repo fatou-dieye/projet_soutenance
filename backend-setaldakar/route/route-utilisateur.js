@@ -6,68 +6,75 @@ const Utilisateur = require('../models/utilisateur.model');
 const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
 
 // Login
+// Login avec email/mot de passe ou téléphone/mot de passe
 router.post('/login', async (req, res) => {
   try {
-      const { email, mot_passe, code_secret } = req.body;
-      let utilisateur;
-
-      
-      // Vérification par email/mot de passe
-      if (email && mot_passe) {
-          // Vérifier si l'email existe
-          utilisateur = await Utilisateur.findOne({ email });
-          if (!utilisateur) {
-              return res.status(404).json({ message: "Cet utilisateur n'existe pas. Vérifiez l'email." });
-          }
-
-          // Vérifier si l'utilisateur est bloqué
-          if (utilisateur.statut === 'bloquer') {
-            return res.status(403).json({ message: "Votre compte est bloqué. Veuillez contacter l'administration." });
+    const { email, telephone, mot_passe } = req.body;
+    let utilisateur;
+    
+    // Vérification si nous avons soit un email, soit un numéro de téléphone avec un mot de passe
+    if ((email || telephone) && mot_passe) {
+      // Chercher l'utilisateur par email ou téléphone
+      if (email) {
+        utilisateur = await Utilisateur.findOne({ email });
+        if (!utilisateur) {
+          return res.status(404).json({ message: "Cet utilisateur n'existe pas. Vérifiez l'email." });
         }
-
-          // Vérifier si le mot de passe est correct
-          const validPassword = await bcrypt.compare(mot_passe, utilisateur.mot_passe);
-          if (!validPassword) {
-              return res.status(401).json({ message: "Mot de passe incorrect. Réessayez." });
-          }
-      } else {
-          return res.status(400).json({ 
-              message: 'Veuillez fournir soit un email et mot de passe, soit un code secret.' 
-          });
+      } else if (telephone) {
+        utilisateur = await Utilisateur.findOne({ telephone });
+        if (!utilisateur) {
+          return res.status(404).json({ message: "Cet utilisateur n'existe pas. Vérifiez le numéro de téléphone." });
+        }
       }
-
-      // Génération du token si tout est bon
-      const token = jwt.sign(
-          {
-              userId: utilisateur._id,
-              email: utilisateur.email,
-              role: utilisateur.role
-          },
-          process.env.JWT_SECRET,
-          { expiresIn: '1h' }
-      );
-
-      res.json({
-          message: 'Connexion réussie',
-          token,
-          user: {
-              id: utilisateur._id,
-              email: utilisateur.email,
-              role: utilisateur.role,
-              nom: utilisateur.nom,
-              prenom: utilisateur.prenom
-          }
+      
+      // Vérifier si l'utilisateur est bloqué
+      if (utilisateur.statut === 'bloquer') {
+        return res.status(403).json({ message: "Votre compte est bloqué. Veuillez contacter l'administration." });
+      }
+      
+      // Vérifier si le mot de passe est correct
+      const validPassword = await bcrypt.compare(mot_passe, utilisateur.mot_passe);
+      if (!validPassword) {
+        return res.status(401).json({ message: "Mot de passe incorrect. Réessayez." });
+      }
+    } else {
+      return res.status(400).json({ 
+        message: 'Veuillez fournir soit un email et mot de passe, soit un numéro de téléphone et mot de passe.' 
       });
-
+    }
+    
+    // Génération du token si tout est bon
+    const token = jwt.sign(
+      {
+        userId: utilisateur._id,
+        email: utilisateur.email,
+        role: utilisateur.role
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    
+    res.json({
+      message: 'Connexion réussie',
+      token,
+      user: {
+        id: utilisateur._id,
+        email: utilisateur.email,
+        telephone: utilisateur.telephone,
+        role: utilisateur.role,
+        nom: utilisateur.nom,
+        prenom: utilisateur.prenom
+      }
+    });
+    
   } catch (error) {
-      console.error('Erreur de connexion:', error);
-      res.status(500).json({ 
-          message: 'Erreur lors de la connexion', 
-          error: error.message 
-      });
+    console.error('Erreur de connexion:', error);
+    res.status(500).json({ 
+      message: 'Erreur lors de la connexion', 
+      error: error.message 
+    });
   }
 });
-
 
 
 
@@ -206,6 +213,58 @@ router.get('/users/:id', verifyToken, async (req, res) => {
         res.status(500).json({ message: 'Erreur lors de la récupération de l\'utilisateur', error: error.message });
     }
 });
+
+
+
+
+// Mettre à jour le bloquer ou debloquer  plusieurs utilisateurs à la fois
+router.put('/users/bulk-update-status', verifyToken, verifyRole(['administrateur']), async (req, res) => {
+  try {
+      const { userIds, statut } = req.body;
+
+      // Vérifier si userIds est un tableau valide
+      if (!Array.isArray(userIds) || userIds.length === 0) {
+          return res.status(400).json({ 
+              message: 'Veuillez fournir un tableau d\'identifiants d\'utilisateurs valide' 
+          });
+      }
+
+      // Vérifier si le statut est valide
+      if (!['bloquer', 'active'].includes(statut)) {
+          return res.status(400).json({ 
+              message: 'Statut invalide. Utilisez "bloquer" ou "active".' 
+          });
+      }
+
+      // Mise à jour des statuts des utilisateurs sélectionnés
+      const result = await Utilisateur.updateMany(
+          { _id: { $in: userIds } }, 
+          { $set: { statut: statut } }
+      );
+
+      if (result.matchedCount === 0) {
+          return res.status(404).json({ 
+              message: 'Aucun utilisateur trouvé pour la mise à jour' 
+          });
+      }
+
+      res.json({ 
+          message: `${result.modifiedCount} utilisateur(s) ${result.statut} mis à jour avec succès`,
+          modifiedCount: result.modifiedCount
+      });
+
+  } catch (error) {
+      console.error('Erreur lors de la mise à jour des statuts:', error);
+      res.status(500).json({ 
+          message: 'Erreur lors de la mise à jour des utilisateurs', 
+          error: error.message 
+      });
+  }
+});
+
+
+
+
 // Modifier un utilisateur
 router.put('/users/:id', verifyToken, upload.single('photo'), async (req, res) => {
     try {
@@ -398,5 +457,51 @@ router.delete('/users/:id', verifyToken, verifyRole(['administrateur']), async (
       res.json({ message: 'Utilisateur supprimé avec succès' });
   } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la suppression de l\'utilisateur', error: error.message });
+  }
+});
+
+
+// Mettre à jour le bloquer ou debloquer  plusieurs utilisateurs à la fois
+router.put('/users/bulk-update-status', verifyToken, verifyRole(['administrateur']), async (req, res) => {
+  try {
+      const { userIds, status } = req.body;
+
+      // Vérifier si userIds est un tableau valide
+      if (!Array.isArray(userIds) || userIds.length === 0) {
+          return res.status(400).json({ 
+              message: 'Veuillez fournir un tableau d\'identifiants d\'utilisateurs valide' 
+          });
+      }
+
+      // Vérifier si le statut est valide
+      if (!['bloquer', 'active'].includes(status)) {
+          return res.status(400).json({ 
+              message: 'Statut invalide. Utilisez "bloquer" ou "active".' 
+          });
+      }
+
+      // Mise à jour des statuts des utilisateurs sélectionnés
+      const result = await Utilisateur.updateMany(
+          { _id: { $in: userIds } }, 
+          { $set: { status: status } }
+      );
+
+      if (result.matchedCount === 0) {
+          return res.status(404).json({ 
+              message: 'Aucun utilisateur trouvé pour la mise à jour' 
+          });
+      }
+
+      res.json({ 
+          message: `${result.modifiedCount} utilisateur(s) mis à jour avec succès`,
+          modifiedCount: result.modifiedCount
+      });
+
+  } catch (error) {
+      console.error('Erreur lors de la mise à jour des statuts:', error);
+      res.status(500).json({ 
+          message: 'Erreur lors de la mise à jour des utilisateurs', 
+          error: error.message 
+      });
   }
 });

@@ -13,7 +13,7 @@ const generateMatricule = () => {
 const utilisateurSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: false, unique: true },
   mot_passe: { type: String, required: true },
   matricule: { type: String, required: false, unique: true, default: generateMatricule },
   photo: { type: String, required: false }, // URL ou chemin de l'image
