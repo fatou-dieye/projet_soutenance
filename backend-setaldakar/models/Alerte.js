@@ -8,7 +8,7 @@ const alerteSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  description: {
+ description: {
     type: String,
     required: true
   },

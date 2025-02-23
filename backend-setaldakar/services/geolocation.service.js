@@ -1,4 +1,4 @@
-// geolocation.service.js
+// service/geolocation.service.js
 const axios = require('axios');
 const NodeCache = require('node-cache');
 
