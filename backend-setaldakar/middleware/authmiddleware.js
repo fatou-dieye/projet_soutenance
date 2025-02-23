@@ -45,3 +45,9 @@ const invalidateToken = (token) => {
 
 
 module.exports = { verifyToken, verifyRole,invalidateToken  };
+
+
+
+
+
+

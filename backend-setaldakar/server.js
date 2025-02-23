@@ -1,4 +1,4 @@
-require('dotenv').config(); // Charger les variables d'environnement
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database'); // Connexion à la base de données
@@ -7,6 +7,15 @@ const authRoutes = require('./route/route-utilisateur');
 
 // Initialiser Express
 const app = express();  // Cette ligne doit venir AVANT toute utilisation de app
+
+
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+    console.error('JWT_SECRET is not defined');
+    process.exit(1);
+}
+
+
 
 // Middleware
 app.use(cors()); // Pour gérer les CORS
@@ -18,6 +27,8 @@ connectDB();
 // Utilisation des routes
 app.use('/api', userRoutes); // Prefixe les routes par /api
 app.use('/api/auth', authRoutes);
+
+
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
