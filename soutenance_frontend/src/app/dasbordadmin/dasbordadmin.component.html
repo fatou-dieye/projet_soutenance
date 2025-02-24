@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Multi-étapes</title>
+    <style>
+        .step { display: none; }
+        .active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div>
+        <h2>Tableau de bord</h2>
+        <p>Bienvenue, {{ authService.getCurrentUser()?.nom }} !</p>
+        <button (click)="logout()">Se déconnecter</button>
+      </div>
+    <form id="multiStepForm">
+        <!-- Étape 1: Géolocalisation -->
+        <div class="step active" id="step1">
+            <h2>Partager votre position</h2>
+            <button type="button" onclick="shareLocation()">Partager ma position</button>
+            <p id="location">Coordonnées non disponibles</p>
+            <button type="button" onclick="nextStep()">Suivant</button>
+        </div>
+        
+        <!-- Étape 2: Téléchargement de photos -->
+        <div class="step" id="step2">
+            <h2>Ajouter des photos</h2>
+            <input type="file" id="photoUpload" multiple>
+            <button type="button" onclick="prevStep()">Précédent</button>
+            <button type="button" onclick="nextStep()">Suivant</button>
+        </div>
+        
+        <!-- Étape 3: Description -->
+        <div class="step" id="step3">
+            <h2>Description</h2>
+            <textarea id="description" placeholder="Ajoutez une description..."></textarea>
+            <button type="button" onclick="prevStep()">Précédent</button>
+            <button type="button" onclick="submitForm()">Envoyer</button>
+        </div>
+    </form>
+    
+    <script>
+        let currentStep = 0;
+        let position = {};
+        const steps = document.querySelectorAll(".step");
+
+        function nextStep() {
+            steps[currentStep].classList.remove("active");
+            currentStep++;
+            steps[currentStep].classList.add("active");
+        }
+
+        function prevStep() {
+            steps[currentStep].classList.remove("active");
+            currentStep--;
+            steps[currentStep].classList.add("active");
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    position = {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+                    };
+                    document.getElementById("location").innerText = `Latitude: ${position.latitude}, Longitude: ${position.longitude}`;
+                }, () => {
+                    alert("Impossible d'obtenir la localisation.");
+                });
+            } else {
+                alert("La géolocalisation n'est pas supportée par votre navigateur.");
+            }
+        }
+
+        function submitForm() {
+            const description = document.getElementById("description").value;
+            const files = document.getElementById("photoUpload").files;
+            let formData = new FormData();
+            formData.append("latitude", position.latitude);
+            formData.append("longitude", position.longitude);
+            formData.append("description", description);
+            
+            for (let i = 0; i < files.length; i++) {
+                formData.append("photos", files[i]);
+            }
+            
+            fetch("http://localhost:5000/api/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert("Données envoyées avec succès !"))
+            .catch(error => alert("Erreur lors de l'envoi des données"));
+        }
+    </script>
+</body>
+</html>

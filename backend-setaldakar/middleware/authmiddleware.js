@@ -1,3 +1,4 @@
+//middlware/auth.middlware
 const jwt = require('jsonwebtoken');
 
 const tokenBlacklist = new Set();
@@ -26,6 +27,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyRole = (roles) => {
     return (req, res, next) => {
+        
         if (!req.utilisateur) {
             return res.status(401).json({ message: 'Non autorisé' });
         }
@@ -34,6 +36,7 @@ const verifyRole = (roles) => {
             return res.status(403).json({ message: 'Accès refusé : rôle insuffisant' });
         }
         
+       
         next();
     };
 };
