@@ -4,14 +4,17 @@ const Alerte = require('../models/Alerte');
 const Utilisateur = require('../models/utilisateur.model');
 const PhotoService = require('../services/photo.service');
 const GeolocationService = require('../services/geolocation.service');
+const { enregistrerAction } = require('./utilisateur-controller');
+const HistoriqueAction = require('../models/HistoriqueAction');
 
 class AlerteController {
+    //creation d'alerte
   static async createAlerte(req, res) {
     try {
-      const { titre, description, adresse, latitude, longitude, priorite } = req.body;
+      const {  description, adresse, latitude, longitude} = req.body;
       
       // Validation des données
-      if (!titre || !description || !adresse || !latitude || !longitude) {
+      if (!description || !adresse || !latitude || !longitude) {
         return res.status(400).json({ 
           message: 'Veuillez fournir toutes les informations nécessaires (titre, description, adresse, coordonnées)'
         });
@@ -19,7 +22,7 @@ class AlerteController {
       
       // Création de l'alerte
       const nouvelleAlerte = new Alerte({
-        titre,
+       
         description,
         adresse,
         coordonnees: {
@@ -27,20 +30,23 @@ class AlerteController {
           longitude: parseFloat(longitude)
         },
         photos: req.compressedFiles || [],
-        priorite: priorite || 'Moyenne',
+      
         declarant: req.utilisateur.userId
       });
       
       await nouvelleAlerte.save();
       
+        // Enregistrer l'action dans l'historique
+   
+
       res.status(201).json({
         message: 'Alerte créée avec succès',
         alerte: {
           id: nouvelleAlerte._id,
-          titre: nouvelleAlerte.titre,
+        
           statut: nouvelleAlerte.statut,
           adresse: nouvelleAlerte.adresse,
-          priorite: nouvelleAlerte.priorite
+          
         }
       });
     } catch (error) {
@@ -52,6 +58,7 @@ class AlerteController {
     }
   }
 
+  //pour lister les alerte
   static async getAlertes(req, res) {
     try {
       const { statut, priorite, page = 1, limit = 10 } = req.query;
@@ -113,7 +120,7 @@ class AlerteController {
       }
       
       // Vérifier les permissions selon le rôle
-      if (req.utilisateur.role === 'citoyen' && 
+      if (req.utilisateur.role === 'utilisateur' && 
           alerte.declarant._id.toString() !== req.utilisateur.userId) {
         return res.status(403).json({ message: 'Vous n\'êtes pas autorisé à accéder à cette alerte' });
       }

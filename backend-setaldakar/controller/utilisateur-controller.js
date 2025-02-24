@@ -3,7 +3,7 @@
 const Utilisateur = require('../models/utilisateur.model');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
-
+const HistoriqueAction = require('../models/HistoriqueAction');
 // Configuration du stockage des images
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
             nom,
             prenom,
             email,
-            mot_passe: await bcrypt.hash(mot_passe, 10),
+            mot_passe,
             photo: photoPath,
             adresse,
             telephone,
@@ -40,7 +40,7 @@ exports.register = async (req, res) => {
         });
         
         await nouvelUtilisateur.save();
-        
+        // Enregistrer l'action dans l'historique
         res.status(201).json({
             message: 'Utilisateur créé avec succès',
             user: {
@@ -99,7 +99,10 @@ const updateUsersStatus = async (req, res) => {
       if (result.matchedCount === 0) {
         return res.status(404).json({ message: 'Aucun utilisateur trouvé pour la mise à jour' });
       }
-  
+      
+      // Enregistrer chaque modification dans l'historique
+     
+       
       res.json({ 
         message: `${result.modifiedCount} utilisateur(s) mis à jour avec succès`,
         modifiedCount: result.modifiedCount
@@ -136,7 +139,8 @@ const updateUsersStatus = async (req, res) => {
       utilisateur.statut = statut || utilisateur.statut;
   
       await utilisateur.save();
-  
+  // Enregistrer l'action dans l'historique
+      await enregistrerAction(req.utilisateur.userId, "Mise à jour d'utilisateur", utilisateur._id, `Utilisateur ${utilisateur.email} modifié`);    
       res.json({
         message: 'Utilisateur mis à jour avec succès',
         user: {
@@ -155,44 +159,52 @@ const updateUsersStatus = async (req, res) => {
       res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'utilisateur', error: error.message });
     }
   };
-
-
-// Changer le mot de passe
+  // Changer le mot de passe et déconnecter l'utilisateur après changement
 exports.changePassword = async (req, res) => {
-    try {
-      const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
-  
-      if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
-        return res.status(400).json({ message: 'Tous les champs sont requis' });
-      }
-  
-      if (nouveau_mot_passe !== confirmation_mot_passe) {
-        return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
-      }
-  
-      const utilisateur = await Utilisateur.findById(req.params.id);
-      if (!utilisateur) {
-        return res.status(404).json({ message: 'Utilisateur non trouvé' });
-      }
-  
-      const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
-      }
-  
-      // Hacher le nouveau mot de passe
-      const hashedPassword = await bcrypt.hash(nouveau_mot_passe, 10);
-      utilisateur.mot_passe = hashedPassword;
-      await utilisateur.save();
-  
-      res.json({
-        message: 'Mot de passe mis à jour avec succès',
-        user: { id: utilisateur._id, email: utilisateur.email }
-      });
-    } catch (error) {
-      res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
+  try {
+    const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
+    const userId = req.utilisateur.userId; // Récupérer l'ID depuis le token
+
+    if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
+      return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
-  };
+
+    if (nouveau_mot_passe !== confirmation_mot_passe) {
+      return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
+    }
+
+    const utilisateur = await Utilisateur.findById(userId);
+    if (!utilisateur) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    // Vérifier si l'ancien mot de passe est valide
+    const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+    }
+
+ 
+    // Mettre à jour le mot de passe avec le nouveau mot de passe (qui doit être déjà haché)
+    utilisateur.mot_passe = nouveau_mot_passe;
+    
+    // Sauvegarder l'utilisateur avec le nouveau mot de passe
+    await utilisateur.save();
+
+    // Enregistrer la dernière déconnexion (si nécessaire)
+    await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
+
+    res.json({
+      message: 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.',
+      userId
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
+  }
+};
+
+
   
   // Statistiques des utilisateurs par rôle
   exports.getUserStatistics = async (req, res) => {
@@ -208,31 +220,44 @@ exports.changePassword = async (req, res) => {
       res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
   };
-  
-  // Suppression multiple d'utilisateurs
-  exports.bulkDeleteUsers = async (req, res) => {
+  // Suppression multiple d'utilisateurs avec enregistrement dans l'historique
+exports.bulkDeleteUsers = async (req, res) => {
     try {
-      const { userIds } = req.body;
-  
-      if (!Array.isArray(userIds) || userIds.length === 0) {
-        return res.status(400).json({ message: 'Veuillez fournir un tableau d\'identifiants valide' });
-      }
-  
-      if (userIds.includes(req.utilisateur.userId)) {
-        return res.status(403).json({ message: 'Vous ne pouvez pas supprimer votre propre compte' });
-      }
-  
-      const result = await Utilisateur.deleteMany({ _id: { $in: userIds } });
-  
-      if (result.deletedCount === 0) {
-        return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
-      }
-  
-      res.json({ message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès`, deletedCount: result.deletedCount });
+        const { userIds } = req.body;
+        const adminId = req.utilisateur.userId; // ID de l'admin qui effectue l'action
+
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: 'Veuillez fournir un tableau d\'identifiants valide' });
+        }
+
+        if (userIds.includes(adminId)) {
+            return res.status(403).json({ message: 'Vous ne pouvez pas supprimer votre propre compte' });
+        }
+
+        // Récupérer les utilisateurs avant suppression pour les détails de l'historique
+        const usersToDelete = await Utilisateur.find({ _id: { $in: userIds } });
+
+        const result = await Utilisateur.deleteMany({ _id: { $in: userIds } });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
+        }
+
+        // Enregistrer chaque suppression dans l'historique
+        for (const user of usersToDelete) {
+            await enregistrerAction(adminId, 'suppression', user._id, `Utilisateur supprimé : ${user.nom} (${user.email})`);
+        }
+
+        res.json({ 
+            message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès`, 
+            deletedCount: result.deletedCount 
+        });
+
     } catch (error) {
-      res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
+        res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
     }
-  };
+};
+
   
   // Suppression d'un utilisateur
   exports.deleteUser = async (req, res) => {
@@ -241,11 +266,44 @@ exports.changePassword = async (req, res) => {
       if (!utilisateur) {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
+
+    // Enregistrer l'action dans l'historique
+    await enregistrerAction(req.utilisateur.userId, "Suppression d'utilisateur", req.params.id, "Utilisateur supprimé");
       res.json({ message: 'Utilisateur supprimé avec succès' });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
     }
   };
+
+  //partie historique
+  //creation historique
+  const enregistrerAction = async (adminId, action, cibleId, details = '') => {
+    try {
+        const nouvelleAction = new HistoriqueAction({
+            adminId,
+            action,
+            cibleId,
+            details
+        });
+        await nouvelleAction.save();
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement de l'historique :", error);
+    }
+};
+//lister les historique 
+exports.getHistorique = async (req, res) => {
+  try {
+      const historique = await HistoriqueAction.find()
+          .populate('adminId', 'nom email')
+          .populate('cibleId', 'nom email')
+          .sort({ date: -1 });
+
+      res.json(historique);
+  } catch (error) {
+      res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+  }
+};
+
   exports.upload = upload;
 exports.updateUsersStatus = updateUsersStatus;
 exports.updateUser = updateUser;

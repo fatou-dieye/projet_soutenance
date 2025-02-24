@@ -7,7 +7,7 @@ const Utilisateur = require('../models/utilisateur.model');
 const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
 const authController = require('../controller/auth.controller');
 const utilisateurController = require('../controller/utilisateur-controller');
-
+const HistoriqueAction = require('../models/HistoriqueAction');
 
 
 // Login avec email/mot de passe ou téléphone/mot de passe
@@ -35,16 +35,19 @@ router.put('/users/:id', verifyToken, utilisateurController.upload.single('photo
 //modifier mots de passe en mettant l'ancien d'abord
 
 // Route pour changer le mot de passe
-router.put('/users/:id/change-password', verifyToken, utilisateurController.changePassword);
+router.put('/change-password', verifyToken, utilisateurController.changePassword);
 
 // Route pour obtenir les statistiques des utilisateurs par rôle
-router.get('/statistiques-utilisateurs', utilisateurController.getUserStatistics);
+router.get('/statistiques-utilisateurs', verifyToken, utilisateurController.getUserStatistics);
 
 // Route pour supprimer plusieurs utilisateurs
 router.delete('/users/bulk-delete', verifyToken, verifyRole(['administrateur']), utilisateurController.bulkDeleteUsers);
 
 // Route pour supprimer un utilisateur
 router.delete('/users/:id', verifyToken, verifyRole(['administrateur']), utilisateurController.deleteUser);
+//route pour lister les historique
+router.get('/historique', verifyToken, utilisateurController.getHistorique);
+
 
 
 
