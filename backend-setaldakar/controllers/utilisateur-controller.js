@@ -1,6 +1,6 @@
 //controller/utilisateur-controller.js
 // controllers/utilisateur.controller.js
-const Utilisateur = require('../models/utilisateur.model');
+const Utilisateur = require('../models/Utilisateur');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const { enregistrerAction  } = require('../controllers/historiqueController');// Configuration du stockage des images

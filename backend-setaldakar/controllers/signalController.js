@@ -1,6 +1,6 @@
 // controllers/alerte.controller.js
-const Alerte = require('../models/Alerte');
-const Utilisateur = require('../models/utilisateur.model');
+const Alerte = require('../models/Signal');
+const Utilisateur = require('../models/Utilisateur');
 const PhotoService = require('../services/photo.service');
 const GeolocationService = require('../services/geolocation.service');
 const { enregistrerAction } = require('./utilisateur-controller');

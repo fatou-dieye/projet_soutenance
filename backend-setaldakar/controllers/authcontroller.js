@@ -1,7 +1,7 @@
 //controller/auth.controller.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Utilisateur = require('../models/utilisateur.model');
+const Utilisateur = require('../models/Utilisateur');
 
 
 const { enregistrerAction  } = require('../controllers/historiqueController');// Configuration du stockage des images
