@@ -4,7 +4,7 @@ const Alerte = require('../models/Alerte');
 const Utilisateur = require('../models/utilisateur.model');
 const PhotoService = require('../services/photo.service');
 const GeolocationService = require('../services/geolocation.service');
-const { enregistrerAction } = require('./utilisateur-controller');
+const { enregistrerAction } = require('./utilisateurController');
 const HistoriqueAction = require('../models/HistoriqueAction');
 
 class AlerteController {

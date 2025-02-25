@@ -14,7 +14,7 @@ const historiqueActionSchema = new mongoose.Schema({
     cibleId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Utilisateur', 
-        required: true 
+        required: false 
     },
     date: { 
         type: Date, 

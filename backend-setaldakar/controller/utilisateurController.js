@@ -4,6 +4,8 @@ const Utilisateur = require('../models/utilisateur.model');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const HistoriqueAction = require('../models/HistoriqueAction');
+const { enregistrerAction } = require('./historiqueContrller');
+
 // Configuration du stockage des images
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -40,6 +42,7 @@ exports.register = async (req, res) => {
         });
         
         await nouvelUtilisateur.save();
+       // await enregistrerAction(req.utilisateur.userId, "inscription d'utilisateur");
         // Enregistrer l'action dans l'historique
         res.status(201).json({
             message: 'Utilisateur créé avec succès',
@@ -108,6 +111,7 @@ const updateUsersStatus = async (req, res) => {
         modifiedCount: result.modifiedCount
       });
   
+      await enregistrerAction(req.utilisateur.userId, "Changement de statuts de plusieur utilisateur");
     } catch (error) {
       console.error('Erreur lors de la mise à jour des statuts:', error);
       res.status(500).json({ message: 'Erreur lors de la mise à jour des utilisateurs', error: error.message });
@@ -190,7 +194,7 @@ exports.changePassword = async (req, res) => {
     
     // Sauvegarder l'utilisateur avec le nouveau mot de passe
     await utilisateur.save();
-
+   
     // Enregistrer la dernière déconnexion (si nécessaire)
     await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
 
@@ -244,9 +248,9 @@ exports.bulkDeleteUsers = async (req, res) => {
         }
 
         // Enregistrer chaque suppression dans l'historique
-        for (const user of usersToDelete) {
-            await enregistrerAction(adminId, 'suppression', user._id, `Utilisateur supprimé : ${user.nom} (${user.email})`);
-        }
+        await enregistrerAction(req.utilisateur.userId, "suppression de plusieur utilisateur");
+          
+       
 
         res.json({ 
             message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès`, 
@@ -268,41 +272,47 @@ exports.bulkDeleteUsers = async (req, res) => {
       }
 
     // Enregistrer l'action dans l'historique
-    await enregistrerAction(req.utilisateur.userId, "Suppression d'utilisateur", req.params.id, "Utilisateur supprimé");
+    
+    await enregistrerAction(req.utilisateur.userId, "Suppression d'utilisateur");
       res.json({ message: 'Utilisateur supprimé avec succès' });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
     }
   };
 
-  //partie historique
-  //creation historique
-  const enregistrerAction = async (adminId, action, cibleId, details = '') => {
-    try {
-        const nouvelleAction = new HistoriqueAction({
-            adminId,
-            action,
-            cibleId,
-            details
-        });
-        await nouvelleAction.save();
-    } catch (error) {
-        console.error("Erreur lors de l'enregistrement de l'historique :", error);
-    }
-};
-//lister les historique 
-exports.getHistorique = async (req, res) => {
-  try {
-      const historique = await HistoriqueAction.find()
-          .populate('adminId', 'nom email')
-          .populate('cibleId', 'nom email')
-          .sort({ date: -1 });
 
-      res.json(historique);
+  // Bloquer ou débloquer un utilisateur
+exports.toggleUserStatus = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const utilisateur = await Utilisateur.findById(id);
+
+      if (!utilisateur) {
+          return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
+
+      // Changer le statut entre 'active' et 'bloquer'
+      const newStatut = utilisateur.statut === 'active' ? 'bloquer' : 'active';
+      
+      utilisateur.statut = newStatut;
+      await utilisateur.save();
+
+      // Enregistrer l'action dans l'historique
+      await enregistrerAction(req.utilisateur.userId, "Changement de statut d'utilisateur");
+
+      res.json({
+          message: `Utilisateur ${newStatut} avec succès`,
+          user: {
+              id: utilisateur._id,
+              statut: utilisateur.statut
+          }
+      });
   } catch (error) {
-      res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+      res.status(500).json({ message: 'Erreur lors du changement de statut de l\'utilisateur', error: error.message });
   }
 };
+
+
 
   exports.upload = upload;
 exports.updateUsersStatus = updateUsersStatus;

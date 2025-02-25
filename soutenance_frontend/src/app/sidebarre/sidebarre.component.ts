@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-sidebarre',
-  imports: [],
+  imports: [RouterModule ],
   templateUrl: './sidebarre.component.html',
   styleUrl: './sidebarre.component.css'
 })
@@ -20,7 +21,7 @@ export class SidebarreComponent implements OnInit {
   }
 
   updateActiveLink(): void {
-    const currentRoute = this.router.url.split('?')[0]; // Remove query params if any
+    const currentRoute = this.router.url.split('?')[0]; 
 
     const links = document.querySelectorAll('.nav-link');
     links.forEach(link => {

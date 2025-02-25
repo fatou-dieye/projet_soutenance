@@ -1,54 +1,56 @@
+
 <!--partie navebarre-->
 <div class="navbar">
-    <!-- Logo Section -->
-    <div class="navbar-logo">
-     
-      <span>SETAL DAKAR</span>
-    </div>
-    
-    <!-- Profile Section -->
-    <div class="navbar-profile">
+  <!-- Logo Section -->
+  <div class="navbar-logo">
+    <span>SETAL DAKAR</span>
+  </div>
+  
+  <!-- Profile Section -->
+  <div class="navbar-profile">
+    <img src="profile.png" alt="Profile" class="profile-img">
+    <div class="profile-info">
       <span class="profile-name">Khalifa Guaye</span>
-      <span class="profile-role">Administrateur</span>
-      <img src="assets/profile_picture.jpg" alt="Profile" class="profile-img">
+      <span class="profile-role">Administrateur <button class="edit-btn triangle-btn">&#x25BC;</button> </span>
     </div>
+   
   </div>
 
+    <!-- Icone pour modifier le profil -->
+ 
+</div>
 
   <!--partie sidebare-->
-  <div class="sidebar">
-    <!-- Logo Section -->
-    <div class="sidebar-logo">
-      <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
-     
-    </div>
-    
-    <!-- Navigation lien -->
-    <div class="sidebar-nav">
-      <a href="/dashboard" class="nav-link" id="dashboard-link">
-        <i class="fas fa-tachometer-alt"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="/gestion-signals" class="nav-link" id="gestion-signals-link">
-        <i class="fas fa-bell"></i>
-        <span>Gestion des Signaux</span>
-      </a>
-      <a href="/gestion-personnel" class="nav-link" id="gestion-personnel-link">
-        <i class="fas fa-users"></i>
-        <span>Gestion Personnel</span>
-      </a>
-      <a href="/pointage" class="nav-link" id="pointage-link">
-        <i class="fas fa-check-circle"></i>
-        <span>Pointage</span>
-      </a>
-      <a href="/historique" class="nav-link" id="historique-link">
-        <i class="fas fa-history"></i>
-        <span>Historique</span>
-      </a>
-    </div>
-    
-    <!-- deconnexion -->
-    <div class="logout">
-      <a href="/logout">Déconnecter</a>
-    </div>
+ <!-- Sidebar component -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
   </div>
+  <div class="sidebar-nav">
+    <a routerLink="/dasbordadmin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-home"></i> 
+      <span>Dashboard</span>
+    </a>
+    <a routerLink="/gestion-des-signaux" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-bell"></i>
+      <span>Gestion des Signaux</span>
+    </a>
+    <a routerLink="/gestion-personels" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-users"></i>
+      <span>Gestion Personnel</span>
+    </a>
+    <a routerLink="/pointage" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-check-circle"></i>
+      <span>Pointage</span>
+    </a>
+    <a routerLink="/historique-admin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-history"></i>
+      <span>Historique</span>
+    </a>
+  </div>
+  <div class="logout">
+        <i class="fas fa-sign-out-alt logout-icon"></i>  
+    <a href="/logout">Déconnecter</a>
+   
+  </div>
+</div>

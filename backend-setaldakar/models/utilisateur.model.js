@@ -25,7 +25,7 @@ const utilisateurSchema = new mongoose.Schema({
 }, {
   timestamps: true // Ajoute des champs createdAt et updatedAt
 });
-
++9-
 
 // Hacher le mot de passe avant de sauvegarder
 utilisateurSchema.pre('save', async function (next) {

@@ -2,8 +2,11 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Utilisateur = require('../models/utilisateur.model');
-
-
+const { enregistrerAction } = require('./historiqueContrller');
+const { invalidateToken } = require('../middlware/auth.middleware');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const motspassoublierController = require('./motspassoublierController');
 
 // Login
 exports.login = async (req, res) => {
@@ -65,17 +68,17 @@ exports.login = async (req, res) => {
     try {
       const userId = req.utilisateur.userId;
       await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
-  
       const token = req.headers.authorization.split(' ')[1];
       invalidateToken(token);
   
       res.json({ message: 'Déconnexion réussie', userId });
-  
+      
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la déconnexion', error: error.message });
     }
   };
 
 
-
+// Fonction pour gérer le mot de passe oublié (moved to motspassoublierController)
+exports.forgotPassword = motspassoublierController.forgotPassword;
 

@@ -8,7 +8,7 @@ const sharp = require('sharp');
 const { verifyToken, verifyRole } = require('../middlware/auth.middleware');
 const Alerte = require('../models/Alerte');
 const Utilisateur = require('../models/utilisateur.model');
-const AlerteController = require('../controller/alerteController');
+const AlerteController = require('../controller/signalController');
 // Configuration de multer pour l'upload des photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
