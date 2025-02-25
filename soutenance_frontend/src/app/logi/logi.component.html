@@ -1,4 +1,4 @@
-<div class="login-container">
+ <!-- <div class="login-container">
     <h2>Connexion</h2>
     <form (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -26,4 +26,30 @@
       <button type="submit" [disabled]="!identifiant || !mot_passe">Se connecter</button>
     </form>
     <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  </div> -->
+  <div class="login-container">
+    <div class="image-section">
+      <!-- Remplacez 'poubelle.png' par le chemin de votre image -->
+      <img src="poubelle2.png" alt="Image de connexion" class="background-image">
+      
   </div>
+    <div class="form-section">
+        <div class="form-box">
+            <h2>Connectez-vous</h2>
+            <p>Chaque geste compte pour un environnement plus propre, ensemble, faisons la différence.</p>
+            <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" ngModel required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" ngModel required>
+                    <span class="toggle-password" (click)="togglePasswordVisibility()">👁️</span>
+                </div>
+                <button type="submit">Connexion</button>
+                <p>Vous n’avez pas de compte ? <a href="#">Créer un compte</a> </p>
+            </form>
+        </div>
+    </div>
+</div>

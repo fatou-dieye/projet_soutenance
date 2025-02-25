@@ -58,4 +58,10 @@ export class LogiComponent {
       }
     });
   }
+
+  showPassword: boolean = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 }
