@@ -9,6 +9,7 @@ const connectDB = require('./config/database'); // Connexion √† la base de donn√
 const userRoutes = require('./route/route-utilisateur'); // Routes des utilisateurs
 const authRoutes = require('./route/route-utilisateur');
 const alerteRoutes = require('./route/alerteRoutes');
+const pointageRoute = require('./route/pointageRoute');
 // Initialiser Express
 const app = express();  // Cette ligne doit venir AVANT toute utilisation de app
 
@@ -33,7 +34,8 @@ app.use('/api', userRoutes); // Prefixe les routes par /api
 app.use('/api/auth', authRoutes);
 
 
-
+// Utilisation des routes
+app.use('/api', pointageRoute);
 app.use('/api', alerteRoutes);
 // Configurer les dossiers statiques pour les photos
 app.use('/uploads', express.static('uploads'));

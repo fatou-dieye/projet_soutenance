@@ -5,7 +5,7 @@ const alerteSchema = new mongoose.Schema({
   // Informations de base
   titre: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
  description: {
@@ -16,7 +16,7 @@ const alerteSchema = new mongoose.Schema({
   // Localisation
   adresse: {
     type: String,
-    required: true
+    required: false
   },
   coordonnees: {
     latitude: {

@@ -1,25 +1,24 @@
 const mongoose = require('mongoose');
+const HistoriqueAction = require('../models/HistoriqueAction');
 
-// Schéma pour les actions des utilisateurs
-const userActionSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    action: { type: String, required: true },
-    timestamp: { type: Date, default: Date.now }
-});
 
-const UserAction = mongoose.model('UserAction', userActionSchema);
 
-// Fonction pour enregistrer une action
-async function logAction(userId, action) {
-    try {
-        const userAction = new UserAction({ userId, action });
-        await userAction.save();
-        console.log(`Action enregistrée : ${action} pour l'utilisateur ${userId}`);
-    } catch (error) {
-        console.error('Erreur lors de l\'enregistrement de l\'action :', error);
-    }
-}
+// Fonction pour enregistrer l'action
+const enregistrerAction = async (adminId, action, cibleId, details = '') => {
+  try {
+    const nouvelleAction = new HistoriqueAction({
+      adminId,
+      action,
+      cibleId,
+      details
+    });
+    await nouvelleAction.save();
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement de l'historique :", error);
+  }
+};
 
 module.exports = {
-    logAction
+  enregistrerAction,
+  // other exports if any
 };

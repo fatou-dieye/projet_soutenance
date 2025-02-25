@@ -1,10 +1,11 @@
+//controller/utilisateur-controller.js
 // controllers/utilisateur.controller.js
 const Utilisateur = require('../models/utilisateur.model');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
-const { logAction } = require('./historiqueController');
+const { enregistrerAction  } = require('../controllers/historiqueController');// Configuration du stockage des images
 
-// Configuration du stockage des images
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); // Dossier où seront stockées les images
@@ -16,96 +17,43 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
-
-// Fonction pour valider le format de l'email
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Fonction pour valider le numéro de téléphone
-function isValidPhoneNumber(phone) {
-    const phoneRegex = /^(70|76|77|78|75)\d{7}$/;
-    return phoneRegex.test(phone);
-}
-
 // Inscription
 exports.register = async (req, res) => {
-  try {
-      const { nom, prenom, email, mot_passe, adresse, telephone, role, statut } = req.body;
-      const photoPath = req.file ? `/uploads/${req.file.filename}` : null;
-
-      // Vérifiez que toutes les données nécessaires sont présentes
-      if (!nom || !prenom || !email || !mot_passe || !adresse || !telephone || !role) {
-          return res.status(400).json({ message: 'Toutes les informations sont requises.' });
-      }
-
-      // Vérification du format de l'email et du téléphone
-      if (!isValidEmail(email)) {
-          return res.status(400).json({ message: 'Format d\'email invalide.' });
-      }
-
-      if (!isValidPhoneNumber(telephone)) {
-          return res.status(400).json({ message: 'Numéro de téléphone invalide.' });
-      }
-
-      // Vérification si l'email ou le téléphone existe déjà
-      const existingUserByEmail = await Utilisateur.findOne({ email });
-      if (existingUserByEmail) {
-          return res.status(400).json({ message: 'Cet email est déjà utilisé.' });
-      }
-
-      const existingUserByPhone = await Utilisateur.findOne({ telephone });
-      if (existingUserByPhone) {
-          return res.status(400).json({ message: 'Ce numéro de téléphone est déjà utilisé.' });
-      }
-
-      // Vérification de la force du mot de passe
-      if (mot_passe.length < 8) {
-          return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères.' });
-      }
-
-      // Hachage du mot de passe avant enregistrement
-      const hashedPassword = await bcrypt.hash(mot_passe, 10);
-      console.log('Mot de passe haché lors de l\'inscription :', hashedPassword);
-
-      // Création de l'utilisateur
-      const nouvelUtilisateur = new Utilisateur({
-          nom,
-          prenom,
-          email,
-          mot_passe: hashedPassword,
-          photo: photoPath,
-          adresse,
-          telephone,
-          role,
-          statut: statut || 'active',
-      });
-
-      await nouvelUtilisateur.save();
-
-      // Enregistrement de l'action dans l'historique
-      await logAction(nouvelUtilisateur._id, "Inscription réussie");
-
-      res.status(201).json({
-          message: 'Utilisateur créé avec succès',
-          user: {
-              id: nouvelUtilisateur._id,
-              email: nouvelUtilisateur.email,
-              role: nouvelUtilisateur.role
-          }
-      });
-  } catch (error) {
-      console.error('Erreur lors de l\'inscription :', error);
-      res.status(500).json({ message: 'Erreur serveur', error: error.message });
-  }
+    try {
+        const { nom, prenom, email, mot_passe, photo, adresse, telephone, role, statut } = req.body;
+        const photoPath = req.file ? `/uploads/${req.file.filename}` : null;
+        
+        const existingUser = await Utilisateur.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+        }
+        
+        const nouvelUtilisateur = new Utilisateur({
+            nom,
+            prenom,
+            email,
+            mot_passe,
+            photo: photoPath,
+            adresse,
+            telephone,
+            role,
+            statut: statut || 'active',
+        });
+        
+        await nouvelUtilisateur.save();
+        // Enregistrer l'action dans l'historique
+        res.status(201).json({
+            message: 'Utilisateur créé avec succès',
+            user: {
+                id: nouvelUtilisateur._id,
+                email: nouvelUtilisateur.email,
+                role: nouvelUtilisateur.role
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de l\'inscription', error: error.message });
+    }
 };
-
-
-
-
-
 
 // Lister tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
@@ -152,7 +100,10 @@ const updateUsersStatus = async (req, res) => {
       if (result.matchedCount === 0) {
         return res.status(404).json({ message: 'Aucun utilisateur trouvé pour la mise à jour' });
       }
-  
+      
+      // Enregistrer chaque modification dans l'historique
+     
+       
       res.json({ 
         message: `${result.modifiedCount} utilisateur(s) mis à jour avec succès`,
         modifiedCount: result.modifiedCount
@@ -189,7 +140,8 @@ const updateUsersStatus = async (req, res) => {
       utilisateur.statut = statut || utilisateur.statut;
   
       await utilisateur.save();
-  
+  // Enregistrer l'action dans l'historique
+      await enregistrerAction(req.utilisateur.userId, "Mise à jour d'utilisateur", utilisateur._id, `Utilisateur ${utilisateur.email} modifié`);    
       res.json({
         message: 'Utilisateur mis à jour avec succès',
         user: {
@@ -208,44 +160,52 @@ const updateUsersStatus = async (req, res) => {
       res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'utilisateur', error: error.message });
     }
   };
-
-
-// Changer le mot de passe
+  // Changer le mot de passe et déconnecter l'utilisateur après changement
 exports.changePassword = async (req, res) => {
-    try {
-      const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
-  
-      if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
-        return res.status(400).json({ message: 'Tous les champs sont requis' });
-      }
-  
-      if (nouveau_mot_passe !== confirmation_mot_passe) {
-        return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
-      }
-  
-      const utilisateur = await Utilisateur.findById(req.params.id);
-      if (!utilisateur) {
-        return res.status(404).json({ message: 'Utilisateur non trouvé' });
-      }
-  
-      const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
-      }
-  
-      // Hacher le nouveau mot de passe
-      const hashedPassword = await bcrypt.hash(nouveau_mot_passe, 10);
-      utilisateur.mot_passe = hashedPassword;
-      await utilisateur.save();
-  
-      res.json({
-        message: 'Mot de passe mis à jour avec succès',
-        user: { id: utilisateur._id, email: utilisateur.email }
-      });
-    } catch (error) {
-      res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
+  try {
+    const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
+    const userId = req.utilisateur.userId; // Récupérer l'ID depuis le token
+
+    if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
+      return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
-  };
+
+    if (nouveau_mot_passe !== confirmation_mot_passe) {
+      return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
+    }
+
+    const utilisateur = await Utilisateur.findById(userId);
+    if (!utilisateur) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    // Vérifier si l'ancien mot de passe est valide
+    const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+    }
+
+ 
+    // Mettre à jour le mot de passe avec le nouveau mot de passe (qui doit être déjà haché)
+    utilisateur.mot_passe = nouveau_mot_passe;
+    
+    // Sauvegarder l'utilisateur avec le nouveau mot de passe
+    await utilisateur.save();
+
+    // Enregistrer la dernière déconnexion (si nécessaire)
+    await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
+
+    res.json({
+      message: 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.',
+      userId
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
+  }
+};
+
+
   
   // Statistiques des utilisateurs par rôle
   exports.getUserStatistics = async (req, res) => {
@@ -261,31 +221,44 @@ exports.changePassword = async (req, res) => {
       res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
   };
-  
-  // Suppression multiple d'utilisateurs
-  exports.bulkDeleteUsers = async (req, res) => {
+  // Suppression multiple d'utilisateurs avec enregistrement dans l'historique
+exports.bulkDeleteUsers = async (req, res) => {
     try {
-      const { userIds } = req.body;
-  
-      if (!Array.isArray(userIds) || userIds.length === 0) {
-        return res.status(400).json({ message: 'Veuillez fournir un tableau d\'identifiants valide' });
-      }
-  
-      if (userIds.includes(req.utilisateur.userId)) {
-        return res.status(403).json({ message: 'Vous ne pouvez pas supprimer votre propre compte' });
-      }
-  
-      const result = await Utilisateur.deleteMany({ _id: { $in: userIds } });
-  
-      if (result.deletedCount === 0) {
-        return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
-      }
-  
-      res.json({ message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès`, deletedCount: result.deletedCount });
+        const { userIds } = req.body;
+        const adminId = req.utilisateur.userId; // ID de l'admin qui effectue l'action
+
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: 'Veuillez fournir un tableau d\'identifiants valide' });
+        }
+
+        if (userIds.includes(adminId)) {
+            return res.status(403).json({ message: 'Vous ne pouvez pas supprimer votre propre compte' });
+        }
+
+        // Récupérer les utilisateurs avant suppression pour les détails de l'historique
+        const usersToDelete = await Utilisateur.find({ _id: { $in: userIds } });
+
+        const result = await Utilisateur.deleteMany({ _id: { $in: userIds } });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
+        }
+
+        // Enregistrer chaque suppression dans l'historique
+        for (const user of usersToDelete) {
+            await enregistrerAction(adminId, 'suppression', user._id, `Utilisateur supprimé : ${user.nom} (${user.email})`);
+        }
+
+        res.json({ 
+            message: `${result.deletedCount} utilisateur(s) supprimé(s) avec succès`, 
+            deletedCount: result.deletedCount 
+        });
+
     } catch (error) {
-      res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
+        res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
     }
-  };
+};
+
   
   // Suppression d'un utilisateur
   exports.deleteUser = async (req, res) => {
@@ -294,11 +267,36 @@ exports.changePassword = async (req, res) => {
       if (!utilisateur) {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
+
+    // Enregistrer l'action dans l'historique
+    await enregistrerAction(req.utilisateur.userId, "Suppression d'utilisateur", req.params.id, "Utilisateur supprimé");
       res.json({ message: 'Utilisateur supprimé avec succès' });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la suppression', error: error.message });
     }
   };
+
+  //partie historique
+  //creation historique
+ 
+
+
+//lister les historique 
+exports.getHistorique = async (req, res) => {
+  try {
+      const historique = await HistoriqueAction.find()
+          .populate('adminId', 'nom email')
+          .populate('cibleId', 'nom email')
+          .sort({ date: -1 });
+
+      res.json(historique);
+  } catch (error) {
+      res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+  }
+};
+
   exports.upload = upload;
 exports.updateUsersStatus = updateUsersStatus;
 exports.updateUser = updateUser;
+
+
