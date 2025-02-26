@@ -11,5 +11,7 @@ router.post('/record-attendance', pointageController.recordAttendance);
 
 // Récupérer les enregistrements de pointage
 router.get('/attendance-records', pointageController.getAttendanceRecords);
+router.get('/getTodayAttendanceRecords', pointageController.getTodayAttendanceRecords);
+
 
 module.exports = router;

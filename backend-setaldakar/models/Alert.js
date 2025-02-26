@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const alertSchema = new mongoose.Schema({
-  lieu: { type: String, required: true },
+  adresse: { type: String, required: true },
+  coordonnees: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true }
+  },
   niveau: { type: Number, required: true },
   date: { type: Date, required: true },
   heure: { type: String, required: true },
@@ -10,5 +14,4 @@ const alertSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Alert', alertSchema);
-
 

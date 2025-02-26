@@ -5,6 +5,9 @@ const Utilisateur = require('../models/Utilisateur');
 const { Pointage } = require('../models/Pointage');
 const mongoose = require('mongoose');
 const { Attendance } = require('../models/Pointage'); // Utiliser destructuring pour importer Attendance
+const moment = require('moment');
+
+
 
 
 
@@ -28,7 +31,7 @@ exports.assignRFID = async (req, res) => {
     // Assigner la carte RFID au gardien
     const pointage = await Pointage.findOneAndUpdate(
       { guard_id },
-      { carte_rfid, name, assigned_at: Date.now() },
+      { carte_rfid, assigned_at: Date.now() },
       { new: true, upsert: true }
     );
 
@@ -51,7 +54,6 @@ exports.assignRFID = async (req, res) => {
 
 
 // Enregistrer le pointage d'un gardien
-
 exports.recordAttendance = async (req, res) => {
   try {
     const { guard_id, name, date, check_in_time, check_out_time, location } = req.body;
@@ -60,16 +62,20 @@ exports.recordAttendance = async (req, res) => {
     const guardObjectId = new mongoose.Types.ObjectId(guard_id); // Utilisation de 'new'
 
     // Vérification si les dates sont valides
-    if (!isValidDate(date) || !isValidDate(check_in_time)) {
+    if (!isValidDate(date) || !isValidTime(check_in_time)) {
       return res.status(400).json({ error: 'Date ou heure de pointage invalide' });
     }
+
+    // Formater les heures au format "HH:mm:ss" si nécessaire
+    const formattedCheckInTime = formatTime(check_in_time);
+    const formattedCheckOutTime = check_out_time ? formatTime(check_out_time) : undefined;
 
     const attendance = new Attendance({
       guard_id: guardObjectId,
       name,
       date,
-      check_in_time,
-      check_out_time,
+      check_in_time: formattedCheckInTime,
+      check_out_time: formattedCheckOutTime,
       location
     });
 
@@ -89,6 +95,17 @@ function isValidDate(date) {
   return !isNaN(Date.parse(date));
 }
 
+// Fonction de validation de l'heure
+function isValidTime(time) {
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+  return timeRegex.test(time);
+}
+
+// Fonction de formatage de l'heure
+function formatTime(time) {
+  const date = new Date(`1970-01-01T${time}Z`);
+  return date.toISOString().substr(11, 8); // Retourne "HH:mm:ss"
+}
 
 // Récupérer les enregistrements de pointage
 exports.getAttendanceRecords = async (req, res) => {
@@ -97,5 +114,26 @@ exports.getAttendanceRecords = async (req, res) => {
     res.status(200).json(records);
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la récupération des enregistrements de pointage' });
+  }
+};
+
+
+// Récupérer les enregistrements de pointage du jour
+exports.getTodayAttendanceRecords = async (req, res) => {
+  try {
+    // Obtenir la date actuelle
+    const today = moment().startOf('day');
+
+    // Filtrer les enregistrements de pointage pour aujourd'hui
+    const records = await Attendance.find({
+      date: {
+        $gte: today.toDate(),
+        $lt: moment(today).add(1, 'days').toDate()
+      }
+    });
+
+    res.status(200).json(records);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la récupération des enregistrements de pointage du jour' });
   }
 };

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Utilisateur = require('../models/Utilisateur');
 
-
+const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
 const { enregistrerAction  } = require('../controllers/historiqueController');// Configuration du stockage des images
 
 
@@ -85,11 +85,15 @@ exports.login = async (req, res) => {
       await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
   
       const token = req.headers.authorization.split(' ')[1];
-      invalidateToken(token);
+      invalidateToken(token); // Assurez-vous que cette fonction est définie
   
       res.json({ message: 'Déconnexion réussie', userId });
+  
+      // Enregistrer l'action de connexion dans l'historique avant de répondre
+      await enregistrerAction(userId, "Deconnexion réussie", userId, "Deconnexion de l'utilisateur");
   
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la déconnexion', error: error.message });
     }
   };
+  

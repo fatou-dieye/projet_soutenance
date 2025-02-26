@@ -1,16 +1,22 @@
 const Alert = require('../models/Alert');
 const nodemailer = require('nodemailer');
+const GeolocationService = require('../services/geolocation.service');
 
 // Créer une nouvelle alerte
 exports.createAlert = async (req, res) => {
   try {
     const alert = new Alert({
-      lieu: req.body.lieu,
+      adresse: req.body.adresse,
+      coordonnees: {
+        latitude: parseFloat(req.body.latitude),
+        longitude: parseFloat(req.body.longitude)
+      },
       niveau: req.body.niveau,
       date: req.body.date,
       heure: req.body.heure,
       bac_id: req.body.bac_id
     });
+
     await alert.save();
     res.status(201).json({ message: 'Alerte créée avec succès', alert });
   } catch (error) {
@@ -68,7 +74,8 @@ const sendTaskEmail = (alert, employee_email) => {
   
   Une nouvelle tâche de vidange vous a été assignée :
   
-  📍 **Lieu** : ${alert.lieu}
+  📍 **Adresse** : ${alert.adresse} 
+  **Coordonnées** : ${alert.coordonnees.latitude}, ${alert.coordonnees.longitude}
   📏 **Niveau** : ${alert.niveau}
   📅 **Date** : ${alert.date}
   ⏰ **Heure** : ${alert.heure}
