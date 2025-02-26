@@ -3,13 +3,13 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Utilisateur = require('../models/utilisateur.model');
+const Utilisateur = require('../models/Utilisateur');
 const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
-const authController = require('../controller/authController');
-const utilisateurController = require('../controller/utilisateurController');
+const authController = require('../controllers/authController');
+const utilisateurController = require('../controllers/utilisateurController');
 const HistoriqueAction = require('../models/HistoriqueAction');
-const historiqueController = require('../controller/historiqueContrller');  // Assurez-vous de bien l'importer
-const motspassoublierController = require('../controller/motspassoublierController');
+const historiqueController = require('../controllers/historiqueContrller');  // Assurez-vous de bien l'importer
+const motspassoublierController = require('../controllers/motspassoublierController');
 
 // Login avec email/mot de passe ou téléphone/mot de passe
 
@@ -47,7 +47,7 @@ router.delete('/users/bulk-delete', verifyToken, verifyRole(['administrateur']),
 // Route pour supprimer un utilisateur
 router.delete('/users/:id', verifyToken, verifyRole(['administrateur']), utilisateurController.deleteUser);
 //route pour lister les historique
-router.get('/historique', verifyToken, historiqueController.getHistorique);  // Modification pour utiliser historiqueController
+router.get('/historique', verifyToken, utilisateurController.getHistorique);  // Modification pour utiliser historiqueController
 
 
 // Route pour bloquer/débloquer un utilisateur par ID

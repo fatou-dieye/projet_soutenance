@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { Chart, registerables } from 'chart.js';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../serviceslogin/auth.service';
 @Component({
   selector: 'app-dasbordadmin',
   imports: [SidebarreComponent],

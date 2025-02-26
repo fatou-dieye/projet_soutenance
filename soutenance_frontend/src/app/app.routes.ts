@@ -2,7 +2,7 @@
 import { Routes } from '@angular/router';
 import { DasbordadminComponent } from './dasbordadmin/dasbordadmin.component';
 import { SidebarreComponent } from './sidebarre/sidebarre.component';
-import { LogiComponent } from './logi/logi.component';
+import { LogiComponent } from './login/logi.component';
 import { GestionDesSignauxComponent } from './gestion-des-signaux/gestion-des-signaux.component';
 import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component';
 import { HistoriqueAdminComponent } from './historique-admin/historique-admin.component';
