@@ -98,6 +98,31 @@ exports.logout = async (req, res) => {
 };
 
 
+// Vérification du mot de passe actuel de l'utilisateur
+exports.verifyOldPassword = async (req, res) => {
+  try {
+    // Vérifier que l'utilisateur est authentifié
+    const user = await Utilisateur.findById(req.utilisateur.userId); // Utilisateur trouvé avec l'ID du token (extrait du middleware)
+    
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    // Comparer l'ancien mot de passe fourni avec celui stocké dans la base de données
+    const isMatch = await bcrypt.compare(req.body.oldPassword, user.mot_passe);
+    
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Ancien mot de passe incorrect' });
+    }
+
+    return res.json({ message: 'Ancien mot de passe correct' });
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Erreur lors de la vérification du mot de passe', error: error.message });
+  }
+};
+
 // Fonction pour gérer le mot de passe oublié (moved to motspassoublierController)
 exports.forgotPassword = motspassoublierController.forgotPassword;
 

@@ -27,6 +27,10 @@ app.use('/api', alerteRoutes);
 app.use('/api', alertRoute)
 // Configurer les dossiers statiques pour les photos
 app.use('/uploads', express.static('uploads'));
+app.use('/alertes', alerteRoutes);
+
+
+
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

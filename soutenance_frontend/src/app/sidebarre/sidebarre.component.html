@@ -10,8 +10,8 @@
   <div class="navbar-profile">
     <img src="profile.png" alt="Profile" class="profile-img">
     <div class="profile-info">
-      <span class="profile-name">Khalifa Guaye</span>
-      <span class="profile-role">Administrateur <button class="edit-btn triangle-btn">&#x25BC;</button> </span>
+      <span class="profile-name">{{ currentUser.prenom }} {{ currentUser.nom }}</span>
+      <span class="profile-role">{{ currentUser.role }}  <button class="edit-btn triangle-btn" (click)="openPasswordChangeModal()" >&#x25BC;</button> </span>
     </div>
    
   </div>
@@ -50,7 +50,10 @@
   </div>
   <div class="logout">
         <i class="fas fa-sign-out-alt logout-icon"></i>  
-    <a href="/logout">Déconnecter</a>
+     <button class="btn-logout" (click)="logout()">
+       Déconnecter
+    </button>
    
   </div>
 </div>
+<app-changement-mots-pass></app-changement-mots-pass>

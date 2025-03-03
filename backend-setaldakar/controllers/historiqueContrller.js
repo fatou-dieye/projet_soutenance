@@ -18,6 +18,9 @@ const enregistrerAction = async (adminId, action, cibleId, details = '') => {
   }
 };
 
+
+
+
 module.exports = {
   enregistrerAction,
   // other exports if any

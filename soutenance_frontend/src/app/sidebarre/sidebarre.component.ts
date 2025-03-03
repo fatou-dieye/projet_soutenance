@@ -1,21 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { GestionpersonnelService, User } from '../gestionpersonnel-services/gestionpersonnel.service';
+
+import { AuthService } from '../serviceslogin/auth.service';
+import { ChangementMotsPassComponent } from '../changement-mots-pass/changement-mots-pass.component';
 @Component({
   selector: 'app-sidebarre',
-  imports: [RouterModule ],
+  imports: [RouterModule, ChangementMotsPassComponent],
   templateUrl: './sidebarre.component.html',
   styleUrl: './sidebarre.component.css'
 })
 export class SidebarreComponent implements OnInit {
-
- 
-  constructor(private router: Router) {}
+ @ViewChild(ChangementMotsPassComponent) passwordModal!: ChangementMotsPassComponent;
+  currentUser: any;
+  users: User[] = [];
+  filteredUsers: User[] = [];
+  constructor(private router: Router,
+    private AuthService: AuthService,
+    private GestionpersonnelService: GestionpersonnelService, 
+  ) {}
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateActiveLink();
+      }
+    });
+
+    if (!this.AuthService.isLoggedIn()) {
+      this.router.navigate(['/logi']);
+      return;
+    }
+    
+    // Get current user
+    this.currentUser = this.AuthService.getCurrentUser();
+    
+    // Check if user has required role
+    if (this.currentUser && this.currentUser.role === 'administrateur') {
+      this.loadUsers();
+    } else {
+      // Redirect if not admin
+      this.router.navigate(['/unauthorized']);
+    }
+  }
+
+  loadUsers(): void {
+    this.GestionpersonnelService.getAllUsers().subscribe({
+      next: (data) => {
+       
+        this.users = data.filter(user => 
+          ['administrateur', 'utilisateur'].includes(user.role)
+        );
+        this.filteredUsers = [...this.users];
+        
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+        
+        // If unauthorized, token might be expired or invalid
+        if (error.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          this.router.navigate(['/logi']);
+        }
       }
     });
   }
@@ -30,5 +78,25 @@ export class SidebarreComponent implements OnInit {
         link.classList.add('active');
       }
     });
+  }
+
+  logout(): void {
+    this.AuthService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/logi']);
+      },
+      error: () => {
+        // Even if logout fails on server, clear local storage and redirect
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.router.navigate(['/logi']);
+      }
+    });
+  }
+
+  openPasswordChangeModal(): void {
+    if (this.passwordModal) {
+      this.passwordModal.openModal();
+    }
   }
 }

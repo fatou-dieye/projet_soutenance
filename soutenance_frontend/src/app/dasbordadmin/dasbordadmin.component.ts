@@ -1,27 +1,50 @@
 import { Component, OnInit} from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { Chart, registerables } from 'chart.js';
-
-import { AuthService } from '../serviceslogin/auth.service';
+import { DasbordadminService } from '../servicedasbordadmin/dasbordadmin.service';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-dasbordadmin',
-  imports: [SidebarreComponent],
+  imports: [SidebarreComponent, RouterModule ],
   templateUrl: './dasbordadmin.component.html',
   styleUrl: './dasbordadmin.component.css'
 })
 export class DasbordadminComponent  implements OnInit {
-  
+   // Déclarer les variables pour les statistiques
+   totalCitoyens: number = 0;
+   totalPersonnel: number = 0;
+   totalAdministrateurs: number = 0;
+   totalVideurs: number = 0;
+   totalGardients: number = 0;
+   alertesLast7Days: any[] = [];
    
-  constructor() {
+  constructor(private DasbordadminService: DasbordadminService) {
     // Enregistrer tous les composants Chart.js
     Chart.register(...registerables);
   }
   
   ngOnInit(): void {
-   this.initAlertChart();
    this.initGarbageLevelCharts();
+   this.fetchStatistics();
+   this.fetchAlertesLast7Days();
   }
   
+  fetchStatistics(): void {
+    this.DasbordadminService .getUserStatistics().subscribe(
+      (data) => {
+        // Assigner les données récupérées aux variables
+        this.totalCitoyens = data.utilisateur || 0;
+        this.totalPersonnel = data.administrateur + data.videur + data.gardient || 0;
+        this.totalAdministrateurs = data.administrateur || 0;
+        this.totalVideurs = data.videur || 0;
+        this.totalGardients = data.gardient || 0;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des statistiques', error);
+      }
+    );
+  }
+
   ngAfterViewInit(): void {
     // Initialiser les graphiques après que la vue soit complètement rendue
     setTimeout(() => {
@@ -30,34 +53,48 @@ export class DasbordadminComponent  implements OnInit {
     }, 100);
   }
   
+  fetchAlertesLast7Days(): void {
+    this.DasbordadminService.getAlertesLast7Days().subscribe(
+      (data) => {
+        this.alertesLast7Days = data;
+        this.initAlertChart();
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des alertes des 7 derniers jours', error);
+      }
+    );
+  }
+
   initAlertChart(): void {
     const canvas = document.getElementById('alertChart');
     if (!canvas) {
       console.error("Canvas element 'alertChart' not found");
       return;
     }
-    
+
     try {
       const ctx = (canvas as HTMLCanvasElement).getContext('2d');
       if (!ctx) {
         console.error("Could not get 2D context for alertChart");
         return;
       }
-      
+
+      const labels = this.alertesLast7Days.map(a => a.day);
+      const data = this.alertesLast7Days.map(a => a.count);
+
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samdi', 'Dimanche'],
+          labels: labels,
           datasets: [{
             label: 'Historique des alertes',
-            data: [12, 19, 30, 15, 35, 22, 14],
+            data: data,
             backgroundColor: '#00A86B',
             borderColor: '#00A86B',
             borderWidth: 0,
             borderRadius: 8,
-            barPercentage: 8, // Rend les barres plus étroites
+            barPercentage: 8,
             maxBarThickness: 40
-            
           }]
         },
         options: {
@@ -120,6 +157,7 @@ export class DasbordadminComponent  implements OnInit {
       console.error("Error initializing alert chart:", error);
     }
   }
+
 
   initGarbageLevelCharts(): void {
     // Créer les graphiques circulaires pour les niveaux de déchets

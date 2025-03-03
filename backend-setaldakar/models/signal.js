@@ -3,11 +3,7 @@ const mongoose = require('mongoose');
 
 const alerteSchema = new mongoose.Schema({
   // Informations de base
-  titre: {
-    type: String,
-    required: false,
-    trim: true
-  },
+  
  description: {
     type: String,
     required: true

@@ -88,7 +88,48 @@ router.post('/alertes',
 // 2. RÉCUPÉRER TOUTES LES ALERTES (filtrage disponible)
 router.get('/alertes', verifyToken, AlerteController.getAlertes);
 
+
+// Récupérer l'historique des alertes des 7 derniers jours
+router.get('/alertes/last7days', verifyToken, AlerteController.getAlertesLast7Days);
+
 // 3. RÉCUPÉRER UNE ALERTE PAR ID
 router.get('/alertes/:id', verifyToken, AlerteController.getAlerteById);
+
+
+// Nouvelle route pour assigner un videur
+router.post('/:id/assigner', 
+  verifyToken, 
+
+  AlerteController.assignerVideur
+);
+router.post('/alertes/:id/assigner', verifyToken, AlerteController.assignerVideur);
+
+
+router.get('/confirmation/:alerteId/:videurId', async (req, res) => {
+  const { alerteId, videurId } = req.params;
+
+  try {
+    const alerte = await Alerte.findById(alerteId);
+    if (!alerte) {
+      return res.status(404).send('Alerte non trouvée');
+    }
+
+    // Vérifiez que le videur est bien assigné à cette alerte
+    if (alerte.chauffeurAssigne.toString() !== videurId) {
+      return res.status(403).send('Accès non autorisé');
+    }
+
+    // Mettre à jour l'état de l'alerte
+    alerte.statut = 'Traité'; // Changer le statut à "Traité"
+    alerte.dateConfirmation = new Date();
+    await alerte.save();
+
+    res.send('Confirmation enregistrée avec succès. Le statut est maintenant "Traité".');
+  } catch (error) {
+    console.error('Erreur lors de la confirmation:', error);
+    res.status(500).send('Erreur lors de la confirmation');
+  }
+});
+
 
 module.exports = router;

@@ -5,7 +5,7 @@ const pointageController = require('../controllers/pointageController');
 const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
 
 // Assigner une carte RFID
-router.post('/assign-rfid', pointageController.assignRFID);
+router.post('/assign-rfid', verifyToken, pointageController.assignRFID);
 
 // Enregistrer le pointage
 router.post('/record-attendance', pointageController.recordAttendance);

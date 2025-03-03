@@ -1,0 +1,26 @@
+<app-sidebarre></app-sidebarre>
+
+<table>
+    <thead>
+      <tr>
+        <th>Lieu</th>
+        <th>Niveau</th>
+        <th>Date</th>
+        <th>Heure</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let alert of alerts">
+        <td>{{ alert.adresse }}</td>
+        <td>{{ alert.niveau }}%</td>
+        <td>{{ alert.date | date }}</td>
+        <td>{{ alert.heure }}</td>
+        <td>{{ alert.status }}</td>
+        <td>
+          <button >Traiter</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>

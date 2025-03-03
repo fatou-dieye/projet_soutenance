@@ -5,12 +5,14 @@
   justify-content: center; /* Centrage horizontal de la navbar */
   align-items: center; /* Centrage vertical de la navbar */
   background-color: white;
-  padding: 15px 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  box-shadow: 0 4px 6px rgba(0.1, 0.1, 0.1, 0.1);
   border-radius: 15px;
   width: 80%;
-  margin-left: 260px;
-  height: 90px;
+  margin-left: 300px;
+  height: 130px;
+  
+ 
 }
 
 /* Logo Section */
@@ -141,11 +143,13 @@
   margin-top: auto;
 }
 
-.logout a {
+.logout button {
   color: #FF0000;
   font-size: 16px;
   text-decoration: none;
   font-weight: 600;
+  border: none;
+  background-color: #FFFFFF;
 }
 
 .logout-icon {

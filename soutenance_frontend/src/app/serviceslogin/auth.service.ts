@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import axiosInstance from '../../environnement/axios';
 @Injectable({
   providedIn: 'root'
 })
@@ -53,4 +54,43 @@ export class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
+
+     // Méthode pour changer le mot de passe
+  changePassword(passwordData: {
+    ancien_mot_passe: string,
+    nouveau_mot_passe: string,
+    confirmation_mot_passe: string
+  }): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    return this.http.put(`${this.apiUrl}/change-password`, passwordData, { headers });
+  }
+    
+   // Méthode pour récupérer l'historique de l'utilisateur connecté
+   getHistoriqueUtilisateur(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    return this.http.get(`${this.apiUrl}/historique-utilisateur`, { headers });
+  }
+
+
+   
+
+  // Vérifier si l'ancien mot de passe est correct (utilisation de HttpClient)
+  verifyOldPassword(ancienMotPasse: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    // Utilisation de "oldPassword" comme clé, qui est attendue côté backend
+    const body = {
+      oldPassword: ancienMotPasse  // Utilisez "oldPassword" au lieu de "ancien_mot_passe"
+    };
+  
+    // Appel HTTP avec la bonne structure de données
+    return this.http.post(`${this.apiUrl}/verify-old-password`, body, { headers });
+  }
+  
 }
+

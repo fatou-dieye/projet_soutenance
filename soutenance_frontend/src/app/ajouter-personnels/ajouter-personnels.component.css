@@ -1,0 +1,124 @@
+/* Fond assombri */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 750px;
+    max-width: 100%; /* Assurez-vous que le modal ne dépasse pas la largeur de la fenêtre */
+    height: auto;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1001;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère */
+    display: block;
+  }
+  
+  /* Bouton de fermeture */
+  .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ff0000; /* Couleur rouge pour la croix de fermeture */
+  }
+  
+  /* Titre */
+   h2 {
+    color: #2eb85c;
+    font-size: 20px; /* Taille de police légèrement plus grande */
+   
+  }
+  
+  /* Champs de formulaire */
+  .form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .form-group {
+    width: 48%;
+    margin-bottom: 15px;
+    border-color: #2eb85c;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+    width: auto; 
+    margin-right: 200px;
+  
+
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  /* Input et select */
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #F4F4F4;
+    border-radius: 5px;
+    font-size: 16px; /* Taille de police pour les champs */
+    background-color: white;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+   border-color: #ccc;
+  }
+
+
+  
+  /* Message d'erreur */
+  .error {
+    color: red;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
+  }
+  
+  /* Bouton */
+  button {
+    background-color: #2eb85c;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    font-size: 16px; /* Taille de police pour le bouton */
+    margin-top: 10px;
+  }
+  
+  button:disabled {
+    background-color: #2eb85c;
+    cursor: not-allowed;
+    opacity: 50%;
+  }
+  
+.forme{
+  border: solid 1px #2eb85c;
+  padding: 30px;
+  margin-top: 10px;
+}
+
+
+
+

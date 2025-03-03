@@ -1,5 +1,8 @@
 /* Main dashboard container */
-
+.dasbord{
+  background-color: #FAFBFF;
+ 
+}
 .dashboard-main {
     display: flex;
     flex-direction: column;
@@ -33,7 +36,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    height: 100px;
+    height: 150px;
     margin-top: 50px;
   }
   

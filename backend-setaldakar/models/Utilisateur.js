@@ -17,7 +17,7 @@ const utilisateurSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
   email: { type: String, required: false, unique: true },
-  mot_passe: { type: String, required: false, select: false },
+  mot_passe: { type: String, required: false },
   matricule: { type: String, required: false, unique: true, default: generateMatricule },
   photo: { type: String, required: false }, // URL ou chemin de l'image
   adresse: { type: String, required: false },
@@ -33,10 +33,13 @@ const utilisateurSchema = new mongoose.Schema({
 
 // Hacher le mot de passe avant de sauvegarder
 utilisateurSchema.pre('save', async function (next) {
-  if (!this.isModified('mot_passe')) return next();
-  this.mot_passe = await bcrypt.hash(this.mot_passe, 10);
+  // Si le mot de passe est fourni et a été modifié, alors on le hache
+  if (this.mot_passe && this.isModified('mot_passe')) {
+    this.mot_passe = await bcrypt.hash(this.mot_passe, 10);
+  }
   next();
 });
+
 
 // Créer le modèle utilisateur à partir du schéma
 const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);

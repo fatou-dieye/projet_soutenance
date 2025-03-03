@@ -1,0 +1,65 @@
+<div class="modal-overlay" *ngIf="selectedUser">
+
+  <div class="modal">
+    <span class="close-icon" (click)="close()">&times;</span>
+    <div class="modal-title">
+      <img src="logosetal.png" alt="Logo" width="170" height="170">
+      
+    </div>
+    <div class="forme">
+    <h2>Modifier Utilisateur</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-container">
+        <div class="form-group">
+          <label for="prenom">Prénom <span class="required">*</span></label>
+          <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nom">Nom <span class="required">*</span></label>
+          <input type="text" id="nom" [(ngModel)]="nom" name="nom" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email <span class="required">*</span></label>
+          <input type="email" id="email" [(ngModel)]="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Téléphone <span class="required">*</span></label>
+          <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adresse">Adresse <span class="required">*</span></label>
+          <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse" required>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Rôle <span class="required">*</span></label>
+          <select id="role" [(ngModel)]="role" name="role" required>
+            <option value="administrateur">Administrateur</option>
+            <option value="utilisateur">Utilisateur</option>
+            <option value="gardient">Gardien</option>
+          </select>
+        </div>
+
+       
+
+        <div class="form-group">
+          <label>Photo</label>
+          <input type="file" (change)="onFileSelected($event)">
+          <div *ngIf="photo">
+            <img [src]="photo" alt="Photo de l'utilisateur" width="100" height="100">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!prenom || !nom || !email || !telephone || !adresse || !role || !statut" class="modifi">
+        Modifier
+      </button>
+     
+    </form>
+  </div>
+  </div>
+</div>

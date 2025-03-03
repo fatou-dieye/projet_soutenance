@@ -18,44 +18,52 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+
+// Fonction pour télécharger une image de profil
+const uploadProfileImage = (req, res) => {
+  if (!req.file) {
+      return res.status(400).send('Aucun fichier téléchargé.');
+  }
+
+  res.send({
+      message: 'Image de profil téléchargée avec succès!',
+      file: req.file
+  });
+};
+
 // Inscription
 exports.register = async (req, res) => {
-    try {
-        const { nom, prenom, email, mot_passe, photo, adresse, telephone, role, statut } = req.body;
-        const photoPath = req.file ? `/uploads/${req.file.filename}` : null;
-        
-        const existingUser = await Utilisateur.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Cet email est déjà utilisé' });
-        }
-        
-        const nouvelUtilisateur = new Utilisateur({
-            nom,
-            prenom,
-            email,
-            mot_passe,
-            photo: photoPath,
-            adresse,
-            telephone,
-            role,
-            statut: statut || 'active',
-        });
-        await enregistrerAction(nouvelUtilisateur, "inscription", nouvelUtilisateur, "inscription");
-        await nouvelUtilisateur.save();
-       // await enregistrerAction(req.utilisateur.userId, "inscription d'utilisateur");
-        // Enregistrer l'action dans l'historique
-        res.status(201).json({
-            message: 'Utilisateur créé avec succès',
-            user: {
-                id: nouvelUtilisateur._id,
-                email: nouvelUtilisateur.email,
-                role: nouvelUtilisateur.role
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de l\'inscription', error: error.message });
-    }
+  try {
+    const { nom, prenom, email, mot_passe, adresse, telephone, role, statut } = req.body;
+    const photoPath = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null; // URL complète
+
+    const nouvelUtilisateur = new Utilisateur({
+      nom,
+      prenom,
+      email,
+      mot_passe: mot_passe || null,
+      photo: photoPath, // Enregistrer l'URL complète
+      adresse,
+      telephone,
+      role,
+      statut: statut || 'active',
+    });
+
+    await nouvelUtilisateur.save();
+    res.status(201).json({
+      message: 'Utilisateur créé avec succès',
+      user: {
+        id: nouvelUtilisateur._id,
+        email: nouvelUtilisateur.email,
+        role: nouvelUtilisateur.role,
+        photo: nouvelUtilisateur.photo, // Renvoyer l'URL complète
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de l\'inscription', error: error.message });
+  }
 };
+
 
 // Lister tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
@@ -130,10 +138,12 @@ const updateUsersStatus = async (req, res) => {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
   
+      // Si un fichier est téléchargé, mettre à jour le chemin de la photo avec l'URL complète
       if (req.file) {
-        utilisateur.photo = `/uploads/${req.file.filename}`;
+        utilisateur.photo = `http://localhost:3000/uploads/${req.file.filename}`;
       }
   
+      // Mettre à jour les autres champs de l'utilisateur
       utilisateur.nom = nom || utilisateur.nom;
       utilisateur.prenom = prenom || utilisateur.prenom;
       utilisateur.email = email || utilisateur.email;
@@ -142,9 +152,18 @@ const updateUsersStatus = async (req, res) => {
       utilisateur.telephone = telephone || utilisateur.telephone;
       utilisateur.statut = statut || utilisateur.statut;
   
+      // Sauvegarder les modifications
       await utilisateur.save();
-  // Enregistrer l'action dans l'historique
-      await enregistrerAction(req.utilisateur.userId, "Mise à jour d'utilisateur", utilisateur._id, `Utilisateur ${utilisateur.email} modifié`);    
+  
+      // Enregistrer l'action dans l'historique
+      await enregistrerAction(
+        req.utilisateur.userId,
+        "Mise à jour d'utilisateur",
+        utilisateur._id,
+        `Utilisateur ${utilisateur.email} modifié`
+      );
+  
+      // Renvoyer la réponse avec l'URL complète de la photo
       res.json({
         message: 'Utilisateur mis à jour avec succès',
         user: {
@@ -152,7 +171,7 @@ const updateUsersStatus = async (req, res) => {
           nom: utilisateur.nom,
           prenom: utilisateur.prenom,
           email: utilisateur.email,
-          photo: utilisateur.photo,
+          photo: utilisateur.photo, // URL complète de la photo
           adresse: utilisateur.adresse,
           telephone: utilisateur.telephone,
           role: utilisateur.role,
@@ -164,53 +183,68 @@ const updateUsersStatus = async (req, res) => {
     }
   };
   // Changer le mot de passe et déconnecter l'utilisateur après changement
-exports.changePassword = async (req, res) => {
-  try {
-    const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
-    const userId = req.utilisateur.userId; // Récupérer l'ID depuis le token
-
-    if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
-      return res.status(400).json({ message: 'Tous les champs sont requis' });
+  exports.changePassword = async (req, res) => {
+    try {
+      const { ancien_mot_passe, nouveau_mot_passe, confirmation_mot_passe } = req.body;
+      const userId = req.utilisateur.userId; // Récupérer l'ID depuis le token
+  
+      // Vérification des champs
+      if (!ancien_mot_passe || !nouveau_mot_passe || !confirmation_mot_passe) {
+        return res.status(400).json({ message: 'Tous les champs sont requis' });
+      }
+  
+      // Vérification de la correspondance des mots de passe
+      if (nouveau_mot_passe !== confirmation_mot_passe) {
+        return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
+      }
+  
+      // Trouver l'utilisateur par son ID
+      const utilisateur = await Utilisateur.findById(userId);
+      if (!utilisateur) {
+        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
+  
+      // Log pour vérifier les valeurs avant la comparaison
+      console.log('Ancien mot de passe envoyé:', ancien_mot_passe);
+      console.log('Mot de passe stocké (haché) dans la base de données:', utilisateur.mot_passe);
+  
+      // Vérification si l'ancienne valeur du mot de passe est valide
+      if (!ancien_mot_passe || !utilisateur.mot_passe) {
+        return res.status(400).json({ message: 'Données invalides pour la comparaison du mot de passe' });
+      }
+  
+      // Comparaison des mots de passe
+      const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
+      console.log('Ancien mot de passe valide ? ', isPasswordValid);
+  
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
+      }
+  
+      // Mettre à jour le mot de passe sans avoir besoin de le hacher à nouveau
+      utilisateur.mot_passe = nouveau_mot_passe;
+  
+      // Sauvegarder l'utilisateur avec le nouveau mot de passe
+      await utilisateur.save();
+  
+      // Optionnel : Enregistrer la dernière déconnexion ou toute autre action liée à l'utilisateur
+      await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
+  
+      // Enregistrer l'action de changement de mot de passe dans l'historique
+      await enregistrerAction(utilisateur._id, "changement de mots de passe", utilisateur._id);
+  
+      // Réponse au client
+      res.json({
+        message: 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.',
+        userId
+      });
+  
+    } catch (error) {
+      console.error('Erreur lors du changement de mot de passe:', error);
+      res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
     }
-
-    if (nouveau_mot_passe !== confirmation_mot_passe) {
-      return res.status(400).json({ message: 'Le nouveau mot de passe et la confirmation ne correspondent pas' });
-    }
-
-    const utilisateur = await Utilisateur.findById(userId);
-    if (!utilisateur) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-
-    // Vérifier si l'ancien mot de passe est valide
-    const isPasswordValid = await bcrypt.compare(ancien_mot_passe, utilisateur.mot_passe);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Ancien mot de passe incorrect' });
-    }
-
- 
-    // Mettre à jour le mot de passe avec le nouveau mot de passe (qui doit être déjà haché)
-    utilisateur.mot_passe = nouveau_mot_passe;
-    
-    // Sauvegarder l'utilisateur avec le nouveau mot de passe
-    await utilisateur.save();
-   
-    // Enregistrer la dernière déconnexion (si nécessaire)
-    await Utilisateur.findByIdAndUpdate(userId, { derniere_deconnexion: new Date() });
-    // Enregistrer l'action de connexion dans l'historique avant de répondre
-   await enregistrerAction(utilisateur._id, "changement de mots de passe", utilisateur._id);
-
-    res.json({
-      message: 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.',
-      userId
-    });
-
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors du changement de mot de passe', error: error.message });
-  }
-};
-
-
+  };
+  
   
   // Statistiques des utilisateurs par rôle
   exports.getUserStatistics = async (req, res) => {
@@ -329,7 +363,24 @@ exports.getHistorique = async (req, res) => {
   }
 };
 
+//lister l'historique de l'utilisateur connecter
+
+exports.getHistoriqueUtilisateur = async (req, res) => {
+  try {
+    const adminId = req.utilisateur.userId; // Récupérer l'ID de l'utilisateur à partir du token
+    const historique = await HistoriqueAction.find({ adminId }) // Filtrer par adminId
+      .populate('adminId', 'nom email')
+      .populate('cibleId', 'nom email')
+      .sort({ date: -1 });
+
+    res.json(historique);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+  }
+};
 
   exports.upload = upload;
 exports.updateUsersStatus = updateUsersStatus;
 exports.updateUser = updateUser;
+exports.uploadProfileImage = uploadProfileImage;
+

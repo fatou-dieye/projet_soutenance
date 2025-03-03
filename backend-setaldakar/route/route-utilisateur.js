@@ -20,7 +20,8 @@ router.post('/logout', verifyToken, authController.logout);
 // Inscription avec upload de photo
 router.post('/register', utilisateurController.upload.single('photo'), utilisateurController.register);
 
-
+// Route pour vérifier l'ancien mot de passe
+router.post('/verify-old-password', verifyToken, authController.verifyOldPassword);
 // Lister tous les utilisateurs (admin uniquement)
 router.get('/users', verifyToken, verifyRole(['administrateur']), utilisateurController.getAllUsers);
 
@@ -49,12 +50,18 @@ router.delete('/users/:id', verifyToken, verifyRole(['administrateur']), utilisa
 //route pour lister les historique
 router.get('/historique', verifyToken, utilisateurController.getHistorique);  // Modification pour utiliser historiqueController
 
+// Route pour récupérer l'historique de l'utilisateur connecté
+router.get('/historique-utilisateur', verifyToken, utilisateurController.getHistoriqueUtilisateur);
 
 // Route pour bloquer/débloquer un utilisateur par ID
 router.put('/users/:id/toggle-status', verifyToken, verifyRole(['administrateur']), utilisateurController.toggleUserStatus);
 
 // Route pour mot de passe oublié
 router.post('/forgot-password', motspassoublierController.forgotPassword);
+
+
+// Route pour télécharger une image de profil
+router.post('/uploadProfileImage', utilisateurController.upload.single('image'), utilisateurController.uploadProfileImage);
 
 
 
