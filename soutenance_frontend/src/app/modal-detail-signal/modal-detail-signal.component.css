@@ -1,214 +1,216 @@
+/* --- Styles généraux du modal --- */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border :none;
+}
 
-  .modal-container {
-    background-color: white;
-    width: 90%;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-height: 90vh;
-    overflow-y: auto;
-  }
+.modal-container {
+  background-color: white;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
+  max-height: 90vh;
+ padding: 10px;
 
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-  }
+ border: none;
+}
 
-  .modal-header h2 {
-    margin: 0;
-    color: #333;
-  }
 
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #666;
-  }
+/* --- En-tête du modal --- */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
 
-  .modal-content {
-    padding: 20px;
-  }
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
 
-  .location-container {
-    display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
+/* --- Localisation Section --- */
+.location-container {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
 
-  .location-icon {
-    margin-right: 15px;
-  }
+.location-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: #00a86b;
+}
 
-  .location-details h3 {
-    margin: 0 0 5px 0;
-    color: #00a86b;
-  }
+.localisation {
+  background: none;
+  border: none;
+  color: #00a86b;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
 
-  .location-details p {
-    margin: 0;
-  }
+.localisation:hover {
+  color: #008b5e;
+  text-decoration: underline;
+}
 
-  .coordinates {
-    color: #666;
-    font-size: 14px;
-  }
+.coordinates {
+  color: #666;
+  font-size: 14px;
+}
 
-  .navigation-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+/* --- Section des images --- */
+.photos-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
 
-  .nav-btn {
-    display: flex;
-    align-items: center;
-    background-color: #00a86b;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-  }
+.photos-grid {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
 
-  .nav-btn .icon {
-    margin-right: 8px;
-  }
+.photo-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
 
-  .description-section, .photos-section, .assignment-section {
-    margin-bottom: 20px;
-  }
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
- 
-  .localisation {
-    background: none; /* Pas de fond */
-    border: none; /* Pas de bordure */
-    color: #2eb85c; /* Couleur du texte en vert */
-    font-size: 24px; /* Grande taille pour le texte */
-    font-weight: bold; /* Texte en gras */
-    padding: 10px 20px; /* Espace autour du texte */
-    cursor: pointer; /* Pointeur au survol pour indiquer que c'est cliquable */
-    text-align: left; /* Aligner le texte à gauche */
-    text-decoration: none; /* Pas de soulignement initial */
-    transition: color 0.3s ease, text-decoration 0.3s ease; /* Transition pour la couleur et soulignement */
-  }
-  
-  .localisation:hover {
-    color: #1a9e48; /* Changer la couleur du texte en survol pour un effet visuel */
-    text-decoration: underline; /* Souligner le texte au survol */
-  }
-  
-  .localisation:active {
-    color: #187e3c; /* Changer la couleur du texte lorsqu'on clique (état actif) */
-    text-decoration: none; /* Retirer le soulignement lorsqu'on clique pour imiter l'effet d'un lien cliqué */
-  }
-  
-  
-  .photos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-  }
+.photo-container:hover {
+  transform: scale(1.05);
+}
 
-  .photo-container {
-    height: 150px;
-    overflow: hidden;
-    border-radius: 4px;
-  }
+/* --- Section Description --- */
+.description-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+}
 
-  .photo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
+.description-section p {
+  font-size: 16px;
+  color: #333;
+}
 
-  .photo-container img:hover {
-    transform: scale(1.05);
-  }
+/* --- Section de sélection du videur --- */
+.assignment-section h5 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
 
-  .expanded-photo-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1100;
-  }
+.videur-select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
 
-  .expanded-photo-overlay img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-  }
+.videur-select:hover {
+  border-color: #00a86b;
+}
 
-  .videur-select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-  }
+/* --- Boutons d'action --- */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
 
-  .action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-   
-  }
+.btn-cancel {
+  background-color: #f4f4f4;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-  .btn-cancel {
-    background-color: #f4f4f4;
-    color: #333;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.btn-assign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00a86b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  max-width: 250px;
+  transition: background 0.3s ease;
+}
 
-  .btn-assign {
-    display: flex;
-    align-items: center;
-    background-color: #00a86b;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-  }
+.btn-assign:disabled {
+  background-color: #a5d6c7;
+  cursor: not-allowed;
+}
 
-  .btn-assign:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
+.btn-assign .icon {
+  margin-right: 8px;
+}
 
-  .btn-assign .icon {
-    margin-right: 8px;
-  }
+/* --- Agrandissement des photos --- */
+.expanded-photo-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.expanded-photo-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+.modal-content{
+  border: none;
+}

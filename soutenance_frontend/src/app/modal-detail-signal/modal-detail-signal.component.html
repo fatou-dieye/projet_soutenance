@@ -9,10 +9,11 @@
         <!-- Localisation section -->
         <div class="location-container">
           <div class="location-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
               <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
               <circle cx="12" cy="10" r="3"/>
             </svg>
+            
           </div>
           <div class="location-details">
             <button (click)="openInMaps()"  class="localisation"><h3> Localisation</h3></button>
@@ -22,28 +23,23 @@
           </div>
         </div>
 
-      
-       
-
-        <!-- Description section -->
-        <div class="description-section">
-          <h3>Description</h3>
-          <p>{{ alerte.description }}</p>
-        </div>
-
         <!-- Photos section -->
         <div class="photos-section">
-          <h3>Photos</h3>
+         <h3>Photo</h3>
           <div class="photos-grid">
             <div class="photo-container" *ngFor="let photo of alerte.photos">
               <img [src]="photo.chemin" alt="Photo de l'alerte" (click)="expandPhoto(photo.chemin)">
             </div>
           </div>
         </div>
-
+         <!-- Description section -->
+         <div class="description-section">
+         <h3>Description</h3>
+          <p>{{ alerte.description }}</p>
+        </div>
         <!-- Assignment section -->
         <div class="assignment-section">
-          <h3>Assigner à un videur</h3>
+          <h5>Assigner à un videur</h5>
           <select [(ngModel)]="selectedVideur" class="videur-select">
             <option [value]="null" disabled selected>Sélectionnez un Videur</option>
             <option *ngFor="let videur of videurs" [value]="videur._id">{{ videur.nom }} {{ videur.prenom }} - {{ videur.adresse }}</option>
