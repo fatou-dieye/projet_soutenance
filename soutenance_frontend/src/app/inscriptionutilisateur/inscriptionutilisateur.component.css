@@ -1,0 +1,170 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Conteneur du formulaire */
+/* Conteneur du formulaire */
+.container {
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 650px;
+    position: relative; /* Assure un positionnement de base */
+    text-align: center;
+    /* Pour s'assurer que le formulaire est centré sur la page */
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+/* Logo */
+.logo img {
+    width: 200px;
+    margin-bottom: 10px;
+    height: auto; /* Correction pour conserver les proportions */
+    position: absolute;
+    top: -30px; /* Ajustez cette valeur pour monter le logo plus haut */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Bordures intérieures personnalisées */
+.container::before,
+.container::after {
+    content: '';
+    position: absolute;
+    z-index: -1; /* Assure que les bordures sont derrière le contenu */
+}
+
+.container::before {
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 10px;
+    background: linear-gradient(to right, white, green);
+    border-top-left-radius: 20px; /* Correspond au bord supérieur gauche */
+}
+
+.container::after {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: linear-gradient(to right, green, white);
+    border-bottom-left-radius: 20px; /* Correspond au bord inférieur gauche */
+    border-bottom-right-radius: 20px; /* Correspond au bord inférieur droit */
+}
+
+/* Bordures intérieures supplémentaires */
+.container::before {
+    border-top: 10px solid transparent;
+    border-image: linear-gradient(to right, white, green) 1;
+}
+
+.container::after {
+    border-bottom: 10px solid transparent;
+    border-image: linear-gradient(to right, green, white) 1;
+}
+
+/* Titre */
+h3 {
+    color: #00A551;
+    margin-top: 15px; /* Ajustez cette valeur pour l'espacement après le logo */
+}
+
+/* Slogan */
+.slogan {
+    font-size: 14px;
+    color: #292D32;
+    margin-top: 120px;
+}
+
+/* Ligne des champs */
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Champ du formulaire */
+.form-group {
+    flex: 1;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #7F7E83;
+}
+
+/* Astérisques en rouge */
+.required {
+    color: red;
+    font-weight: normal;
+}
+
+
+input {
+    width: 85%;
+    padding: 10px;
+    border: 1px solid #00A551;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f4f4f4;
+}
+
+/* Mot de passe */
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 43px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Bouton */
+.btn {
+    width: 20%;
+    background-color: #00A551;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #008050;
+}
+
+/* Lien de connexion */
+.login-link {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #00796b;
+    text-decoration: none;
+}
+/* Styles pour les messages d'erreur */
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  

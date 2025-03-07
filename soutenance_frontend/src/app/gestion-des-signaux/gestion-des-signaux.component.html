@@ -1,0 +1,65 @@
+<body>
+<app-sidebarre></app-sidebarre>
+<div class="utilisateur-main">
+   <!-- votre-composant.component.html -->
+   <div class="content-container">
+    <div class="step-labels">
+      <p>
+        <span class="label" id="label-1">Geolocalisation</span>
+        <span class="label" id="label-2">Photos</span>
+        <span class="label" id="label-3">Description</span>
+      </p>
+      <div class="step-indicator">
+        <div class="progress-line"></div>
+      </div>
+    </div>
+  
+    <div class="signal-container">
+      <div class="step-content">
+        <!-- Étape 1 : Géolocalisation -->
+        <div class="step" [class.active]="currentStep === 1">
+          <div class="step-header">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Nous avons besoin de votre position pour localiser le problème.</p>
+          </div>
+          <button class="share-location" (click)="shareLocation()">Partager</button>
+          <div id="map" style="height: 300px;"></div>
+        </div>
+  
+        <!-- Étape 2 : Photos -->
+        <div class="step" [class.active]="currentStep === 2">
+          <div class="step-header">
+            <p>Ajouter des photos</p>
+           
+          </div>
+          <div class="photo-options">
+            <div class="photo-block">
+              <i class="fas fa-plus"></i>
+              <input type="file" (change)="onFileChange($event)" multiple accept="image/*">
+            </div>
+          </div>
+          <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
+        </div>
+  
+        <!-- Étape 3 : Description -->
+        <div class="step" [class.active]="currentStep === 3">
+          <div class="step-header">
+            <p>Décrire la situation</p>
+          </div>
+          <div class="description-box">
+            <textarea [(ngModel)]="description" placeholder="Décrivez le problème ici..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="navigation-buttons">
+        <button class="prev-step" (click)="prevStep()" *ngIf="currentStep > 1">Retour</button>
+        <button class="next-step" (click)="nextStep()" *ngIf="currentStep < 3">Suivant</button>
+        <button class="finish-step" (click)="finishStep()" *ngIf="currentStep === 3">Terminer</button>
+      </div>
+    </div>
+  </div>
+  
+  
+</div>
+
+</body>

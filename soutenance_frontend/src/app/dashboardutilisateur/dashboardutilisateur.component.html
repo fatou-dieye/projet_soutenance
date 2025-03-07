@@ -1,0 +1,108 @@
+<div class="corps">
+  <app-sidebarre></app-sidebarre>
+  <div class="utilisateur-main">
+    <div class="content-container">
+      <!-- Message de Sensibilisation et Stats cards row -->
+      <div class="stats-row">
+        <!-- Stats cards -->
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ nombreUtilisateurs }}</h2>
+            <p class="stat-label">Citoyens Inscrits</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <img src="Group.png" alt=""> <!-- Nouvelle icône pour les dépôts disponibles -->
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">05</h2>
+            <p class="stat-label">Points de dépôt disponibles</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="localisation-container">
+      <div class="chart-box">
+        <h3 class="title">Trouver un dépôt</h3>
+        <div class="chart-wrapper">
+          <!-- Conteneur de la carte avec une taille fixe -->
+          <div id="map-container"></div>
+          <!-- Bouton pour agrandir la carte -->
+         
+        </div>
+      </div>
+  
+    
+          
+        
+          
+      
+
+      <div class="depots-sauvage">
+        <h3 class="title">Les Dépôts Signalés</h3>
+        <div class="depots-grid" id="depots-grid">
+          <!-- Affichage des alertes -->
+          <div *ngFor="let alerte of alertes" class="depot-item">
+            <div class="depot-info">
+              <p class="depot-date">{{ alerte.dateCreation | date: 'dd/MM/yyyy' }}</p>
+              <p class="depot-time">{{ alerte.dateCreation | date: 'HH:mm' }}</p>
+              <p class="depot-location">{{ alerte.adresse }}</p>
+            </div>
+            <div class="depot-icon" (click)="showDetails(alerte)">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+        </div>
+        <ng-template #noAlertes>
+          <p>Aucune alerte disponible.</p>
+        </ng-template>
+      
+<!-- Pagination -->
+<div class="pagination" id="pagination">
+  <!-- Bouton "Précédent" -->
+  <button (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Page précédente">
+    <i class="fas fa-chevron-left"></i> <!-- Icône pour la flèche gauche -->
+  </button>
+
+  <!-- Affichage de la page courante et du total -->
+  <span> {{ currentPage }} sur {{ totalPages }}</span>
+
+  <!-- Bouton "Suivant" -->
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Page suivante">
+    <i class="fas fa-chevron-right"></i> <!-- Icône pour la flèche droite -->
+  </button>
+</div>
+
+
+
+      
+         
+      
+    </div>  
+  </div>
+</div>
+
+
+<!-- Modale pour afficher les détails de l'alerte -->
+<div class="modal-overlay" *ngIf="selectedAlerte">
+  <div class="modal-content">
+    <h3>Détails de l'Alerte</h3>
+    <p><strong>Date :</strong> {{ selectedAlerte.dateCreation | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p><strong>Adresse :</strong> {{ selectedAlerte.adresse }}</p>
+    <p><strong>Coordonnees :</strong> Latitude: {{ selectedAlerte.coordonnees.latitude }}, Longitude: {{ selectedAlerte.coordonnees.longitude }}</p>
+    <p><strong>Description :</strong> {{ selectedAlerte.description || 'Aucune description' }}</p>
+    <div *ngIf="selectedAlerte.photos && selectedAlerte.photos.length > 0">
+      <h4>Photos :</h4>
+      <div *ngFor="let photo of selectedAlerte.photos">
+        <img [src]="getPhotoUrl(photo)" alt="Photo de l'alerte" class="alert-photo" (error)="photoLoadError($event)">
+      </div>
+    </div>
+    <button class="close-btn" (click)="closeModal()">Fermer</button>
+  </div>
+</div>

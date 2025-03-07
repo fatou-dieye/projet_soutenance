@@ -9,6 +9,9 @@ const { verifyToken, verifyRole } = require('../middleware/authmiddleware');
 const Alerte = require('../models/Signal');
 const Utilisateur = require('../models/Utilisateur');
 const AlerteController = require('../controllers/signalController');
+const  getNearbyDepots  = require('../controllers/signalController');
+const getAlertesByUser  = require('../controllers/signalController');
+
 // Configuration de multer pour l'upload des photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -77,7 +80,7 @@ const compressImages = async (req, res, next) => {
 };
 
 // 1. CRÉER UNE ALERTE (pour les citoyens)
-router.post('/alertes', 
+router.post('/alertes/create', 
   verifyToken, 
   upload.array('photos', 4),
   compressImages,
@@ -89,5 +92,11 @@ router.get('/alertes', verifyToken, AlerteController.getAlertes);
 
 // 3. RÉCUPÉRER UNE ALERTE PAR ID
 router.get('/alertes/:id', verifyToken, AlerteController.getAlerteById);
+
+
+router.get('/nearby-depots', verifyToken, AlerteController.getNearbyDepots);
+
+// Route pour récupérer les alertes par utilisateur
+router.get('/alertesbyuser', verifyToken, AlerteController.getAlertesByUser);
 
 module.exports = router;

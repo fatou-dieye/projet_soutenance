@@ -25,10 +25,10 @@ const utilisateurSchema = new mongoose.Schema({
   role: { type: String, required: true, enum: ['administrateur', 'utilisateur', 'videur', 'gardient'] },
   statut: { type: String, required: false, enum: ['active', 'bloquer'] },
   carte_rfid: { type: String, unique: true, sparse: true, default: null }, // rfid_id reste null jusqu'à l'assignation
-}, {
+  }, {
   timestamps: true // Ajoute des champs createdAt et updatedAt
 });
-
++9-
 
 
 // Hacher le mot de passe avant de sauvegarder

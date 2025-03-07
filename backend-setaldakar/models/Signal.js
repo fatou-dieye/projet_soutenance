@@ -60,6 +60,7 @@ const alerteSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Utilisateur'
   },
+  nom: String,
   
   // Horodatage
   dateCreation: {

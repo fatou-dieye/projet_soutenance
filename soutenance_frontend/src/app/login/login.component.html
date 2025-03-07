@@ -1,0 +1,59 @@
+
+  
+
+<div class="page-container">
+<div class="login-container">
+ 
+  <div class="image-section">
+    <img src="poubelle2.png" alt="Image de connexion">
+  </div>
+
+  <div class="form-section">
+    <div class="form-box">
+      <h2>Connectez-vous</h2>
+      <p>Chaque geste compte pour un environnement plus propre, ensemble, faisons la différence.</p>
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="form-group">
+          <label for="identifiant">Identifiant</label>
+          <input
+            type="text"
+            id="identifiant"
+            name="identifiant"
+            [(ngModel)]="identifiant"
+            #identifiantField="ngModel"
+            required
+            (input)="validateIdentifiant()"
+          >
+          <div *ngIf="identifiantError" class="error-message">
+            {{ identifiantError }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <div class="password-container">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="mot_passe"
+              #passwordField="ngModel"
+              required
+              (input)="validatePassword()"
+            >
+            <span class="toggle-password" (click)="togglePasswordVisibility()">
+              <i class="fa" [ngClass]="{'fa-eye-slash': showPassword, 'fa-eye': !showPassword}"></i>
+            </span>
+          </div>
+          <div *ngIf="passwordError" class="error-message">
+            {{ passwordError }}
+          </div>
+        </div>
+        <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+        <button type="submit" [disabled]="loginForm.invalid || identifiantError || passwordError">Connexion</button>
+        <p>Vous n’avez pas de compte ? <a href="/inscriptionutilisateur">Créer un compte</a></p>
+      </form>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </div>
+  </div>
+</div>
+</div>

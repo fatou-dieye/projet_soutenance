@@ -3,17 +3,20 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Utilisateur = require('../models/Utilisateur');
 
-const authController = require('../controllers/authcontroller');
-const utilisateurController = require('../controllers/utilisateur-controller');
+const utilisateurController = require('../controllers/utilisateurController');
+
+
+const authController = require('../controllers/authController');
+
 const { verifyToken, verifyRole, invalidateToken } = require('../middleware/authmiddleware');
-const HistoriqueAction = require('../models/HistoriqueAction');
-
+const historiqueController = require('../controllers/historiqueController'); // Assurez-vous de bien l'importer
+const motdepasseController = require('../controllers/motdepasseControllerjs'); // Assurez-vous que le chemin est correct
 
 // Login avec email/mot de passe ou téléphone/mot de passe
 
 router.post('/login', authController.login);
+router.post('/check-existence', authController.checkExistence);
 //route pour deconexion 
 router.post('/logout', verifyToken, authController.logout);
 
@@ -47,8 +50,26 @@ router.delete('/users/bulk-delete', verifyToken, verifyRole(['administrateur']),
 // Route pour supprimer un utilisateur
 router.delete('/users/:id', verifyToken, verifyRole(['administrateur']), utilisateurController.deleteUser);
 //route pour lister les historique
-router.get('/historique', verifyToken, utilisateurController.getHistorique);
+// router.get('/historique', verifyToken, historiqueController.getHistorique);  // Modification pour utiliser historiqueController
 
+
+// Route pour bloquer/débloquer un utilisateur par ID
+router.put('/users/:id/toggle-status', verifyToken, verifyRole(['administrateur']), utilisateurController.toggleUserStatus);
+
+// Route pour mot de passe oublié
+// Route pour récupérer l'historique de l'utilisateur connecté
+router.get('/historique-utilisateur', verifyToken, utilisateurController.getHistoriqueUtilisateur);
+
+// Route pour l'inscription des utilisateurs avec des champs limités
+router.post('/register-simple-user', utilisateurController.registerSimpleUser);
+
+router.get('/total-users', utilisateurController.getTotalUsers);
+
+// Route pour demander une réinitialisation de mot de passe
+router.post('/request-reset-password', motdepasseController.requestResetPassword);
+
+// Route pour réinitialiser le mot de passe
+router.post('/reset-password', motdepasseController.resetPassword);
 
 
 

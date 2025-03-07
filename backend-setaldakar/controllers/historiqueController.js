@@ -1,5 +1,8 @@
-const mongoose = require('mongoose');
+
+// controllers/historiqueController
+const Utilisateur = require('../models/Utilisateur');
 const HistoriqueAction = require('../models/HistoriqueAction');
+
 
 
 
@@ -19,6 +22,29 @@ const enregistrerAction = async (adminId, action, cibleId, details = '') => {
 };
 
 module.exports = {
-  enregistrerAction,
-  // other exports if any
+  enregistrerAction
 };
+
+
+
+/* Lister l'historique
+ const getHistorique = async (req, res) => {
+  try {
+    const historique = await HistoriqueAction.find()
+      .populate('adminId', 'nom email')
+      .populate('cibleId', 'nom email')
+      .sort({ date: -1 });
+
+    res.json(historique);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+  }
+}; 
+
+module.exports = {
+ 
+ getHistorique    
+};
+
+*/
+

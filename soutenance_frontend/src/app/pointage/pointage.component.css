@@ -1,0 +1,175 @@
+.admin-main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 240px; /* Space for sidebar */
+    padding: 20px;
+    overflow-y: auto;
+    
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.pointage-container {
+    padding: 20px;
+    overflow-x: auto; /* Permet le défilement horizontal si nécessaire */
+}
+
+.pointage-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Pour garantir que les colonnes ont une largeur fixe */
+}
+
+.pointage-table thead {
+    background-color: #00A551;
+}
+
+.pointage-table th,
+.pointage-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word; /* Permet le retour à la ligne dans les cellules */
+}
+
+.pointage-table th {
+    background-color: #00A551;
+    color: white;
+}
+
+.pointage-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.pointage-table tr:hover {
+    background-color: #ddd;
+}
+
+.pointage-table img {
+    max-width: 50px; /* Limite la taille des images */
+    border-radius: 50%; /* Pour des images circulaires */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    background-color: #00A551;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #008040;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+/* Style de l'icône pour l'assignation de carte */
+.assign-card {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+.assign-card:hover {
+    transform: scale(1.1);
+}
+
+
+/* Style général pour les images assignées ou non assignées */
+.assign-card {
+    width: 30px; /* Taille de l'image, ajustez selon vos besoins */
+    height: 30px; /* Taille de l'image, ajustez selon vos besoins */
+    cursor: pointer; /* Change le curseur au survol pour indiquer que l'image est cliquable */
+    transition: transform 0.3s ease; /* Ajout d'une animation pour l'effet de survol */
+  }
+  
+  /* Effet au survol de l'image */
+  .assign-card:hover {
+    transform: scale(1.1); /* L'image grossit légèrement lorsqu'on passe la souris dessus */
+  }
+  
+  .modal {
+    display: block; /* Visible lorsque showModal est vrai */
+    position: fixed; /* Reste en place même en scrollant */
+    z-index: 1; /* Par-dessus le reste du contenu */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur totale */
+    height: 100%; /* Hauteur totale */
+    overflow: auto; /* Activer le scroll si nécessaire */
+    background-color: rgba(0, 0, 0, 0.4); /* Fond noir semi-transparent */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centré avec un décalage de 15% du haut */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Largeur du modal (modifiable) */
+    border-radius: 8px; /* Coins arrondis */
+  }
+  
+  .close {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+   
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  button {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  input {
+    padding: 8px;
+    margin: 10px 0;
+    width: 85%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+ 

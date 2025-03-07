@@ -1,0 +1,30 @@
+<body>
+    <app-sidebarre></app-sidebarre>
+<div class="utilisateur-main">
+    <div class="content-container">
+        <div class="historique-actions-container">
+            <h2>Historique des Actions</h2>
+            <table class="historique-table">
+                <thead>
+                  <tr>
+                    <th>Utilisateur</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of historique">
+                    <td>{{ entry.utilisateur }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.heure }}</td>
+                    <td>{{ entry.action }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+        </div>
+    </div>
+</div>
+
+</body>

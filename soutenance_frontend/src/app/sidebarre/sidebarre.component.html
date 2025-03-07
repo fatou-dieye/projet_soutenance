@@ -1,54 +1,68 @@
-<!--partie navebarre-->
+<!-- sidebar.component.html -->
 <div class="navbar">
-    <!-- Logo Section -->
-    <div class="navbar-logo">
-     
-      <span>SETAL DAKAR</span>
-    </div>
-    
-    <!-- Profile Section -->
-    <div class="navbar-profile">
-      <span class="profile-name">Khalifa Guaye</span>
-      <span class="profile-role">Administrateur</span>
-      <img src="assets/profile_picture.jpg" alt="Profile" class="profile-img">
-    </div>
+  <!-- Logo Section -->
+  <div class="navbar-logo">
+    <span>SETAL DAKAR</span>
   </div>
 
-
-  <!--partie sidebare-->
-  <div class="sidebar">
-    <!-- Logo Section -->
-    <div class="sidebar-logo">
-      <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
-     
-    </div>
-    
-    <!-- Navigation lien -->
-    <div class="sidebar-nav">
-      <a href="/dashboard" class="nav-link" id="dashboard-link">
-        <i class="fas fa-tachometer-alt"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="/gestion-signals" class="nav-link" id="gestion-signals-link">
-        <i class="fas fa-bell"></i>
-        <span>Gestion des Signaux</span>
-      </a>
-      <a href="/gestion-personnel" class="nav-link" id="gestion-personnel-link">
-        <i class="fas fa-users"></i>
-        <span>Gestion Personnel</span>
-      </a>
-      <a href="/pointage" class="nav-link" id="pointage-link">
-        <i class="fas fa-check-circle"></i>
-        <span>Pointage</span>
-      </a>
-      <a href="/historique" class="nav-link" id="historique-link">
-        <i class="fas fa-history"></i>
-        <span>Historique</span>
-      </a>
-    </div>
-    
-    <!-- deconnexion -->
-    <div class="logout">
-      <a href="/logout">Déconnecter</a>
+  <!-- Profile Section -->
+  <div class="navbar-profile">
+    <img [src]="userPhoto ? userPhoto : null" alt="Profile" class="profile-img" *ngIf="userPhoto; else avatar">
+    <ng-template #avatar>
+      <div class="avatar" [style.background-color]="getBackgroundColor()">
+        {{ getInitials() }}
+      </div>
+    </ng-template>
+    <div class="profile-info">
+      <span class="profile-name">{{ userPrenom }} {{ userName }}</span>
+      <span class="profile-role">{{ userRole }} <button class="edit-btn triangle-btn">&#x25BC;</button></span>
     </div>
   </div>
+</div>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
+  </div>
+  <div class="sidebar-nav">
+    <!-- Liens pour l'admin -->
+    <a *ngIf="isAdmin" routerLink="/dasbordadmin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-home"></i>
+      <span>Dashboard</span>
+    </a>
+    <a *ngIf="isAdmin" routerLink="/gestion-des-alertes" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-bell"></i>
+      <span>Gestion des Signaux</span>
+    </a>
+    <a *ngIf="isAdmin" routerLink="/gestion-personels" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-users"></i>
+      <span>Gestion Personnel</span>
+    </a>
+    <a *ngIf="isAdmin" routerLink="/pointage" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-check-circle"></i>
+      <span>Pointage</span>
+    </a>
+    <a *ngIf="isAdmin" routerLink="/historique-admin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-history"></i>
+      <span>Historique</span>
+    </a>
+
+    <!-- Liens pour l'utilisateur -->
+    <a *ngIf="!isAdmin" routerLink="/dashboardutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-home"></i>
+      <span>Dashboard</span>
+    </a>
+    <a *ngIf="!isAdmin" routerLink="/gestion-des-signaux" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-bell"></i>
+      <span>Signal</span>
+    </a>
+    <a *ngIf="!isAdmin" routerLink="/historiqueutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <i class="fas fa-history"></i>
+      <span>Historique</span>
+    </a>
+  </div>
+  <div class="logout">
+    <i class="fas fa-sign-out-alt logout-icon"></i>
+    <a class="button" (click)="logout()">Déconnecter</a>
+  </div>
+</div>

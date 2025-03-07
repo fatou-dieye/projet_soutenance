@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+/* const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/citoyen');
 const { logAction } = require('./historiqueController');
@@ -180,3 +180,5 @@ exports.updateUserInfo = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
 };
+
+*/
