@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl,AbstractControl  } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../serviceslogin/auth.service';
+import { AuthService } from '../services/serviceslogin/auth.service';
 
 @Component({
   selector: 'app-changement-mots-pass',

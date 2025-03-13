@@ -149,3 +149,22 @@ exports.getTodayAttendanceRecords = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la récupération des enregistrements de pointage du jour' });
   }
 };
+
+// Récupérer le nombre de pointages pour un jour donné
+exports.getDailyAttendanceCount = async (req, res) => {
+  try {
+    const today = moment().startOf('day');
+    const tomorrow = moment(today).add(1, 'days');
+
+    const count = await Attendance.countDocuments({
+      date: {
+        $gte: today.toDate(),
+        $lt: tomorrow.toDate()
+      }
+    });
+
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la récupération du nombre de pointages' });
+  }
+};

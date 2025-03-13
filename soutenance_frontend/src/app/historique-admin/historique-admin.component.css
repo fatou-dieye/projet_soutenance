@@ -122,6 +122,9 @@
   }
   
  
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
  
   
   /* Pagination */

@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const GeolocationService = require('../services/geolocation.service');
 const Depot = require('../models/depos');
 const User = require('../models/Utilisateur'); // Assurez-vous que le chemin est correct
-
+const moment = require('moment');
 // Créer une nouvelle alerte
 exports.createAlert = async (req, res) => {
   try {
@@ -36,6 +36,28 @@ exports.getAlerts = async (req, res) => {
     res.json(alerts);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+
+
+
+// Récupérer le nombre d'alertes pour un jour donné
+exports.getDailyAlertCount = async (req, res) => {
+  try {
+    const today = moment().startOf('day');
+    const tomorrow = moment(today).add(1, 'days');
+
+    const count = await Alert.countDocuments({
+      date: {
+        $gte: today.toDate(),
+        $lt: tomorrow.toDate()
+      }
+    });
+
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la récupération du nombre d\'alertes' });
   }
 };
 
@@ -81,7 +103,7 @@ exports.updateAlert = async (req, res) => {
       `;
     }
     
-    // Envoyer un email au videur avec l'itinéraire
+    // Envoyer un email au videur avec l'itinéraire et le lien de confirmation
     await sendTaskEmail(alert, employee_email, itineraire);
     
     // Mettre à jour le statut de l'alerte
@@ -94,9 +116,97 @@ exports.updateAlert = async (req, res) => {
   }
 };
 
+// Confirmer la vidange (endpoint appelé depuis l'email)
+exports.confirmVidange = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Rechercher l'alerte par ID
+    const alert = await Alert.findById(id);
+    
+    if (!alert) {
+      return res.status(404).send(`
+        <html>
+          <head>
+            <title>Confirmation de vidange</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+              .error { color: red; }
+            </style>
+          </head>
+          <body>
+            <h1 class="error">Erreur</h1>
+            <p>Alerte non trouvée.</p>
+          </body>
+        </html>
+      `);
+    }
+    
+    // Mettre à jour le statut de l'alerte
+    if (alert.status === 'en traitement') {
+      alert.status = 'traité';
+      await alert.save();
+      
+      // Retourner une page de confirmation HTML
+      return res.status(200).send(`
+        <html>
+          <head>
+            <title>Confirmation de vidange</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+              .success { color: green; }
+            </style>
+          </head>
+          <body>
+            <h1 class="success">Vidange confirmée avec succès!</h1>
+            <p>Le statut de l'alerte a été mis à jour de "en traitement" à "traité".</p>
+          </body>
+        </html>
+      `);
+    } else {
+      return res.status(400).send(`
+        <html>
+          <head>
+            <title>Confirmation de vidange</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+              .warning { color: orange; }
+            </style>
+          </head>
+          <body>
+            <h1 class="warning">Pas de mise à jour nécessaire</h1>
+            <p>Cette alerte n'est pas en cours de traitement ou a déjà été traitée.</p>
+            <p>Statut actuel: ${alert.status}</p>
+          </body>
+        </html>
+      `);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la confirmation de vidange:', error);
+    res.status(500).send(`
+      <html>
+        <head>
+          <title>Confirmation de vidange</title>
+          <style>
+            body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+            .error { color: red; }
+          </style>
+        </head>
+        <body>
+          <h1 class="error">Erreur</h1>
+          <p>Une erreur s'est produite lors de la confirmation de la vidange.</p>
+        </body>
+      </html>
+    `);
+  }
+};
+
 // Fonction pour envoyer un email de tâche au videur
 const sendTaskEmail = (alert, employee_email, itineraire) => {
   return new Promise((resolve, reject) => {
+    // Construire l'URL de confirmation avec l'ID de l'alerte
+    const confirmationUrl = `${process.env.API_BASE_URL || 'http://localhost:3000'}/api/confirm-vidange/${alert._id}`;
+    
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -127,17 +237,36 @@ const sendTaskEmail = (alert, employee_email, itineraire) => {
           </div>
           
           <div style="background-color: #e0f7e9; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <!-- Ajouter le bouton avec un lien vers Google Maps -->
-            <a href="${mapsUrl}" target="_blank" style="
-              display: inline-block; 
-              background-color: #4CAF50; 
-              color: white; 
-              padding: 10px 20px; 
-              text-align: center; 
-              border-radius: 5px; 
-              text-decoration: none; 
-              font-size: 16px; 
-              margin-top: 10px;">L'itinéraire sur Google Maps</a>
+            <p><strong>Instructions :</strong></p>
+            <div style="margin: 10px 0;">
+              <!-- Ajouter le bouton avec un lien vers Google Maps -->
+              <a href="${mapsUrl}" target="_blank" style="
+                display: inline-block; 
+                background-color: #4CAF50; 
+                color: white; 
+                padding: 10px 20px; 
+                text-align: center; 
+                border-radius: 5px; 
+                text-decoration: none; 
+                font-size: 16px; 
+                margin-right: 10px;">L'itinéraire sur Google Maps</a>
+                
+                
+              <!-- Bouton de confirmation de vidange -->
+              <a href="${confirmationUrl}" target="_blank" style="
+                display: inline-block; 
+                background-color: #2196F3; 
+                color: white; 
+                padding: 10px 20px; 
+                text-align: center; 
+                border-radius: 5px; 
+                text-decoration: none; 
+                font-size: 16px; 
+                margin-top: 10px;">Confirmer la vidange</a>
+            </div>
+            <p style="font-size: 14px; color: #666; margin-top: 15px;">
+              <i>Cliquez sur "Confirmer la vidange" une fois que vous avez terminé la mission pour mettre à jour son statut.</i>
+            </p>
           </div>
           
           <p>Merci de traiter cette alerte dès que possible.</p>

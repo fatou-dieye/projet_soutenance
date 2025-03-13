@@ -14,4 +14,7 @@ router.post('/record-attendance', pointageController.recordAttendance);
 router.get('/attendance-records', verifyToken, verifyRole(['administrateur']), pointageController.getAttendanceRecords);
 //voir les pointage journaliers
 router.get('/getTodayAttendanceRecords', verifyToken, verifyRole(['administrateur']), pointageController.getTodayAttendanceRecords);
+//voir le nombre de pontage dans la journee
+router.get('/daily-attendance-count', verifyToken, verifyRole(['administrateur']), pointageController.getDailyAttendanceCount);
+
 module.exports = router;

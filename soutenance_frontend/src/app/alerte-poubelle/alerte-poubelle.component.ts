@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
-import { AlertPoubelleService, User } from '../services-alert-poubelle/alert-poubelle.service';
+import { AlertPoubelleService, User } from '../services/services-alert-poubelle/alert-poubelle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -23,12 +23,32 @@ export class AlertePoubelleComponent {
   searchText = ''; // Texte de recherche
   filteredAlerts: any[] = [];
   isTraiterAlertModalOpen = false;
-  
-  
+  addresses: string[] = []; 
+  filteredVideurs: User[] = []; 
+  selectedAddress: string = '';
   // Pour le modal de traitement
   selectedAlert: any = null;
   selectedVideur: string = '';
  
+// Limites de Dakar (approximatives)
+dakarLimits = {
+  latMin: 14.60,
+  latMax: 14.85,
+  lngMin: -17.55,
+  lngMax: -17.30
+};
+  
+  // Erreurs de validation
+  validationErrors = {
+    lieu: '',
+    latitude: '',
+    longitude: '',
+    gardien_id: ''
+  };
+  
+  // Indicateur si le formulaire est valide
+  isFormValid = false;
+
   constructor(private alertService: AlertPoubelleService) {}
 
   ngOnInit(): void {
@@ -56,12 +76,29 @@ export class AlertePoubelleComponent {
     this.alertService.getVideurs().subscribe(
       (videurs) => {
         this.videurs = videurs; // Stocke les videurs récupérés dans la variable
+        this.filteredVideurs = videurs; // Initialiser les videurs filtrés avec tous les videurs
+        
+        // Extraire les adresses uniques
+        this.addresses = Array.from(new Set(this.videurs.map(videur => videur.adresse)));
       },
       (error) => {
         console.error('Erreur lors de la récupération des videurs', error);
       }
     );
   }
+
+ // Méthode pour filtrer les videurs par adresse
+ filterVideursByAddress(): void {
+  if (!this.selectedAddress) {
+    // Si aucune adresse n'est sélectionnée, afficher tous les videurs
+    this.filteredVideurs = this.videurs;
+  } else {
+    // Filtrer les videurs par l'adresse sélectionnée
+    this.filteredVideurs = this.videurs.filter(videur => videur.adresse === this.selectedAddress);
+  }
+  // Réinitialiser le videur sélectionné pour éviter des incohérences
+  this.selectedVideur = '';
+}
 
    // Fonction pour filtrer la recherche
    filterAlerts() {
@@ -115,16 +152,65 @@ export class AlertePoubelleComponent {
   }
 
  
-  submitNewDepot() {
-    this.alertService.addDepot(this.newDepot).then(response => {
-      console.log('Dépôt ajouté avec succès', response);
-      this.closeAddAlertModal();
-      this.newDepot = { lieu: '', latitude: 0, longitude: 0, gardien_id: '' };
-    }).catch(error => {
-      console.error('Erreur lors de l\'ajout du dépôt', error);
-    });
+  // Validation des coordonnées pour controle de saisi du formulaire ajout depos
+  validateCoordinates(): boolean {
+    let isValid = true;
+    
+    // Réinitialiser les erreurs
+    this.validationErrors = {
+      lieu: '',
+      latitude: '',
+      longitude: '',
+      gardien_id: ''
+    };
+    
+    // Validation du lieu
+    if (!this.newDepot.lieu || this.newDepot.lieu.trim() === '') {
+      this.validationErrors.lieu = 'Le lieu est obligatoire';
+      isValid = false;
+    }
+    
+    // Validation de la latitude
+    if (isNaN(this.newDepot.latitude)) {
+      this.validationErrors.latitude = 'La latitude doit être un nombre';
+      isValid = false;
+    } else if (this.newDepot.latitude < this.dakarLimits.latMin || this.newDepot.latitude > this.dakarLimits.latMax) {
+      this.validationErrors.latitude = `La latitude doit être entre ${this.dakarLimits.latMin} et ${this.dakarLimits.latMax} pour Dakar`;
+      isValid = false;
+    }
+    
+    // Validation de la longitude
+    if (isNaN(this.newDepot.longitude)) {
+      this.validationErrors.longitude = 'La longitude doit être un nombre';
+      isValid = false;
+    } else if (this.newDepot.longitude < this.dakarLimits.lngMin || this.newDepot.longitude > this.dakarLimits.lngMax) {
+      this.validationErrors.longitude = `La longitude doit être entre ${this.dakarLimits.lngMin} et ${this.dakarLimits.lngMax} pour Dakar`;
+      isValid = false;
+    }
+    
+   
+    
+    this.isFormValid = isValid;
+    return isValid;
   }
-
+  
+  // Méthode pour vérifier si les coordonnées sont dans Dakar pendant la saisie
+  onCoordinateChange() {
+    this.validateCoordinates();
+  }
+  
+  submitNewDepot() {
+    if (this.validateCoordinates()) {
+      this.alertService.addDepot(this.newDepot).then(response => {
+        console.log('Dépôt ajouté avec succès', response);
+        this.closeAddAlertModal();
+        this.newDepot = { lieu: '', latitude: 0, longitude: 0, gardien_id: '' };
+        this.validationErrors = { lieu: '', latitude: '', longitude: '', gardien_id: '' };
+      }).catch(error => {
+        console.error('Erreur lors de l\'ajout du dépôt', error);
+      });
+    }
+  }
   // Ouvrir le modal pour traiter une alerte
   openTraiterAlertModal(alert: any) {
     this.selectedAlert = alert;
@@ -193,5 +279,18 @@ export class AlertePoubelleComponent {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+}
+
+// Dans votre fichier component.ts
+getStatusClass(status: string): string {
+  switch (status) {
+    case 'traité':
+      return 'status-badge status-traite';
+    case 'en traitement':
+      return 'status-badge status-en-traitement';
+    case 'en attente':
+    default:
+      return 'status-badge status-en-attente';
+  }
 }
 }

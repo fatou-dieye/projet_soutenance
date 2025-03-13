@@ -1,5 +1,5 @@
 
-import { GestionpersonnelService, User } from '../gestionpersonnel-services/gestionpersonnel.service';
+import { GestionpersonnelService, User } from '../services/gestionpersonnel-services/gestionpersonnel.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, Input , OnInit} from '@angular/core';

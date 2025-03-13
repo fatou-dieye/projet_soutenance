@@ -101,6 +101,10 @@
     color: #6c757d;
   }
   
+  .status-blocked {
+    color: #00A551;
+    font-weight: 500;
+  }
   /* Actions */
  
   /* Tableau */
@@ -124,16 +128,39 @@
     line-height: 1; /* Ajustez ce nombre pour augmenter l'espacement entre les lignes de texte */
   }
   
- 
-  
   th {
     
     font-weight: 600;
     color: #6c757d;
   }
   
+/* Styles pour les lignes d'alertes traitées */
+.status-traite {
+  background-color: rgba(76, 175, 80, 0.1); /* Vert clair avec transparence */
+}
+
+/* Styles pour les statuts */
+.status-badge {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.status-en-attente {
+
+  color: #856404;
+}
+
+
+.status-traite {
+ 
+  color: #00A551;
   
-  
+}
+
+#niveau{
+  color: #ff4d4d;
+}
+
   /* Pagination */
   .pagination {
     display: flex;
@@ -478,4 +505,7 @@
 .btn-submit::before {
     content: "✉";
     margin-right: 8px;
+}
+.address-filter{
+  margin-bottom: 10px;
 }

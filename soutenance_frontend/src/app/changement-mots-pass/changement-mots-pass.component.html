@@ -21,7 +21,7 @@
             [type]="showCurrentPassword ? 'text' : 'password'"
             id="currentPassword"
             [formControl]="getFormControl('ancien_mot_passe')"
-            placeholder="········"
+            placeholder="saisir mots de passe"
           >
           <button type="button" class="toggle-password" (click)="toggleShowCurrentPassword()">
             <span *ngIf="!showCurrentPassword"><i class="fas fa-eye"></i> </span>
@@ -50,7 +50,7 @@
             [type]="showNewPassword ? 'text' : 'password'"
             id="newPassword"
             [formControl]="getFormControl('nouveau_mot_passe')"
-            placeholder="········"
+            placeholder="saisir mots de passe"
             
           >
           <button type="button" class="toggle-password" (click)="toggleShowNewPassword()">
@@ -71,7 +71,7 @@
             [type]="showConfirmPassword ? 'text' : 'password'"
             id="confirmPassword"
             [formControl]="getFormControl('confirmation_mot_passe')"
-            placeholder="········"
+            placeholder="saisir mots de passe"
           >
           <button type="button" class="toggle-password" (click)="toggleShowConfirmPassword()">
             <span *ngIf="!showConfirmPassword"><i class="fas fa-eye"></i></span>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import {  OnInit } from '@angular/core';
-import { SignalService } from '../serviceSignal/signal.service';
+import { SignalService } from '../services/serviceSignal/signal.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { ModalDetailSignalComponent } from '../modal-detail-signal/modal-detail-signal.component';
@@ -71,7 +71,8 @@ export class GestionDesSignauxComponent  implements OnInit {
   onSearch(): void {
     if (this.searchQuery) {
       this.filteredAlertes = this.alertes.filter(alerte =>
-        alerte.adresse.toLowerCase().includes(this.searchQuery.toLowerCase())
+        alerte.adresse.toLowerCase().includes(this.searchQuery.toLowerCase())||
+        alerte.statut.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
       this.paginateAlertes();
     } else {

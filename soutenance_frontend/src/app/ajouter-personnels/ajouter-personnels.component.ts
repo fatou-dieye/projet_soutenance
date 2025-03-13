@@ -2,7 +2,7 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { GestionpersonnelService,  NewUser  } from '../gestionpersonnel-services/gestionpersonnel.service';
+import { GestionpersonnelService,  NewUser  } from '../services/gestionpersonnel-services/gestionpersonnel.service';
 @Component({
   selector: 'app-ajouter-personnels',
   imports: [FormsModule,CommonModule],
@@ -46,6 +46,7 @@ export class AjouterPersonnelsComponent {
                      this.role !== '' &&
                      (this.role !== 'administrateur' || this.passwordValid) &&
                      this.photo !== undefined;
+                     
   }
 
   checkRole() {
@@ -67,36 +68,42 @@ export class AjouterPersonnelsComponent {
     this.fermer.emit();
   }
 
-  onSubmit() {
-    if (!this.formValid) {
-      alert('Veuillez corriger les erreurs avant de soumettre.');
-      return;
-    }
-  
-    // Créer un objet NewUser avec les données du formulaire
-    const newUser: NewUser = {
-      nom: this.nom,
-      prenom: this.prenom,
-      email: this.email,
-      telephone: this.telephone,
-      adresse: this.adresse,
-      role: this.role,
-      statut: 'active',
-      photo: this.photo, // Assurez-vous que this.photo est un objet File
-      mot_passe: this.password
-    };
-  
-    // Appeler la méthode addUser du service
-    this.GestionpersonnelService.addUser(newUser).subscribe(
-      (response) => {
-        console.log('Utilisateur créé avec succès', response);
-        this.userAdded.emit();
-        this.fermerModal();
-      },
-      (error) => {
-        console.error('Erreur lors de la création de l\'utilisateur', error);
-      }
-    );
+ onSubmit() {
+  if (!this.formValid) {
+    alert('Veuillez corriger les erreurs avant de soumettre.');
+    return;
   }
+
+  const newUser: NewUser = {
+    nom: this.nom,
+    prenom: this.prenom,
+    email: this.email,
+    telephone: this.telephone,
+    adresse: this.adresse,
+    role: this.role,
+    statut: 'active',
+    photo: this.photo,
+    mot_passe: this.password
+  };
+
+  this.GestionpersonnelService.addUser(newUser).subscribe(
+    (response) => {
+      console.log('Utilisateur créé avec succès', response);
+      this.userAdded.emit();
+      this.fermerModal();
+    },
+    (error) => {
+      console.error('Erreur lors de la création de l\'utilisateur', error);
+      if (error.includes('email')) {
+        this.emailErrorMessage = error;
+      } else if (error.includes('telephone')) {
+        this.telephoneErrorMessage = error;
+      } else {
+        alert('Une erreur est survenue lors de l\'inscription');
+      }
+    }
+  );
+}
+
   }
   

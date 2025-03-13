@@ -17,5 +17,9 @@ router.get('/depots', verifyToken,verifyRole(['administrateur']), depotControlle
 // Route pour traiter une alerte (mettre à jour le statut et envoyer un email au videur)
 router.put('/alerts/:id',verifyToken,verifyRole(['administrateur']), alertController.updateAlert);
 
+router.get('/daily-alert-count', verifyToken, verifyRole(['administrateur']), alertController.getDailyAlertCount);
+
+// Nouvelle route pour confirmer la vidange (accessible sans authentification car utilisée depuis l'email)
+router.get('/confirm-vidange/:id', alertController.confirmVidange);
 
 module.exports = router;

@@ -43,7 +43,7 @@
               <td>{{ alerte.adresse }}</td>
               <td>{{ alerte.dateCreation | date:'dd/MM/yyyy' }}</td>
               <td>{{ alerte.dateCreation | date:'HH:mm' }}</td>
-              <td [ngClass]="{'status-active': alerte.statut === 'En Attente', 'status-blocked': alerte.statut === 'Traité'}">
+              <td [ngClass]="{'status-active': alerte.statut === 'Non traité', 'status-blocked': alerte.statut === 'Traité'}">
                 {{ alerte.statut }}
               </td>
               <td>

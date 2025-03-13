@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { AjouterPersonnelsComponent } from '../ajouter-personnels/ajouter-personnels.component';
 import { FormsModule } from '@angular/forms';
-import { GestionpersonnelService, User } from '../gestionpersonnel-services/gestionpersonnel.service';
+import { GestionpersonnelService, User } from '../services/gestionpersonnel-services/gestionpersonnel.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../serviceslogin/auth.service';
+import { AuthService } from '../services/serviceslogin/auth.service';
 import { ModifierPersonnelsComponent } from '../modifier-personnels/modifier-personnels.component';
 
 @Component({
@@ -345,7 +345,9 @@ updateMultipleUserStatus(statut: string): void {
         user.nom.toLowerCase().includes(value) || 
         user.prenom.toLowerCase().includes(value) || 
         user.email.toLowerCase().includes(value) ||
-        user.telephone.includes(value)
+        user.telephone.includes(value)||
+        user.role.toLowerCase().includes(value) ||
+        user.statut.toLowerCase().includes(value) 
       );
     } else {
       this.filteredUsers = [...this.users];

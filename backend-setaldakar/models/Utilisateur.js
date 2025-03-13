@@ -1,3 +1,4 @@
+//models/Utilisateur.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -30,7 +31,6 @@ const utilisateurSchema = new mongoose.Schema({
 });
 
 
-
 // Hacher le mot de passe avant de sauvegarder
 utilisateurSchema.pre('save', async function (next) {
   // Si le mot de passe est fourni et a été modifié, alors on le hache
@@ -39,7 +39,6 @@ utilisateurSchema.pre('save', async function (next) {
   }
   next();
 });
-
 
 // Créer le modèle utilisateur à partir du schéma
 const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);

@@ -36,10 +36,10 @@
               </tr>
           <tr *ngFor="let alert  of filteredAlerts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)">
             <td>{{ alert.depot_id.lieu}}</td>
-            <td>{{ alert.niveau }}%</td>
+            <td id="niveau">{{ alert.niveau }}%</td>
             <td>{{ alert.date | date }}</td>
             <td>{{ alert.heure }}</td>
-            <td>{{ alert.status }}</td>
+            <td>  <span [ngClass]="getStatusClass(alert.status)">{{ alert.status }}</span></td>
             <td>
             <button class="btn-action"  (click)="openTraiterAlertModal(alert)">  <i class="fas fa-file-alt"></i> </button>
             </td>
@@ -100,32 +100,85 @@
 
     <div class="modal-body">
         <!-- Formulaire d'ajout de dépôt -->
-        <form (ngSubmit)="submitNewDepot()">
-          <div class="form-group">
-            <label for="lieu">Lieu</label>
-            <input type="text" id="lieu" [(ngModel)]="newDepot.lieu" name="lieu" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="latitude">Latitude</label>
-            <input type="number" id="latitude" [(ngModel)]="newDepot.latitude" name="latitude" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="longitude">Longitude</label>
-            <input type="number" id="longitude" [(ngModel)]="newDepot.longitude" name="longitude" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="gardien">Gardien</label>
-            <select id="gardien" [(ngModel)]="newDepot.gardien_id" name="gardien" class="form-control" required>
-              <option *ngFor="let gardien of gardiens" [value]="gardien._id">
-                {{ gardien.nom }} - {{ gardien.adresse }}
-              </option>
-            </select>
-          </div>
-          
-          <div class="form-actions">
-            <button type="submit" class="btn-add">Ajouter Dépôt</button>
-          </div>
-        </form>
+       <!-- Formulaire d'ajout de dépôt -->
+<form (ngSubmit)="submitNewDepot()">
+  <div class="form-group">
+    <label for="lieu">Lieu</label>
+    <input 
+      type="text" 
+      id="lieu" 
+      [(ngModel)]="newDepot.lieu" 
+      name="lieu" 
+      class="form-control" 
+      required>
+    <div *ngIf="validationErrors.lieu" class="error-message text-danger">
+      {{ validationErrors.lieu }}
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="latitude">Latitude</label>
+    <input 
+      type="number" 
+      id="latitude" 
+      [(ngModel)]="newDepot.latitude" 
+      name="latitude" 
+      class="form-control" 
+      required
+      (input)="onCoordinateChange()">
+    <div *ngIf="validationErrors.latitude" class="error-message text-danger">
+      {{ validationErrors.latitude }}
+    </div>
+    <small class="form-text text-muted">
+      Les valeurs valides pour Dakar sont entre {{ dakarLimits.latMin }} et {{ dakarLimits.latMax }}
+    </small>
+  </div>
+  
+  <div class="form-group">
+    <label for="longitude">Longitude</label>
+    <input 
+      type="number" 
+      id="longitude" 
+      [(ngModel)]="newDepot.longitude" 
+      name="longitude" 
+      class="form-control" 
+      required
+      (input)="onCoordinateChange()">
+    <div *ngIf="validationErrors.longitude" class="error-message text-danger">
+      {{ validationErrors.longitude }}
+    </div>
+    <small class="form-text text-muted">
+      Les valeurs valides pour Dakar sont entre {{ dakarLimits.lngMin }} et {{ dakarLimits.lngMax }}
+    </small>
+  </div>
+  
+  <div class="form-group">
+    <label for="gardien">Gardien</label>
+    <select 
+      id="gardien" 
+      [(ngModel)]="newDepot.gardien_id" 
+      name="gardien" 
+      class="form-control" 
+      required>
+      <option value="">Sélectionner un gardien</option>
+      <option *ngFor="let gardien of gardiens" [value]="gardien._id">
+        {{ gardien.nom }} - {{ gardien.adresse }}
+      </option>
+    </select>
+    <div *ngIf="validationErrors.gardien_id" class="error-message text-danger">
+      {{ validationErrors.gardien_id }}
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <button 
+      type="submit" 
+      class="btn-add" 
+      [disabled]="!isFormValid">
+      Ajouter Dépôt
+    </button>
+  </div>
+</form>
       </div>
     </div>
   </div>
@@ -158,13 +211,27 @@
         
         <div class="videur-section">
           <h3>Assigner à un videur</h3>
-          <div class="select-wrapper">
-            <select [(ngModel)]="selectedVideur">
-              <option value="">Sélectionnez un videur</option>
-              <option *ngFor="let videur of videurs" [value]="videur._id">
-                {{ videur.nom }} {{ videur.prenom }} - {{ videur.email }}
-              </option>
-            </select>
+          
+          <!-- Ajout du filtre par adresse -->
+           <!-- Ajout du filtre par adresse -->
+  <div class="address-filter">
+    <label for="addressFilter"></label>
+    <div class="select-wrapper">
+      <select id="addressFilter" [(ngModel)]="selectedAddress" (change)="filterVideursByAddress()">
+        <option value="">Selectionner une Zone</option>
+        <option *ngFor="let address of addresses" [value]="address">{{ address }}</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Masquer le sélecteur de videur si aucune zone n'est sélectionnée -->
+  <div class="select-wrapper" *ngIf="selectedAddress">
+    <select [(ngModel)]="selectedVideur">
+      <option value="">Sélectionnez un videur</option>
+      <option *ngFor="let videur of filteredVideurs" [value]="videur._id">
+        {{ videur.nom }} {{ videur.prenom }} - {{ videur.email }}
+      </option>
+    </select>
           </div>
         </div>
       </div>

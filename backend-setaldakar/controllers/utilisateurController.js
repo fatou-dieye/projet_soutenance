@@ -1,4 +1,3 @@
-//controller/utilisateur-controller.js
 // controllers/utilisateur.controller.js
 const Utilisateur = require('../models/Utilisateur');
 const multer = require('multer');
@@ -19,23 +18,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-// Fonction pour télécharger une image de profil
-const uploadProfileImage = (req, res) => {
-  if (!req.file) {
-      return res.status(400).send('Aucun fichier téléchargé.');
-  }
-
-  res.send({
-      message: 'Image de profil téléchargée avec succès!',
-      file: req.file
-  });
-};
-
+// Inscription
 // Inscription
 exports.register = async (req, res) => {
   try {
     const { nom, prenom, email, mot_passe, adresse, telephone, role, statut } = req.body;
     const photoPath = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null; // URL complète
+
+    // Vérifier si l'email ou le téléphone existe déjà
+    const utilisateurExistant = await Utilisateur.findOne({ $or: [{ email }, { telephone }] });
+    if (utilisateurExistant) {
+      if (utilisateurExistant.email === email) {
+        return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+      }
+      if (utilisateurExistant.telephone === telephone) {
+        return res.status(400).json({ message: 'Ce numéro de téléphone est déjà utilisé' });
+      }
+    }
 
     const nouvelUtilisateur = new Utilisateur({
       nom,
@@ -64,7 +63,18 @@ exports.register = async (req, res) => {
   }
 };
 
+ 
+// Fonction pour télécharger une image de profil
+const uploadProfileImage = (req, res) => {
+  if (!req.file) {
+      return res.status(400).send('Aucun fichier téléchargé.');
+  }
 
+  res.send({
+      message: 'Image de profil téléchargée avec succès!',
+      file: req.file
+  });
+};
 // Lister tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
     try {

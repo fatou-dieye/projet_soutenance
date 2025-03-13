@@ -52,6 +52,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    
   }
   
   /* Bouton d'ajout */
@@ -128,104 +129,132 @@
   }
   
   /* Tableau */
-  table{
-  
-    
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
- .container table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e1e1e1;
-    vertical-align: middle;
-    line-height: 1; /* Ajustez ce nombre pour augmenter l'espacement entre les lignes de texte */
-  }
-  
+ /* Tableau */
+/* Tableau */
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
  
-  
-  th {
-    
-    font-weight: 600;
-    color: #6c757d;
-  }
-  
-  /* Info de l'utilisateur */
-  .user-info {
-    display: flex;
-    align-items: center;
+}
+
+/* En-tête */
+th {
+ 
+  color: #6c757d;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 14px;
+}
+
+/* Lignes */
+tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Dernière ligne sans bordure */
+
+
+
+/* Cellules */
+td {
+  padding: 12px 15px;
+  font-size: 18px;
+  color: #333;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e1e1e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  th, td {
+    padding: 8px;
+    font-size: 12px;
   }
   
   .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #e1e1e1;
-    margin-right: 10px;
-    overflow: hidden;
-   
-    align-items: center;
-    justify-content: center;
+    width: 30px;
+    height: 30px;
   }
-  
-  .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Statut des utilisateurs */
-  .status-active {
-    color: #00A551;
-    font-weight: 500;
-  }
-  
-  .status-blocked {
-    color: #e55353;
-    font-weight: 500;
-  }
-  
-  /* Actions sur la ligne */
-  .actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .btn-edit, .btn-user, .btn-delete-single {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   
-    height: 50px;
-  }
-  
-  .btn-edit i {
-    color: #00A551;
-  }
-  
-  .btn-user i {
-    color: #00A551;
-  }
-  
-  .btn-delete-single i {
-    color: #e55353;
-  }
-  
-  .btn-edit i, .btn-user i, .btn-delete-single i {
-   /* Taille uniforme pour les icônes */
-    line-height: 0; /* Pour éviter tout écart vertical dû à la taille de l'icône */
-    vertical-align: middle; /* Assurez-vous que les icônes sont verticalement centrées */
-  }
-  
+}
+
+/* Statut */
+.status-active {
+  color: #00A551;
+  font-weight: 500;
+}
+
+.status-blocked {
+  color: #e55353;
+  font-weight: 500;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.btn-edit, .btn-user, .btn-delete-single {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
+.btn-edit i {
+  color: #00A551;
+}
+
+.btn-user i {
+  color: #00A551;
+}
+
+.btn-delete-single i {
+  color: #e55353;
+}
+
+/* Icônes */
+.btn-edit i, .btn-user i, .btn-delete-single i {
+  line-height: 0;
+  vertical-align: middle;
+}
+
+
   /* Pagination */
   .pagination {
     display: flex;

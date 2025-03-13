@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { GestionpersonnelService, User } from '../gestionpersonnel-services/gestionpersonnel.service';
+import { GestionpersonnelService, User } from '../services/gestionpersonnel-services/gestionpersonnel.service';
 
-import { AuthService } from '../serviceslogin/auth.service';
+import { AuthService } from '../services/serviceslogin/auth.service';
 import { ChangementMotsPassComponent } from '../changement-mots-pass/changement-mots-pass.component';
 @Component({
   selector: 'app-sidebarre',

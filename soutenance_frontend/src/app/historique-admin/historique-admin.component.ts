@@ -1,6 +1,6 @@
 import { Component , OnInit} from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
-import { AuthService } from '../serviceslogin/auth.service';
+import { AuthService } from '../services/serviceslogin/auth.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';

@@ -56,19 +56,7 @@
     align-items: center;
     margin-bottom: 1.5rem;
   }
-  
-  /* Bouton d'ajout */
-  .btn-add {
-    background-color: #00A551;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
+ 
   .btn-add:hover {
     background-color: #269d4e;
   }
@@ -102,33 +90,6 @@
     color: #6c757d;
   }
   
-  /* Actions */
-  .btn-action {
-    background-color:#F9FBFF;
-    color: #6c757d;
-    border: 1px solid #F9FBFF;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: none;
-  }
-  
-  .btn-action.visible {
-    display: block;
-  }
-  
-  .btn-delete-multiple {
-    color: #e55353;
-  }
-  
-  .btn-block-multiple {
-    color: #e55353;
-  }
-  
-  .btn-unblock-multiple {
-    color: #00A551;
-  }
   
   /* Tableau */
   table{
@@ -150,28 +111,29 @@
     vertical-align: middle;
     line-height: 0.5; /* Ajustez ce nombre pour augmenter l'espacement entre les lignes de texte */
   }
-  
- 
-  
+
   th {
-    
+  
     font-weight: 600;
     color: #6c757d;
   }
+  tr {
+    border-bottom: 1px solid #f0f0f0;
+  }
   
- 
+
   
   /* Statut des utilisateurs */
-  .status-active {
+  
+  .status-blocked {
     color: #00A551;
     font-weight: 500;
   }
   
-  .status-blocked {
-    color: #e55353;
+  .status-active{
+    color: #ff4d4d;
     font-weight: 500;
   }
-  
   /* Actions sur la ligne */
   .actions {
     display: flex;
@@ -198,11 +160,7 @@
 .date-filter input {
   border: solid 1px #00A551;
 }
-  .btn-edit i, .btn-user i, .btn-delete-single i {
-   /* Taille uniforme pour les icônes */
-    line-height: 0; /* Pour éviter tout écart vertical dû à la taille de l'icône */
-    vertical-align: middle; /* Assurez-vous que les icônes sont verticalement centrées */
-  }
+ 
   
   /* Pagination */
   .pagination {
