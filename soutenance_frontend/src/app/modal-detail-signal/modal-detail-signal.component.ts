@@ -2,18 +2,20 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { MessageSuccesComponent } from '../message-succes/message-succes.component';
 import { SignalService, User } from '../services/serviceSignal/signal.service';
 @Component({
   selector: 'app-modal-detail-signal',
-  imports: [CommonModule,FormsModule ],
+  imports: [CommonModule,FormsModule, MessageSuccesComponent ],
   templateUrl: './modal-detail-signal.component.html',
   styleUrl: './modal-detail-signal.component.css'
 })
 export class ModalDetailSignalComponent {
   @Input() alerteId: string | null = null;
   @Output() closeModal = new EventEmitter<void>();
-  
+  @Output() missionEnvoyee = new EventEmitter<string>(); // Nouveau EventEmitter
+  showSuccessModal: boolean = false;
+  successModalMessage: string = '';
   alerte: any = null;
   videurs: any[] = [];
   filteredVideurs: any[] = [];
@@ -90,13 +92,23 @@ export class ModalDetailSignalComponent {
     this.signalService.assignerVideur(this.alerteId, this.selectedVideur).then(response => {
       alert('Mission envoyée avec succès!');
       this.close();
+      this.missionEnvoyee.emit('Mission envoyée avec succès!'); // Envoie l'événement de succès
     }).catch(error => {
       console.error('Erreur lors de l\'assignation du videur:', error);
       alert('Erreur lors de l\'envoi de la mission. Veuillez réessayer.');
     });
   }
-  
+
+
+
+
   close(): void {
     this.closeModal.emit();
   }
+ 
+  
+
 }
+
+
+

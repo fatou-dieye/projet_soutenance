@@ -35,7 +35,7 @@ export class SidebarreComponent implements OnInit {
     
     // Get current user
     this.currentUser = this.AuthService.getCurrentUser();
-    
+    console.log('Current User:', this.currentUser); 
     // Check if user has required role
     if (this.currentUser && this.currentUser.role === 'administrateur') {
       this.loadUsers();

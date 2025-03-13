@@ -120,4 +120,32 @@
 }
 
 
+/* Styles pour les erreurs de validation */
+.input-error {
+  border: 1px solid #dc3545 !important;
+  background-color: #fff8f8;
+}
 
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.valid-message {
+  color: #28a745;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.hint-message {
+  color: #6c757d;
+  font-size: 12px;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Ajustement pour le champ select */
+select.input-error {
+  background-color: #fff8f8;
+}

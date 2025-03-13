@@ -4,13 +4,16 @@ import { AlertPoubelleService, User } from '../services/services-alert-poubelle/
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MessageSuccesComponent } from '../message-succes/message-succes.component';
 @Component({
   selector: 'app-alerte-poubelle',
-  imports: [SidebarreComponent, CommonModule, FormsModule, NgxPaginationModule ],
+  imports: [SidebarreComponent, CommonModule, FormsModule, NgxPaginationModule,  MessageSuccesComponent ],
   templateUrl: './alerte-poubelle.component.html',
   styleUrl: './alerte-poubelle.component.css'
 })
 export class AlertePoubelleComponent {
+  showSuccessModal: boolean = false;
+  successModalMessage: string = '';
   alerts: any[] = [];
   gardiens: any[] = [];
   isAddAlertModalOpen = false;
@@ -199,10 +202,26 @@ dakarLimits = {
     this.validateCoordinates();
   }
   
+  // Méthode pour ouvrir le modal avec un message spécifique
+  openSuccessModal(message: string): void {
+    this.successModalMessage = message;
+    this.showSuccessModal = true;
+
+    // Fermer le modal après 10 secondes
+    setTimeout(() => {
+      this.closeSuccessModal();
+    }, 2000); // 10 secondes
+  }
+   // Fermer le modal de succès
+   closeSuccessModal(): void {
+    this.showSuccessModal = false;
+  }
+
   submitNewDepot() {
     if (this.validateCoordinates()) {
       this.alertService.addDepot(this.newDepot).then(response => {
         console.log('Dépôt ajouté avec succès', response);
+        this.openSuccessModal('Dépôt ajouté avec succès succès !');
         this.closeAddAlertModal();
         this.newDepot = { lieu: '', latitude: 0, longitude: 0, gardien_id: '' };
         this.validationErrors = { lieu: '', latitude: '', longitude: '', gardien_id: '' };
@@ -247,6 +266,7 @@ dakarLimits = {
     }).subscribe(
       (response) => {
         console.log('Alerte assignée avec succès', response);
+        this.openSuccessModal('Alerte assignée avec succès!');
         this.closeTraiterAlertModal();
         this.loadAlerts(); // Recharger la liste des alertes
       },

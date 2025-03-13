@@ -68,7 +68,8 @@ exports.login = async (req, res) => {
         telephone: utilisateur.telephone,
         role: utilisateur.role,
         nom: utilisateur.nom,
-        prenom: utilisateur.prenom
+        prenom: utilisateur.prenom,
+        photo:  utilisateur.photo
       }
     });
 

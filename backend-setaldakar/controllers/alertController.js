@@ -219,7 +219,7 @@ const sendTaskEmail = (alert, employee_email, itineraire) => {
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${alert.depot_id.coordonnees.latitude},${alert.depot_id.coordonnees.longitude}`;
 
     let mailOptions = {
-      from: 'fatoujeey2001@gmail.com',
+      from: 'SETALDAKAR',
       to: employee_email,
       subject: 'Nouvelle Mission de Vidange',
       html: `

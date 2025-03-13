@@ -20,11 +20,12 @@ const upload = multer({ storage: storage });
 
 // Inscription
 // Inscription
+// Inscription
 exports.register = async (req, res) => {
   try {
     const { nom, prenom, email, mot_passe, adresse, telephone, role, statut } = req.body;
-    const photoPath = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null; // URL complète
-
+    const photoPath = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null;
+    
     // Vérifier si l'email ou le téléphone existe déjà
     const utilisateurExistant = await Utilisateur.findOne({ $or: [{ email }, { telephone }] });
     if (utilisateurExistant) {
@@ -35,19 +36,19 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Ce numéro de téléphone est déjà utilisé' });
       }
     }
-
+    
     const nouvelUtilisateur = new Utilisateur({
       nom,
       prenom,
       email,
       mot_passe: mot_passe || null,
-      photo: photoPath, // Enregistrer l'URL complète
+      photo: photoPath,
       adresse,
       telephone,
       role,
       statut: statut || 'active',
     });
-
+    
     await nouvelUtilisateur.save();
     res.status(201).json({
       message: 'Utilisateur créé avec succès',
@@ -55,14 +56,13 @@ exports.register = async (req, res) => {
         id: nouvelUtilisateur._id,
         email: nouvelUtilisateur.email,
         role: nouvelUtilisateur.role,
-        photo: nouvelUtilisateur.photo, // Renvoyer l'URL complète
+        photo: nouvelUtilisateur.photo,
       }
     });
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de l\'inscription', error: error.message });
   }
 };
-
  
 // Fonction pour télécharger une image de profil
 const uploadProfileImage = (req, res) => {

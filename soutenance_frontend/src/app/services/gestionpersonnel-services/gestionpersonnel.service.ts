@@ -9,7 +9,7 @@ export interface User {
   telephone: string;
   role: string;
   statut: string;
-  photo?: string;
+  photo?: File | string; 
 
   mot_passe?: string;
   adresse: string;
@@ -52,7 +52,8 @@ export class GestionpersonnelService {
     return new Observable((observer) => {
       axiosInstance.get(`/users/${id}`)
         .then((response) => {
-          observer.next(response.data); // Retourner les données de l'utilisateur
+          observer.next(response.data); 
+          // Retourner les données de l'utilisateur
           observer.complete();
         })
         .catch((error) => {
@@ -180,16 +181,21 @@ updateUserWithFile(user: User, file: File): Observable<any> {
   formData.append('statut', user.statut);
 
   return new Observable((observer) => {
-    axiosInstance.put(`/users/${user._id}`, formData)
-      .then((response) => {
-        observer.next(response.data);
-        observer.complete();
-      })
-      .catch((error) => {
-        observer.error(error);
-      });
+    axiosInstance.put(`/users/${user._id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((response) => {
+      observer.next(response.data);
+      observer.complete();
+    })
+    .catch((error) => {
+      observer.error(error);
+    });
   });
 }
+
 }
 
   

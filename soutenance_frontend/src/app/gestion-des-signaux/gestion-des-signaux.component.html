@@ -70,4 +70,8 @@
 <!-- New modal component for alert details -->
 <app-modal-detail-signal *ngIf="selectedAlerteId" 
 [alerteId]="selectedAlerteId" 
-(closeModal)="closeDetailModal()"></app-modal-detail-signal>
+(closeModal)="closeDetailModal()"    (missionEnvoyee)="openSuccessModal($event)"></app-modal-detail-signal>
+
+
+<!--message de succes-->
+<app-message-succes [showSuccessModal]="showSuccessModal" [successModalMessage]="successModalMessage"></app-message-succes>

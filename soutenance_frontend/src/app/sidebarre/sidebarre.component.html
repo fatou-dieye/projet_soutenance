@@ -8,8 +8,7 @@
   
   <!-- Profile Section -->
   <div class="navbar-profile">
-    
-    <img [src]="currentUser.photo || 'avatar.png'" alt="Profile" class="profile-img">
+    <img [src]="currentUser?.photo" alt="Profile" class="profile-img">
     <div class="profile-info">
       <span class="profile-name">{{ currentUser.prenom }} {{ currentUser.nom }}</span>
       <span class="profile-role">{{ currentUser.role }}  <button class="edit-btn triangle-btn" (click)="openPasswordChangeModal()" >&#x25BC;</button> </span>

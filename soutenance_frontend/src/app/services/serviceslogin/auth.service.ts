@@ -22,6 +22,7 @@ export class AuthService {
   
     return this.http.post(`${this.apiUrl}/login`, body).pipe(
       tap((response: any) => {
+        console.log('Réponse complète après connexion :', response); 
         console.log('Token reçu après connexion :', response.token);
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
@@ -51,6 +52,7 @@ export class AuthService {
   // Récupérer l'utilisateur connecté
   getCurrentUser(): any {
     const user = localStorage.getItem('user');
+    
     return user ? JSON.parse(user) : null;
   }
 

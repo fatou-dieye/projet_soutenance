@@ -5,13 +5,16 @@ import { SignalService } from '../services/serviceSignal/signal.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { ModalDetailSignalComponent } from '../modal-detail-signal/modal-detail-signal.component';
+import { MessageSuccesComponent } from '../message-succes/message-succes.component';
 @Component({
   selector: 'app-gestion-des-signaux',
-  imports: [SidebarreComponent,CommonModule,FormsModule, ModalDetailSignalComponent],
+  imports: [SidebarreComponent,CommonModule,FormsModule, ModalDetailSignalComponent, MessageSuccesComponent],
   templateUrl: './gestion-des-signaux.component.html',
   styleUrl: './gestion-des-signaux.component.css'
 })
 export class GestionDesSignauxComponent  implements OnInit {
+  showSuccessModal: boolean = false;
+  successModalMessage: string = '';
   alertes: any[] = [];
   paginatedAlertes: any[] = [];
   selectedAlerteId: string | null = null;
@@ -91,4 +94,25 @@ export class GestionDesSignauxComponent  implements OnInit {
     this.selectedAlerteId = null;
     this.loadAlertes(); // Refresh data in case assignment was made
   }
+  onMissionEnvoyee(message: string): void {
+    // Affiche le modal de succès
+    this.openSuccessModal('Mission envoyer avec succes');
+  }
+
+  // Méthode pour ouvrir le modal avec un message spécifique
+  openSuccessModal(message: string): void {
+    this.successModalMessage = message;
+    this.showSuccessModal = true;
+
+    // Fermer le modal après un délai (ex. 2 secondes)
+    setTimeout(() => {
+      this.closeSuccessModal();
+    }, 10000); // 2 secondes
+  }
+
+  // Fermer le modal de succès
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
+  }
+
 }
