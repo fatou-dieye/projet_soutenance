@@ -22,6 +22,8 @@ export class InscriptionutilisateurComponent {
   nomError: string = '';
   prenomError: string = '';
   serverError: null | string = '';
+  showSuccessModal: boolean = false;
+  successModalMessage: string = '';
 
   mot_passe: string = '';
   prenom: string = '';
@@ -101,18 +103,18 @@ export class InscriptionutilisateurComponent {
         adresse: this.adresse,
         telephone: this.telephone
       };
-  
+
       this.utilisateurService.registerUser(userData)
         .then(response => {
           console.log('Inscription réussie :', response);
           this.serverError = null; // Réinitialiser les erreurs du serveur
-          alert('Inscription réussie !');
+          this.openSuccessModal('Inscription réussie !');
           form.resetForm(); // Réinitialiser le formulaire
           this.resetErrors(); // Réinitialiser les messages d'erreur
         })
         .catch(error => {
           console.error('Erreur lors de l\'inscription :', error);
-    
+
           // Vérification de l'erreur liée à MongoDB et traitement des erreurs spécifiques
           if (error.response && error.response.data) {
             if (error.response.data.error && error.response.data.error.includes('E11000')) {
@@ -135,15 +137,28 @@ export class InscriptionutilisateurComponent {
       this.serverError = 'Veuillez remplir tous les champs requis correctement.';
     }
   }
-  
+
   resetErrors() {
     this.passwordError = '';
     this.emailError = ''; // Réinitialiser l'erreur email
     this.telephoneError = '';
     this.nomError = '';
     this.prenomError = '';
-    this.serverError = null;
+    this.serverError = null; // Réinitialiser les erreurs du serveur
   }
-  
-  
-}  
+
+  openSuccessModal(message: string): void {
+    this.successModalMessage = message;
+    this.showSuccessModal = true;
+    this.serverError = null; // Réinitialiser les erreurs du serveur
+
+    setTimeout(() => {
+      this.closeSuccessModal();
+    }, 2000);
+  }
+
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
+  }
+}
+

@@ -27,8 +27,7 @@
                 <!-- Affichage de l'erreur email sous le champ -->
                 <div *ngIf="emailError" class="error">{{ emailError }}</div>
             </div>
-            
-            
+
             <div class="form-group">
                 <label>Adresse</label>
                 <input type="text" placeholder="Adresse" [(ngModel)]="adresse" name="adresse">
@@ -60,4 +59,11 @@
         <!-- Afficher les messages d'erreur globaux -->
         <div *ngIf="serverError" class="error">{{ serverError }}</div>
     </form>
+
+    <!-- Modal de succès -->
+    <div class="modal-overlay" *ngIf="showSuccessModal">
+        <div class="status-change-success-modal-content">
+            <p>{{ successModalMessage }}</p>
+        </div>
+    </div>
 </div>

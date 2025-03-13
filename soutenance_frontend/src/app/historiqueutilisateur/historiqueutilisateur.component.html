@@ -1,30 +1,37 @@
-<body>
-    <app-sidebarre></app-sidebarre>
+<app-sidebarre></app-sidebarre>
+
 <div class="utilisateur-main">
-    <div class="content-container">
-        <div class="historique-actions-container">
-            <h2>Historique des Actions</h2>
-            <table class="historique-table">
-                <thead>
-                  <tr>
-                    <th>Utilisateur</th>
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let entry of historique">
-                    <td>{{ entry.utilisateur }}</td>
-                    <td>{{ entry.date }}</td>
-                    <td>{{ entry.heure }}</td>
-                    <td>{{ entry.action }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              
-        </div>
+  <div class="content-container">
+    <div class="historique-actions-container">
+      <h2>Historique des Actions</h2>
+      <table class="historique-table">
+        <thead>
+          <tr>
+            <th>Utilisateur</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of paginatedHistorique">
+            <td>{{ userPrenom }} {{ userName }}</td> <!-- Affichage du prénom et nom de l'utilisateur -->
+            <td>{{ getDateAndTime(entry.date).date || 'Date inconnue' }}</td> <!-- Affichage de la date -->
+            <td>{{ getDateAndTime(entry.date).time || 'Heure inconnue' }}</td> <!-- Affichage de l'heure -->
+            <td>{{ entry.action }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 
-</body>
+<!-- Pagination -->
+<div class="pagination">
+  <button (click)="changePage(page - 1)" [disabled]="page === 1">Précédent</button>
+  
+  <!-- Affichage de la page actuelle -->
+  <span>{{ page }}</span>
+
+  <button (click)="changePage(page + 1)" [disabled]="page * size >= totalItems">Suivant</button>
+</div>

@@ -46,6 +46,7 @@ export class DashboardutilisateurComponent implements OnInit {
   limit: number = 3; // Nombre d'alertes par page
   paginationArray: number[] = [];
   nombreUtilisateurs: number = 0;
+  
 
   
   signals: Alerte[] = [
@@ -69,6 +70,10 @@ export class DashboardutilisateurComponent implements OnInit {
     }
     // Ajouter d'autres alertes ici
   ];
+
+
+  // Fonction pour fermer le modal
+ 
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -158,14 +163,7 @@ export class DashboardutilisateurComponent implements OnInit {
     
         map.invalidateSize();
     
-        const expandButton = document.getElementById('expand-map-btn');
-        if (expandButton) {
-          expandButton.addEventListener('click', () => {
-            this.router.navigate(['/navigation']);
-          });
-        } else {
-          console.error("Le bouton d'agrandissement n'a pas été trouvé");
-        }
+       
     
       } catch (error) {
         console.error('Erreur lors du chargement de la carte Leaflet:', error);
@@ -240,6 +238,18 @@ export class DashboardutilisateurComponent implements OnInit {
   closeModal() {
     this.selectedAlerte = null;
   }
+
+  openInMaps() {
+    if (this.selectedAlerte) {
+      const latitude = this.selectedAlerte.coordonnees.latitude;
+      const longitude = this.selectedAlerte.coordonnees.longitude;
+      const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+      window.open(url, '_blank'); // Ouvre Google Maps dans un nouvel onglet
+    } else {
+      console.error('Aucune alerte sélectionnée.');
+    }
+  }
+  
 
   getPhotoUrl(photo: { chemin: string }): string {
     return photo.chemin; // Use the URL directly as constructed by the backend

@@ -50,3 +50,39 @@ body {
 .historique-table tr:hover {
     background-color: #ddd;
 }
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #00A551;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:hover:not([disabled]) {
+    background-color: #82da7f;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination span {
+    font-size: 16px;
+    margin: 0 15px;
+    font-weight: bold;
+  }
+  

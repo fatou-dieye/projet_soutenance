@@ -66,7 +66,8 @@ export class UtilisateurService {
   
   getHistoriqueUtilisateur(): Promise<any> {
     const token = localStorage.getItem('token');
-    console.log('Token in service:', token); // Log the token
+   
+
     if (!token) {
       console.error('Token manquant dans le service');
       throw new Error('Token manquant');
@@ -78,7 +79,7 @@ export class UtilisateurService {
       }
     })
     .then(response => {
-      console.log('Response data:', response.data); // Log the response data
+      
       return response.data;
     })
     .catch(error => {

@@ -67,4 +67,43 @@ export class AuthService {
       throw error;
     });
   }
+
+  requestResetPassword(email: string) {
+    return axiosInstance.post('/request-reset-password', { email })
+      .then(response => {
+        console.log('Email de réinitialisation envoyé:', response.data.message);
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la demande de réinitialisation:', error);
+        throw error;
+      });
+  }
+
+   
+
+  resetPassword(token: string, newPassword: string, confirmPassword: string) {
+    return axiosInstance.post(`/reset-password?token=${token}`, { newPassword, confirmPassword })
+      .then(response => {
+        console.log('Mot de passe réinitialisé:', response.data.message);
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la réinitialisation du mot de passe:', error);
+        throw error;
+      });
+  }
+
+   // Vérifier si l'utilisateur est connecté
+   isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  // Récupérer l'utilisateur connecté
+  getCurrentUser(): any {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
+  
 }

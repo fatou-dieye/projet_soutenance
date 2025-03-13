@@ -1,5 +1,10 @@
 .corps{
-    background-color: #FAFBFF
+    background-color: #FAFBFF;
+    position: fixed;
+    top: 0;
+    
+    width: 100%;
+    height: 100%;
 
 }
 .utilisateur-main {
@@ -20,36 +25,39 @@
     display: flex;
     flex-direction: column;
     gap: 40px; /* Augmente l'espace entre les blocs */
+    margin-left: 320px; /* Space for sidebar */
+
   }
   
   
 /* Stats row */
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Ajusté pour 2 colonnes */
-  gap: 60px; /* Augmente l'espace entre les cartes */
+  grid-template-columns: repeat(4, 1fr); /* Ajusté pour 2 colonnes */
+  gap: 40px; /* Augmente l'espace entre les cartes */
+  margin-left: 630px;
 }
 
 .stat-card {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 16px; /* Augmente le padding pour plus d'espace interne */
+  padding: 14px; /* Augmente le padding pour plus d'espace interne */
   display: flex;
   align-items: center;
-  gap: 30px; /* Augmente l'espace entre l'icône et le texte */
-  height: 150px; /* Augmente la hauteur de la carte */
+  gap: 15px; /* Augmente l'espace entre l'icône et le texte */
+  height: 130px; /* Augmente la hauteur de la carte */
   margin-top: 50px;
 }
 
 .stat-icon {
-  width: 90px; /* Augmente la taille du conteneur de l'icône */
-  height: 90px; /* Augmente la taille du conteneur de l'icône */
+  width: 80px; /* Augmente la taille du conteneur de l'icône */
+  height: 80px; /* Augmente la taille du conteneur de l'icône */
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  font-size: 40px; /* Augmente la taille de l'icône */
+  font-size: 30px; /* Augmente la taille de l'icône */
 }
 
 .stat-icon.green {
@@ -68,14 +76,14 @@
 }
 
 .stat-number {
-  font-size: 42px; /* Augmente la taille du nombre */
+  font-size: 32px; /* Augmente la taille du nombre */
   font-weight: 600;
   margin: 0;
   color: #333;
 }
 
 .stat-label {
-  font-size: 25px; /* Augmente la taille du label */
+  font-size: 20px; /* Augmente la taille du label */
   color: black;
   margin: 0;
 }
@@ -88,6 +96,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     padding: 20px;
+
   }
   
   .title {
@@ -111,15 +120,17 @@
     align-items: center;
     justify-content: center;
     overflow: hidden; /* Assure que rien ne dépasse */
+
+
 }
 
 .localisation-container {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
-    margin-top: 100px;
+    margin-top: 50px;
     overflow: hidden; /* Assure que les éléments restent dans leur place */
-    min-height: 500px; /* Augmente la hauteur totale */
+    min-height: 100px; /* Augmente la hauteur totale */
 
 }
 
@@ -239,38 +250,158 @@
   color: #333; /* Couleur du texte */
 }
 
-  
+/* --- Overlay du modal --- */
 .modal-overlay {
- 
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  border: none;
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
+/* --- Conteneur du modal --- */
+.modal-container {
+  background-color: white;
+  width: 90%;
+  max-width: 800px;
   border-radius: 8px;
-  width: 400px;
-  text-align: center;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
+  max-height: 90vh;
+  padding: 15px;
+  border: none;
+  overflow-y: auto; /* Pour gérer le défilement du contenu si nécessaire */
 }
 
-.alert-photo {
-  width: 100%;
-  height: auto;
-  margin-top: 10px;
+/* --- En-tête du modal --- */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
 }
 
 .close-btn {
-  margin-top: 15px;
-  padding: 10px 15px;
-  background: red;
-  color: white;
+  background: none;
   border: none;
+  font-size: 20px;
   cursor: pointer;
+  color: #666;
+}
+
+/* --- Section Détails --- */
+.details-section {
+  margin-bottom: 20px;
+}
+
+.details-section p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* --- Section Localisation --- */
+.location-container {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
+
+.location-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: #00a86b;
+}
+
+.location-details p {
+  font-size: 16px;
+  color: #333;
+}
+
+.localisation {
+  background: none;
+  border: none;
+  color: #00a86b;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.localisation:hover {
+  color: #008b5e;
+  text-decoration: underline;
+}
+
+/* --- Section Description --- */
+.description-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.description-section p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* --- Section Photos --- */
+.photos-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.photos-grid {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.photo-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-container:hover {
+  transform: scale(1.05);
+}
+
+/* --- Bouton de fermeture --- */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: red;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: red;
 }
