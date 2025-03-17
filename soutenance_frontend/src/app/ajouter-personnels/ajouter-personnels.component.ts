@@ -23,7 +23,8 @@ export class AjouterPersonnelsComponent {
   password: string = '';
   statut?: string;
   photo?: File;
-  
+  showPassword: boolean = false;
+
   emailErrorMessage: string = '';
   telephoneErrorMessage: string = '';
   
@@ -140,5 +141,8 @@ export class AjouterPersonnelsComponent {
         }
       }
     );
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

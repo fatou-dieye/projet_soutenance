@@ -6,6 +6,7 @@
   align-items: center; /* Centrage vertical de la navbar */
   background-color: white;
 
+
   box-shadow: 0 4px 6px rgba(0.1, 0.1, 0.1, 0.1);
   border-radius: 15px;
   width: 80%;
@@ -60,6 +61,73 @@
   border: 2px solid #00A551; /* Bordure verte autour de l'image */
 }
 
+/* Logo Section */
+.navbar-logo {
+  display: flex;
+  justify-content: center; /* Centrer le texte */
+  align-items: center;
+  flex-grow: 1;
+
+}
+
+.navbar-logo span {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00A551; /* Vert */
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),  /* Ombre noire avec flou léger */
+    0px 0px 8px rgba(255, 255, 255, 1);
+  opacity: 80%;
+
+}
+
+/* Profile Section */
+.navbar-profile {
+  display: flex;
+  flex-direction: column; /* Mise en colonne pour l'image, nom et rôle */
+  align-items: center;
+  gap: 5px; /* Espacement entre l'image et les infos */
+}
+
+
+/* Modifications pour le bouton triangle */
+.triangle-btn {
+  background-color: transparent; /* Pas de fond */
+  border: none; /* Pas de bordure */
+  font-size: 15px; /* Taille du triangle */
+  color: #00A551; /* Couleur verte pour le triangle */
+  cursor: pointer; /* Curseur pointer pour montrer que c'est cliquable */
+  
+
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  
+}
+
+
+
 .profile-info {
   display: flex;
   flex-direction: column; /* Alignement vertical pour nom et rôle */
@@ -102,10 +170,9 @@
 }
 
 .logo-img {
+
   width: 150px;
   height: 150px;
-  border-radius: 50%;
- 
 }
 
 .sidebar-nav {
@@ -143,6 +210,7 @@
   margin-top: auto;
 }
 
+
 .logout button {
   color: #FF0000;
   font-size: 16px;
@@ -151,6 +219,23 @@
   border: none;
   background-color: #FFFFFF;
 }
+
+
+.button {
+  color: #FF0000;                
+  font-size: 16px;               
+  font-weight: 600;              
+  background-color: transparent; 
+  border: none;                 
+  padding: 0;                    
+  margin: 0;                     
+  text-align: left;              
+  cursor: pointer;              
+  font-family: inherit;          
+  text-decoration: none;         
+}
+
+
 
 .logout-icon {
   color: red; /* Red color for the logout icon */

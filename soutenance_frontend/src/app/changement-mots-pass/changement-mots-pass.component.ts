@@ -98,64 +98,61 @@ export class ChangementMotsPassComponent implements OnInit{
 
   
    // Méthode pour vérifier le mot de passe actuel avant de passer à l'étape suivante
-   verifyCurrentPassword(): void {
-    this.errorMessage = ''; // Réinitialiser l'erreur
+verifyCurrentPassword(): void {
+  this.errorMessage = ''; // Réinitialiser l'erreur
   
-    const ancienMotPasse = this.passwordForm.get('ancien_mot_passe')?.value;
-    console.log('Mot de passe actuel:', ancienMotPasse); // Déboguer la valeur
+  const ancienMotPasse = this.passwordForm.get('ancien_mot_passe')?.value;
+  console.log('Mot de passe actuel:', ancienMotPasse); // Déboguer la valeur
   
-    if (ancienMotPasse) {
-      // Appeler le service AuthService pour vérifier l'ancien mot de passe
-      this.authService.verifyOldPassword(ancienMotPasse).subscribe({
-        next: (response: { message: string }) => {  // Spécifier le type de la réponse
-          console.log('Réponse du serveur:', response); // Déboguer la réponse
-          if (response.message === 'Ancien mot de passe correct') {
-            this.step = 2;
-          } else {
-            this.errorMessage = 'Ancien mot de passe incorrect';
-          }
-        },
-        error: (error: any) => {  // Typage de l'erreur
-          console.log('Erreur lors de la vérification du mot de passe:', error); // Déboguer l'erreur
+  if (ancienMotPasse) {
+    // Appeler le service AuthService pour vérifier l'ancien mot de passe
+    this.authService.verifyOldPassword(ancienMotPasse)
+      .then((response: { message: string }) => {  // Spécifier le type de la réponse
+        console.log('Réponse du serveur:', response); // Déboguer la réponse
+        if (response.message === 'Ancien mot de passe correct') {
+          this.step = 2;
+        } else {
           this.errorMessage = 'Ancien mot de passe incorrect';
         }
+      })
+      .catch((error: any) => {  // Typage de l'erreur
+        console.log('Erreur lors de la vérification du mot de passe:', error); // Déboguer l'erreur
+        this.errorMessage = 'Ancien mot de passe incorrect';
       });
-    }
+  }
+}
+
+changePassword(): void {
+  if (this.passwordForm.invalid) {
+    return;
   }
   
+  const passwordData = this.passwordForm.value;
   
-  changePassword(): void {
-    if (this.passwordForm.invalid) {
-      return;
-    }
-    
-    const passwordData = this.passwordForm.value;
-    
-    this.authService.changePassword(passwordData).subscribe({
-      next: (response) => {
-        this.successMessage = response.message || 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.';
-        setTimeout(() => {
-          this.closeModal();
-          this.authService.logout().subscribe({
-            next: () => {
-              this.router.navigate(['/logi']);
-            },
-            error: () => {
-              // Even if logout fails on server, clear local storage and redirect
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
-              this.router.navigate(['/logi']);
-            }
+  this.authService.changePassword(passwordData)
+    .then((response) => {
+      this.successMessage = response.message || 'Mot de passe mis à jour avec succès. Veuillez vous reconnecter.';
+      setTimeout(() => {
+        this.closeModal();
+        this.authService.logout()
+          .then(() => {
+            this.router.navigate(['/logi']);
+          })
+          .catch(() => {
+            // Even if logout fails on server, clear local storage and redirect
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            this.router.navigate(['/logi']);
           });
-        }, 2000);
-      },
-      error: (error) => {
-        this.step = 1; // Go back to first step
-        this.errorMessage = error.error.message || 'Erreur lors du changement de mot de passe';
-      }
+      }, 2000);
+    })
+    .catch((error) => {
+      this.step = 1; // Go back to first step
+      this.errorMessage = error.response?.data?.message || 'Erreur lors du changement de mot de passe';
     });
-  }
-  getFormControl(name: string): FormControl {
-    return this.passwordForm.get(name) as FormControl;
-  }
+}
+
+getFormControl(name: string): FormControl {
+  return this.passwordForm.get(name) as FormControl;
+}
 }

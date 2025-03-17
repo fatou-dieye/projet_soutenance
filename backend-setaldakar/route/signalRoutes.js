@@ -5,10 +5,15 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
-const { verifyToken, verifyRole } = require('../middlware/auth.middleware');
-const Alerte = require('../models/signal');
+
+
+
+const { verifyToken, verifyRole } = require('../middleware/authmiddleware');
+const Alerte = require('../models/Signal');
 const Utilisateur = require('../models/Utilisateur');
 const AlerteController = require('../controllers/signalController');
+const  getNearbyDepots  = require('../controllers/signalController');
+const getAlertesByUser  = require('../controllers/signalController');
 
 // Configuration de multer pour l'upload des photos
 const storage = multer.diskStorage({
@@ -78,7 +83,7 @@ const compressImages = async (req, res, next) => {
 };
 
 // 1. CRÉER UNE ALERTE (pour les citoyens)
-router.post('/alertes', 
+router.post('/alertes/create', 
   verifyToken, 
   upload.array('photos', 4),
   compressImages,
@@ -94,6 +99,7 @@ router.get('/alertes/last7days', verifyToken, AlerteController.getAlertesLast7Da
 
 // 3. RÉCUPÉRER UNE ALERTE PAR ID
 router.get('/alertes/:id', verifyToken, AlerteController.getAlerteById);
+
 
 
 // Nouvelle route pour assigner un videur
@@ -130,6 +136,12 @@ router.get('/confirmation/:alerteId/:videurId', async (req, res) => {
     res.status(500).send('Erreur lors de la confirmation');
   }
 });
+
+
+router.get('/nearby-depots', verifyToken, AlerteController.getNearbyDepots);
+
+// Route pour récupérer les alertes par utilisateur
+router.get('/alertesbyuser', verifyToken, AlerteController.getAlertesByUser);
 
 
 module.exports = router;

@@ -55,7 +55,9 @@
   
           <div class="form-group" *ngIf="role === 'administrateur'">
             <label>Mot de passe <span class="required">*</span></label>
+            
             <input type="password" [(ngModel)]="password" name="password" (input)="validateForm()" required>
+           
             <span class="error" *ngIf="!passwordValid && password.length > 0">Mot de passe trop court (min. 8 caractères)</span>
           </div>
   

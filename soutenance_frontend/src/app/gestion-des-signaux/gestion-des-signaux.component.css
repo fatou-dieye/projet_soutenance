@@ -1,217 +1,218 @@
+
+/* Import Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+
 .signal{
-    background-color: #FAFBFF; 
+  background-color: #FAFBFF; 
 }
 .gestion{
-    background-color: #FAFBFF;
-   
-  }
- body{
-    margin: 0;
-    padding: 0;
-    background-color: #FAFBFF;
-  }
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Conteneur principal */
-  .container {
-  
-    /* Augmenter la largeur du conteneur (par rapport à la page) */
-    height: 80vh;
-    margin-left: 250px; /* Éloigner du bord gauche */
-    box-shadow:  rgba(0.5, 0.5, 0.5, 0.5);
-    box-shadow: #6c757d;
-    font-family: 'Poppins', sans-serif;
-  
-  }
-  
-  /* Contenu principal */
-  .content {
-    flex-grow: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    width: 140%; /* S'assurer que le contenu prend toute la largeur disponible */
-    margin-top: 40px;
-   
-  }
-  
-  /* Conteneur du tableau */
-  .table-container {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
-    width: 100%;
-      border-collapse: collapse;
-      box-shadow: 0 4px 6px rgba(0.1, 0.1, 0.1, 0.1);
-  }
-  
-  /* En-tête du tableau */
-  .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
+  background-color: #FAFBFF;
  
-  .btn-add:hover {
-    background-color: #269d4e;
-  }
-  
-  /* Conteneur de la recherche */
-  .search-container {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-  }
-  
-  /* Input de recherche */
-  .search-wrapper {
-    position: relative;
-  }
-  
-  .search-input {
-    padding: 0.5rem 1rem;
-    padding-right: 2.5rem;
-    border: 1px solid  #F9FBFF;
-    border-radius: 5px;
-    width: 250px;
-    background-color: #F9FBFF;
-  }
-  
-  .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-  }
-  
-  
-  /* Tableau */
-  table{
-  
-    
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
- .container table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 0.5rem;
-    text-align: left;
-    border-bottom: 1px solid #e1e1e1;
-    vertical-align: middle;
-    line-height: 0.5; /* Ajustez ce nombre pour augmenter l'espacement entre les lignes de texte */
-  }
-
-  th {
-  
-    font-weight: 600;
-    color: #6c757d;
-  }
-  tr {
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-
-  
-  /* Statut des utilisateurs */
-  
-  .status-blocked {
-    color: #00A551;
-    font-weight: 500;
-  }
-  
-  .status-active{
-    color: #ff4d4d;
-    font-weight: 500;
-  }
-  /* Actions sur la ligne */
-  .actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .btn-edit, .btn-user, .btn-delete-single {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   
-    height: 50px;
-  }
-  
-  .btn-edit i {
-    color: #292e35;
-    font-size: x-large;
-    opacity: 80%;
-  }
-  
-.date-filter input {
-  border: solid 1px #00A551;
 }
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #FAFBFF;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Conteneur principal */
+.container {
+
+  /* Augmenter la largeur du conteneur (par rapport à la page) */
+  height: 80vh;
+  margin-left: 250px; /* Éloigner du bord gauche */
+  box-shadow:  rgba(0.5, 0.5, 0.5, 0.5);
+  box-shadow: #6c757d;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+/* Contenu principal */
+.content {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 140%; /* S'assurer que le contenu prend toute la largeur disponible */
+  margin-top: 40px;
  
+}
+
+/* Conteneur du tableau */
+.table-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 6px rgba(0.1, 0.1, 0.1, 0.1);
+}
+
+/* En-tête du tableau */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add:hover {
+  background-color: #269d4e;
+}
+
+/* Conteneur de la recherche */
+.search-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Input de recherche */
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  padding: 0.5rem 1rem;
+  padding-right: 2.5rem;
+  border: 1px solid  #F9FBFF;
+  border-radius: 5px;
+  width: 250px;
+  background-color: #F9FBFF;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+
+/* Tableau */
+table{
+
   
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1.5rem;
-    gap: 0.5rem;
-  }
-  
-  .pagination button {
-    background-color: #f5f6fa;
-    border: 1px solid #e1e1e1;
-    border-radius: 5px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #f5f6fa;
-  }
-  
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  .page-number {
-    min-width: 32px;
-    height: 32px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0 5px;
-  }
-  
-  .page-number.active {
-    background-color: #00A551;
-    color: white;
-  }
-  
-  .page-dots {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  
-  /* Import Font Awesome */
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-  
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+  vertical-align: middle;
+  line-height: 0.5; /* Ajustez ce nombre pour augmenter l'espacement entre les lignes de texte */
+}
+
+th {
+
+  font-weight: 600;
+  color: #6c757d;
+}
+tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+
+
+/* Statut des utilisateurs */
+
+.status-blocked {
+  color: #00A551;
+  font-weight: 500;
+}
+
+.status-active{
+  color: #ff4d4d;
+  font-weight: 500;
+}
+/* Actions sur la ligne */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-edit, .btn-user, .btn-delete-single {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  height: 50px;
+}
+
+.btn-edit i {
+  color: #292e35;
+  font-size: x-large;
+  opacity: 80%;
+}
+
+.date-filter input {
+border: solid 1px #00A551;
+}
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background-color: #f5f6fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #f5f6fa;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-number {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.page-number.active {
+  background-color: #00A551;
+  color: white;
+}
+
+.page-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

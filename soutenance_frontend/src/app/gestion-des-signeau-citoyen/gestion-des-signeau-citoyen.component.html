@@ -1,0 +1,96 @@
+
+
+<app-sidebarre></app-sidebarre>
+<div class="utilisateur-main">
+  <div class="content-container">
+    <div class="step-labels">
+      <p>
+        <span class="label" id="label-1">Geolocalisation</span>
+        <span class="label" id="label-2">Photos</span>
+        <span class="label" id="label-3">Description</span>
+      </p>
+      <div class="step-indicator">
+        <div class="progress-line"></div> <!-- La barre de progression -->
+      </div>
+    </div>
+
+    <div class="signal-container">
+      <div class="step-content">
+        <!-- Étape 1 : Géolocalisation -->
+        <div class="step" [class.active]="currentStep === 1">
+          <div class="step-header">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Nous avons besoin de votre position pour localiser le problème.</p>
+            <button class="share-location" (click)="shareLocation()">Partager</button>
+          </div>
+          <div id="map" class="map-container"></div>
+        </div>
+
+       
+                  <!-- Étape 2 : Photos -->
+      <div class="step" [class.active]="currentStep === 2">
+        <div class="step-header">
+          <p class="step-title">Ajouter des photos</p>
+        </div>
+
+        <!-- Section pour uploader des photos -->
+        <div class="photo-options">
+          <div class="photo-block">
+            <label for="photo-upload" class="add-photo-icon">
+              <i class="fas fa-plus"></i>
+              <input 
+                type="file" 
+                id="photo-upload" 
+                (change)="onFileChange($event)" 
+                multiple 
+                accept="image/*" 
+                hidden 
+              />
+            </label>
+          </div>
+        </div>
+        
+        <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
+
+        <!-- Affichage des aperçus des photos sélectionnées -->
+        <div class="photo-preview">
+          <div *ngFor="let photoUrl of photoUrls">
+            <img [src]="photoUrl" alt="Preview" width="130px" />
+          </div>
+        </div>
+
+        <!-- Afficher le message d'erreur -->
+      </div>
+
+
+
+
+
+        <!-- Étape 3 : Description -->
+        <div class="step" [class.active]="currentStep === 3">
+          <div class="step-header">
+            <p>Décrire la situation</p>
+          </div>
+          <div class="description-box">
+            <textarea [(ngModel)]="description" placeholder="Décrivez la situation (type de déchets, quantité, urgence...)"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="navigation-buttons">
+        <button class="prev-step" (click)="prevStep()" *ngIf="currentStep > 1">Retour</button>
+        <button class="next-step" (click)="nextStep()" *ngIf="currentStep < 3 && showNextButton">Suivant</button>
+        <button class="finish-step" (click)="finishStep()" *ngIf="currentStep === 3">Terminer</button>
+      </div>
+    </div>
+
+    <div class="message success" *ngIf="successMessage">{{ successMessage }}</div>
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  </div>
+</div>
+
+<!-- Modal de succès -->
+<div class="status-change-success-modal-overlay" [class.visible]="showSuccessModal">
+  <div class="status-change-success-modal-content">
+    <p>{{ successModalMessage }}</p>
+  </div>
+</div>

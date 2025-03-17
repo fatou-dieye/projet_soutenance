@@ -2,12 +2,18 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Utilisateur = require('../models/Utilisateur');
-const { enregistrerAction } = require('./historiqueContrller');
 
-const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
+
+const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
+
+const motspassoublierController = require('./motspassoublierController');
+const HistoriqueAction = require('../models/HistoriqueAction');
+const { enregistrerAction } = require('./historiqueController');
+
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const motspassoublierController = require('./motspassoublierController');
+
+
 
 // Login
 
@@ -68,8 +74,11 @@ exports.login = async (req, res) => {
         telephone: utilisateur.telephone,
         role: utilisateur.role,
         nom: utilisateur.nom,
+
         prenom: utilisateur.prenom,
-        photo:  utilisateur.photo
+        photo:  utilisateur.photo,
+        prenom: utilisateur.prenom
+
       }
     });
 
@@ -79,6 +88,51 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: 'Erreur serveur', error: error.message });
   }
 };
+
+
+
+
+
+// Vérifier l'existence de l'email ou du téléphone dans la base de données
+exports.checkExistence = async (req, res) => {
+  try {
+    const { email, telephone, password } = req.body;
+
+    if (!email && !telephone) {
+      return res.status(400).json({ message: 'Email ou téléphone requis pour la vérification.' });
+    }
+
+    // Chercher l'utilisateur dans la base de données par email ou téléphone
+    const utilisateur = email
+      ? await Utilisateur.findOne({ email }).select('+mot_passe')
+      : await Utilisateur.findOne({ telephone }).select('+mot_passe');
+
+    // Vérifier si l'utilisateur existe
+    if (utilisateur) {
+      if (password) {
+        // Si le mot de passe est fourni, le comparer avec celui de l'utilisateur
+        const isPasswordValid = await bcrypt.compare(password, utilisateur.mot_passe);
+
+        if (isPasswordValid) {
+          return res.json({ exists: true, isValid: true }); // Email/Téléphone et mot de passe corrects
+        } else {
+          return res.status(401).json({ exists: true, isValid: false, message: 'Mot de passe incorrect.' });
+        }
+      }
+
+      // Si le mot de passe n'est pas fourni, simplement confirmer que l'email/téléphone existe
+      return res.json({ exists: true });
+    } else {
+      return res.json({ exists: false, message: 'Utilisateur introuvable.' });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification de l\'email ou du téléphone :', error);
+    return res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+};
+
+
+
 // Logout
 exports.logout = async (req, res) => {
   try {
@@ -123,6 +177,10 @@ exports.verifyOldPassword = async (req, res) => {
     return res.status(500).json({ message: 'Erreur lors de la vérification du mot de passe', error: error.message });
   }
 };
+
+// Fonction pour gérer le mot de passe oublié (moved to motspassoublierController)
+exports.forgotPassword = motspassoublierController.forgotPassword;
+
 
 // Fonction pour gérer le mot de passe oublié (moved to motspassoublierController)
 exports.forgotPassword = motspassoublierController.forgotPassword;

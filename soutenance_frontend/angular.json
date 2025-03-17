@@ -92,12 +92,19 @@
             "styles": [
               "src/styles.css",
                "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-               "node_modules/bootstrap/dist/css/bootstrap.min.css"
+
+               
+
+               "node_modules/leaflet/dist/leaflet.css"
+
             ],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "0899f832-d775-4c19-8d97-3aaae0b7dd83"
   }
 }

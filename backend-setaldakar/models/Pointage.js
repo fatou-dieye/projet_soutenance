@@ -19,4 +19,7 @@ const attendanceSchema = new mongoose.Schema({
 const Pointage = mongoose.model('pointage', guardSchema);
 const Attendance = mongoose.model('Attendance', attendanceSchema);
 
+
+
 module.exports = { Pointage, Attendance };
+

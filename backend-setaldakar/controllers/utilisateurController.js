@@ -1,25 +1,27 @@
 // controllers/utilisateur.controller.js
 const Utilisateur = require('../models/Utilisateur');
 const multer = require('multer');
+const path = require('path');
 const bcrypt = require('bcrypt');
+const { enregistrerAction  } = require('../controllers/historiqueController');// Configuration du stockage des images
+
 const HistoriqueAction = require('../models/HistoriqueAction');
-const { enregistrerAction } = require('./historiqueContrller');
+
+
 
 // Configuration du stockage des images
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Dossier où seront stockées les images
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + '-' + file.originalname);
-    }
+  destination: (req, file, cb) => {
+      cb(null, 'uploads/'); // Dossier où seront stockées les images
+  },
+  filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + '-' + file.originalname);
+  }
 });
 const upload = multer({ storage: storage });
 
 
-// Inscription
-// Inscription
 // Inscription
 exports.register = async (req, res) => {
   try {
@@ -75,6 +77,58 @@ const uploadProfileImage = (req, res) => {
       file: req.file
   });
 };
+// Nouvelle méthode d'inscription pour les utilisateurs avec des champs limités
+exports.registerSimpleUser = async (req, res) => {
+  try {
+      const { nom, prenom, email, mot_passe, adresse, telephone } = req.body;
+
+      const existingUser = await Utilisateur.findOne({ email });
+      if (existingUser) {
+          return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+      }
+
+      const nouvelUtilisateur = new Utilisateur({
+          nom,
+          prenom,
+          email,
+          mot_passe,
+          adresse,
+          telephone,
+          role: 'utilisateur', // Rôle par défaut pour ces utilisateurs
+          statut: 'active', // Statut par défaut
+      });
+
+      await nouvelUtilisateur.save();
+
+      // Compter le nombre d'utilisateurs inscrits avec le rôle "utilisateur"
+      const nombreUtilisateurs = await Utilisateur.countDocuments({ role: 'utilisateur' });
+
+      res.status(201).json({
+          message: 'Utilisateur créé avec succès',
+          user: {
+              id: nouvelUtilisateur._id,
+              email: nouvelUtilisateur.email,
+              role: nouvelUtilisateur.role
+          },
+          totalUsers: nombreUtilisateurs // Inclure le nombre total d'utilisateurs avec le rôle "utilisateur" dans la réponse
+      });
+  } catch (error) {
+      res.status(500).json({ message: 'Erreur lors de l\'inscription', error: error.message });
+  }
+};
+
+// Nouvelle méthode pour récupérer le nombre d'utilisateurs inscrits
+exports.getTotalUsers = async (req, res) => {
+  try {
+    const nombreUtilisateurs = await Utilisateur.countDocuments({ role: 'utilisateur' });
+    res.status(200).json({ totalUsers: nombreUtilisateurs });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors du comptage des utilisateurs', error: error.message });
+  }
+};
+
+
+
 // Lister tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
     try {
@@ -255,7 +309,6 @@ const updateUsersStatus = async (req, res) => {
     }
   };
   
-  
   // Statistiques des utilisateurs par rôle
   exports.getUserStatistics = async (req, res) => {
     try {
@@ -327,51 +380,38 @@ exports.bulkDeleteUsers = async (req, res) => {
   };
 
 
-  // Bloquer ou débloquer un utilisateur
+// Bloquer ou débloquer un utilisateur
 exports.toggleUserStatus = async (req, res) => {
   try {
-      const { id } = req.params;
-      const utilisateur = await Utilisateur.findById(id);
+    const { id } = req.params;
+    const utilisateur = await Utilisateur.findById(id);
 
-      if (!utilisateur) {
-          return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    if (!utilisateur) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    // Changer le statut entre 'active' et 'bloquer'
+    const newStatut = utilisateur.statut === 'active' ? 'bloquer' : 'active';
+
+    utilisateur.statut = newStatut;
+    await utilisateur.save();
+
+    // Enregistrer l'action dans l'historique
+    await enregistrerAction(req.utilisateur.userId, "Changement de statut d'utilisateur");
+
+    res.json({
+      message: `Utilisateur ${newStatut} avec succès`,
+      user: {
+        id: utilisateur._id,
+        statut: utilisateur.statut
       }
-
-      // Changer le statut entre 'active' et 'bloquer'
-      const newStatut = utilisateur.statut === 'active' ? 'bloquer' : 'active';
-      
-      utilisateur.statut = newStatut;
-      await utilisateur.save();
-
-      // Enregistrer l'action dans l'historique
-      await enregistrerAction(req.utilisateur.userId, "Changement de statut d'utilisateur");
-
-      res.json({
-          message: `Utilisateur ${newStatut} avec succès`,
-          user: {
-              id: utilisateur._id,
-              statut: utilisateur.statut
-          }
-      });
+    });
   } catch (error) {
-      res.status(500).json({ message: 'Erreur lors du changement de statut de l\'utilisateur', error: error.message });
+    res.status(500).json({ message: 'Erreur lors du changement de statut de l\'utilisateur', error: error.message });
   }
 };
 
 
-//lister les historique 
-exports.getHistorique = async (req, res) => {
-  try {
-      const historique = await HistoriqueAction.find()
-          .populate('adminId', 'nom email')
-          .populate('cibleId', 'nom email')
-          .sort({ date: -1 });
-
-      res.json(historique);
-  } catch (error) {
-      res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
-  }
-};
 
 //lister l'historique de l'utilisateur connecter
 
@@ -388,8 +428,7 @@ exports.getHistoriqueUtilisateur = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
   }
 };
-
-  exports.upload = upload;
+exports.upload = upload;
 exports.updateUsersStatus = updateUsersStatus;
 exports.updateUser = updateUser;
 exports.uploadProfileImage = uploadProfileImage;

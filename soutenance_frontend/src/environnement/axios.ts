@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Par exemple, rediriger l'utilisateur vers la page de login en cas de token expiré
-      window.location.href = '/logi'; // Modifiez selon votre logique
+      window.location.href = '/login'; // Modifiez selon votre logique
     }
     return Promise.reject(error);
   }

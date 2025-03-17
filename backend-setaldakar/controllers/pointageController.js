@@ -8,23 +8,20 @@ const { Attendance } = require('../models/Pointage'); // Utiliser destructuring 
 const moment = require('moment');
 
 
-
-
-
 // Assigner une carte RFID à un gardien
 exports.assignRFID = async (req, res) => {
   try {
-    const { carte_rfid, guard_id, name } = req.body;
+    const { carte_rfid, guard_id } = req.body;
 
-    // Vérifier si la carte RFID est déjà assignée
-    const existingGuardByRFID = await Pointage.findOne({ carte_rfid});
+    // Vérifier si la carte RFID est déjà assignée à un autre gardien
+    const existingGuardByRFID = await Pointage.findOne({ carte_rfid });
     if (existingGuardByRFID) {
       return res.status(400).json({ error: 'Cette carte RFID est déjà assignée à un autre gardien.' });
     }
 
-    // Vérifier si le gardien est déjà assigné à une autre carte RFID
+    // Vérifier si le gardien est déjà assigné à une carte RFID
     const existingGuardByID = await Pointage.findOne({ guard_id });
-    if (existingGuardByID && existingGuardByID.rfid_id) {
+    if (existingGuardByID && existingGuardByID.carte_rfid) {
       return res.status(400).json({ error: 'Ce gardien est déjà assigné à une autre carte RFID.' });
     }
 
@@ -39,7 +36,7 @@ exports.assignRFID = async (req, res) => {
       return res.status(404).json({ error: 'Gardien non trouvé.' });
     }
 
-    // Mettre à jour l'utilisateur avec le rfid_id
+    // Mettre à jour l'utilisateur avec la carte RFID
     await Utilisateur.findByIdAndUpdate(guard_id, { carte_rfid });
 
     res.status(200).json(pointage);
@@ -48,10 +45,6 @@ exports.assignRFID = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l\'assignation de la carte RFID', details: error.message });
   }
 };
-
-
-
-
 
 
 // Enregistrer le pointage d'un gardien
@@ -150,6 +143,7 @@ exports.getTodayAttendanceRecords = async (req, res) => {
   }
 };
 
+
 // Récupérer le nombre de pointages pour un jour donné
 exports.getDailyAttendanceCount = async (req, res) => {
   try {
@@ -166,5 +160,16 @@ exports.getDailyAttendanceCount = async (req, res) => {
     res.status(200).json({ count });
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la récupération du nombre de pointages' });
+  }
+};
+
+
+// Récupérer tous les gardiens
+exports.getAllGardiens = async (req, res) => {
+  try {
+    const gardiens = await Utilisateur.find({ role: 'gardient' });
+    res.status(200).json(gardiens);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la récupération des gardiens' });
   }
 };

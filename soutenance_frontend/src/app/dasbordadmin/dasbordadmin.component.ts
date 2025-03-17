@@ -13,6 +13,7 @@ import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubell
   templateUrl: './dasbordadmin.component.html',
   styleUrl: './dasbordadmin.component.css'
 })
+
 export class DasbordadminComponent  implements OnInit , OnDestroy {
   
   private depotPercentages: Map<number, number> = new Map();

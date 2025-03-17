@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const alertController = require('../controllers/alertController');
-const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
+const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
 const depotController = require('../controllers/deposController');
 // Route pour créer une nouvelle alerte
 router.post('/alerts/create',verifyToken,verifyRole(['administrateur']), alertController.createAlert);

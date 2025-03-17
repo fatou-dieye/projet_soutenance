@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="logo">
+        <img src="logosetal.png" alt="SETAL">
+    </div>
+
+    <p class="slogan">Dakar mérite mieux... Ne restons pas spectateurs, agissons maintenant</p>
+    <h3>Inscrivez-vous</h3>
+
+    <form (ngSubmit)="onSubmit(inscriptionForm)" #inscriptionForm="ngForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Prénom <span class="required">*</span></label>
+                <input type="text" placeholder="Prénom" required [(ngModel)]="prenom" name="prenom" (ngModelChange)="validatePrenom(prenom)">
+                <div *ngIf="prenomError" class="error">{{ prenomError }}</div>
+            </div>
+            <div class="form-group">
+                <label>Nom <span class="required">*</span></label>
+                <input type="text" placeholder="Nom" required [(ngModel)]="nom" name="nom" (ngModelChange)="validateNom(nom)">
+                <div *ngIf="nomError" class="error">{{ nomError }}</div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" placeholder="Email" required [(ngModel)]="email" name="email" (ngModelChange)="validateEmail(email)">
+                <!-- Affichage de l'erreur email sous le champ -->
+                <div *ngIf="emailError" class="error">{{ emailError }}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Adresse</label>
+                <input type="text" placeholder="Adresse" [(ngModel)]="adresse" name="adresse">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Téléphone <span class="required">*</span></label>
+                <input type="tel" placeholder="Téléphone" required [(ngModel)]="telephone" name="telephone" (ngModelChange)="validateTelephone(telephone)">
+                <div *ngIf="telephoneError" class="error">{{ telephoneError }}</div>
+            </div>
+            <div class="form-group">
+                <label>Mot de passe <span class="required">*</span></label>
+                <div class="password-container">
+                    <input [type]="showPassword ? 'text' : 'password'" placeholder="Mot de passe" required [(ngModel)]="mot_passe" name="mot_passe" (ngModelChange)="validatePassword(mot_passe)">
+                    <span class="toggle-password" (click)="togglePassword()">
+                        <i class="fa" [ngClass]="{'fa-eye-slash': showPassword, 'fa-eye': !showPassword}"></i>
+                    </span>
+                </div>
+                <div *ngIf="passwordError" class="error">{{ passwordError }}</div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn" [disabled]="inscriptionForm.invalid || emailError || telephoneError || nomError || prenomError || passwordError">S'inscrire</button>
+
+        <p class="login-link">Vous avez un compte ? <a href="/login">Se connecter</a></p>
+
+        <!-- Afficher les messages d'erreur globaux -->
+        <div *ngIf="serverError" class="error">{{ serverError }}</div>
+    </form>
+
+    <!-- Modal de succès -->
+    <div class="modal-overlay" *ngIf="showSuccessModal">
+        <div class="status-change-success-modal-content">
+            <p>{{ successModalMessage }}</p>
+        </div>
+    </div>
+</div>

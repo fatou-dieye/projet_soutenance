@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
+
 import { AjouterPersonnelsComponent } from '../ajouter-personnels/ajouter-personnels.component';
 import { FormsModule } from '@angular/forms';
 import { GestionpersonnelService, User } from '../services/gestionpersonnel-services/gestionpersonnel.service';
@@ -16,6 +17,7 @@ import { ModifierPersonnelsComponent } from '../modifier-personnels/modifier-per
   styleUrl: './gestion-personels.component.css'
 })
 export class GestionPersonelsComponent implements OnInit {
+
   users: User[] = [];
   filteredUsers: User[] = [];
   currentPage = 1;
@@ -49,7 +51,9 @@ export class GestionPersonelsComponent implements OnInit {
   ngOnInit(): void {
     // Check if user is logged in
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/logi']);
+
+      this.router.navigate(['/login']);
+
       return;
     }
     
@@ -83,7 +87,9 @@ export class GestionPersonelsComponent implements OnInit {
         if (error.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          this.router.navigate(['/logi']);
+
+          this.router.navigate(['/login']);
+
         }
       }
     });
@@ -345,9 +351,11 @@ updateMultipleUserStatus(statut: string): void {
         user.nom.toLowerCase().includes(value) || 
         user.prenom.toLowerCase().includes(value) || 
         user.email.toLowerCase().includes(value) ||
+
         user.telephone.includes(value)||
         user.role.toLowerCase().includes(value) ||
         user.statut.toLowerCase().includes(value) 
+
       );
     } else {
       this.filteredUsers = [...this.users];
@@ -384,4 +392,5 @@ updateMultipleUserStatus(statut: string): void {
       this.currentPage++;
     }
   }
+
 }

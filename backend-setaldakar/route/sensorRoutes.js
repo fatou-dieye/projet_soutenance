@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sensorController = require('../controllers/sensorController');
-const { verifyToken, verifyRole,invalidateToken } = require('../middlware/auth.middleware');
+const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
 
 // Route pour récupérer les dernières données
 router.get('/donnees', verifyToken, sensorController.getDernieresDonnees);

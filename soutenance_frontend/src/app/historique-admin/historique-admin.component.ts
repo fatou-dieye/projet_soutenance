@@ -1,3 +1,4 @@
+
 import { Component , OnInit} from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { AuthService } from '../services/serviceslogin/auth.service';
@@ -25,19 +26,17 @@ export class HistoriqueAdminComponent implements OnInit {
 
   ngOnInit(): void {
     // Récupérer l'historique de l'utilisateur connecté
-    this.historiqueService.getHistoriqueUtilisateur().subscribe(
-      (data) => {
+    this.historiqueService.getHistoriqueUtilisateur()
+      .then((data) => {
         this.historique = data; // Stocker les données d'historique
         this.filteredHistorique = data; // Initialement tous les éléments sont affichés
         this.totalPages = Math.ceil(this.filteredHistorique.length / this.itemsPerPage); // Calculer le nombre total de pages
         console.log('Historique récupéré :', this.historique);
-      },
-      (error) => {
+      })
+      .catch((error) => {
         console.error('Erreur lors de la récupération de l\'historique :', error);
-      }
-    );
+      });
   }
-
   // Fonction pour changer de page
   goToPage(page: number): void {
     if (page < 1 || page > this.totalPages) return;  // Si la page est hors des limites

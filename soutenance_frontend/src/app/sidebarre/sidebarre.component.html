@@ -1,4 +1,3 @@
-
 <!--partie navebarre-->
 <div class="navbar">
   <!-- Logo Section -->
@@ -8,52 +7,71 @@
   
   <!-- Profile Section -->
   <div class="navbar-profile">
-    <img [src]="currentUser?.photo" alt="Profile" class="profile-img">
-    <div class="profile-info">
-      <span class="profile-name">{{ currentUser.prenom }} {{ currentUser.nom }}</span>
-      <span class="profile-role">{{ currentUser.role }}  <button class="edit-btn triangle-btn" (click)="openPasswordChangeModal()" >&#x25BC;</button> </span>
+    <img *ngIf="currentUser?.photo" [src]="currentUser?.photo" alt="Profile" class="profile-img">
+    <div *ngIf="!currentUser?.photo" class="profile-img-placeholder" [style.background-color]="getBackgroundColor()">
+      {{ getInitials() }}
     </div>
-   
+    <div class="profile-info">
+      <span class="profile-name">{{ currentUser?.prenom }} {{ currentUser?.nom }}</span>
+      <span class="profile-role">{{ userRole }} <button class="edit-btn triangle-btn" (click)="openPasswordChangeModal()">&#x25BC;</button></span>
+    </div>
   </div>
-
-    <!-- Icone pour modifier le profil -->
- 
 </div>
 
-  <!--partie sidebare-->
- <!-- Sidebar component -->
+<!-- Sidebar component -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
   </div>
+  
   <div class="sidebar-nav">
-    <a routerLink="/dasbordadmin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fas fa-home"></i> 
-      <span>Dashboard</span>
-    </a>
-    <a routerLink="/gestion-des-signaux" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fas fa-bell"></i>
-      <span>Gestion des Signaux</span>
-    </a>
-    <a routerLink="/gestion-personels" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fas fa-users"></i>
-      <span>Gestion Personnel</span>
-    </a>
-    <a routerLink="/pointage" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fas fa-check-circle"></i>
-      <span>Pointage</span>
-    </a>
-    <a routerLink="/historique-admin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      <i class="fas fa-history"></i>
-      <span>Historique</span>
-    </a>
+    <!-- Liens pour l'administrateur -->
+    <ng-container *ngIf="isAdmin">
+      <a routerLink="/dasbordadmin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/gestion-des-signaux" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-bell"></i>
+        <span>Gestion des Signaux</span>
+      </a>
+      <a routerLink="/gestion-personels" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-users"></i>
+        <span>Gestion Personnel</span>
+      </a>
+      <a routerLink="/pointage" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-check-circle"></i>
+        <span>Pointage</span>
+      </a>
+      <a routerLink="/historique-admin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </a>
+    </ng-container>
+    
+    <!-- Liens pour l'utilisateur standard -->
+    <ng-container *ngIf="!isAdmin">
+      <a routerLink="/dashboardutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/gestion-des-signeau-citoyen" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-bell"></i>
+        <span>Signal</span>
+      </a>
+      <a routerLink="/historiqueutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </a>
+    </ng-container>
   </div>
+  
   <div class="logout">
-        <i class="fas fa-sign-out-alt logout-icon"></i>  
-     <button class="btn-logout" (click)="logout()">
-       Déconnecter
+    <i class="fas fa-sign-out-alt logout-icon"></i>
+    <button class="btn-logout" (click)="logout()">
+      Déconnecter
     </button>
-   
   </div>
 </div>
+
 <app-changement-mots-pass></app-changement-mots-pass>

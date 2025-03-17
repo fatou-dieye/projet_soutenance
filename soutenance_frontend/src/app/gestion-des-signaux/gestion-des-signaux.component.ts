@@ -71,6 +71,7 @@ export class GestionDesSignauxComponent  implements OnInit {
     }
   }
 
+
   onSearch(): void {
     if (this.searchQuery) {
       this.filteredAlertes = this.alertes.filter(alerte =>
@@ -82,8 +83,6 @@ export class GestionDesSignauxComponent  implements OnInit {
       this.filterAlertesByDate(); // Appliquer le filtrage par date
     }
   }
-
- 
 
   
   viewDetails(alerteId: string): void {

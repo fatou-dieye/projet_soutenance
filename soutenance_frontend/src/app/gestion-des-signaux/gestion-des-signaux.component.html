@@ -1,3 +1,4 @@
+
 <div class="signal">
 <app-sidebarre></app-sidebarre>
 
@@ -75,3 +76,13 @@
 
 <!--message de succes-->
 <app-message-succes [showSuccessModal]="showSuccessModal" [successModalMessage]="successModalMessage"></app-message-succes>
+
+
+  <!-- Modal de succès -->
+  <div class="status-change-success-modal-overlay" [class.visible]="showSuccessModal">
+    <div class="status-change-success-modal-content">
+      <p>{{ successModalMessage }}</p>
+    </div>
+  </div>
+
+

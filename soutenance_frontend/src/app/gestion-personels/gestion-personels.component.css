@@ -1,160 +1,165 @@
 
- .gestion{
-    background-color: #FAFBFF;
-   
-  }
- body{
-    margin: 0;
-    padding: 0;
-    background-color: #FAFBFF;
-  }
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+
+/* Import Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+
+.gestion{
+  background-color: #FAFBFF;
+ 
+}
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #FAFBFF;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Conteneur principal */
+.container {
+
+  /* Augmenter la largeur du conteneur (par rapport à la page) */
+  height: 80vh;
+  margin-left: 250px; /* Éloigner du bord gauche */
+  box-shadow:  rgba(0.1, 0.1, 0.1, 0.1);
+  box-shadow: #6c757d;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Contenu principal */
+.content {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 140%; /* S'assurer que le contenu prend toute la largeur disponible */
+  margin-top: 40px;
+ 
+}
+
+/* Conteneur du tableau */
+.table-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  width: 100%;
+    border-collapse: collapse;
+
+}
+
+/* En-tête du tableau */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
   
-  /* Conteneur principal */
-  .container {
-  
-    /* Augmenter la largeur du conteneur (par rapport à la page) */
-    height: 80vh;
-    margin-left: 250px; /* Éloigner du bord gauche */
-    box-shadow:  rgba(0.1, 0.1, 0.1, 0.1);
-    box-shadow: #6c757d;
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  /* Contenu principal */
-  .content {
-    flex-grow: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    width: 140%; /* S'assurer que le contenu prend toute la largeur disponible */
-    margin-top: 40px;
-   
-  }
-  
-  /* Conteneur du tableau */
-  .table-container {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
-    width: 100%;
-      border-collapse: collapse;
-  
-  }
-  
-  /* En-tête du tableau */
-  .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    
-  }
-  
-  /* Bouton d'ajout */
-  .btn-add {
-    background-color: #00A551;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .btn-add:hover {
-    background-color: #269d4e;
-  }
-  
-  /* Conteneur de la recherche */
-  .search-container {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-  }
-  
-  /* Input de recherche */
-  .search-wrapper {
-    position: relative;
-  }
-  
-  .search-input {
-    padding: 0.5rem 1rem;
-    padding-right: 2.5rem;
-    border: 1px solid  #F9FBFF;
-    border-radius: 5px;
-    width: 250px;
-    background-color: #F9FBFF;
-  }
-  
-  .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-  }
-  
-  /* Actions */
-  .btn-action {
-    background-color:#F9FBFF;
-    color: #6c757d;
-    border: 1px solid #F9FBFF;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: none;
-  }
-  
-  .btn-action.visible {
-    display: block;
-  }
-  
-  .btn-delete-multiple {
-    color: #e55353;
-  }
-  
-  .btn-block-multiple {
-    color: #e55353;
-  }
-  
-  .btn-unblock-multiple {
-    color: #00A551;
-  }
-  
-  /* Tableau */
- /* Tableau */
+}
+
+/* Bouton d'ajout */
+.btn-add {
+  background-color: #00A551;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #269d4e;
+}
+
+/* Conteneur de la recherche */
+.search-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Input de recherche */
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  padding: 0.5rem 1rem;
+  padding-right: 2.5rem;
+  border: 1px solid  #F9FBFF;
+  border-radius: 5px;
+  width: 250px;
+  background-color: #F9FBFF;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+/* Actions */
+.btn-action {
+  background-color:#F9FBFF;
+  color: #6c757d;
+  border: 1px solid #F9FBFF;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: none;
+}
+
+.btn-action.visible {
+  display: block;
+}
+
+.btn-delete-multiple {
+  color: #e55353;
+}
+
+.btn-block-multiple {
+  color: #e55353;
+}
+
+.btn-unblock-multiple {
+  color: #00A551;
+}
+
+/* Tableau */
+/* Tableau */
 /* Tableau */
 .table-responsive {
-  overflow-x: auto;
+overflow-x: auto;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
- 
+width: 100%;
+border-collapse: collapse;
+border-radius: 10px;
+
 }
 
 /* En-tête */
 th {
- 
-  color: #6c757d;
-  font-weight: bold;
-  text-align: left;
-  padding: 12px 15px;
-  font-size: 14px;
+
+color: #6c757d;
+font-weight: bold;
+text-align: left;
+padding: 12px 15px;
+font-size: 14px;
 }
 
 /* Lignes */
 tr {
-  border-bottom: 1px solid #f0f0f0;
+border-bottom: 1px solid #f0f0f0;
 }
 
 /* Dernière ligne sans bordure */
@@ -163,276 +168,273 @@ tr {
 
 /* Cellules */
 td {
-  padding: 12px 15px;
-  font-size: 18px;
-  color: #333;
-  text-align: left;
-  vertical-align: middle;
+padding: 12px 15px;
+font-size: 18px;
+color: #333;
+text-align: left;
+vertical-align: middle;
 }
 
 /* User Info */
 .user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
 }
 
 /* Avatar */
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #e1e1e1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+overflow: hidden;
+background: #e1e1e1;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  th, td {
-    padding: 8px;
-    font-size: 12px;
-  }
-  
-  .avatar {
-    width: 30px;
-    height: 30px;
-  }
+th, td {
+  padding: 8px;
+  font-size: 12px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+}
 }
 
 /* Statut */
 .status-active {
-  color: #00A551;
-  font-weight: 500;
+color: #00A551;
+font-weight: 500;
 }
 
 .status-blocked {
-  color: #e55353;
-  font-weight: 500;
+color: #e55353;
+font-weight: 500;
 }
 
 /* Actions */
 .actions {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-start;
+display: flex;
+gap: 0.5rem;
+justify-content: flex-start;
 }
 
 .btn-edit, .btn-user, .btn-delete-single {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
+background-color: transparent;
+border: none;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 50px;
 }
 
 .btn-edit i {
-  color: #00A551;
+color: #00A551;
 }
 
 .btn-user i {
-  color: #00A551;
+color: #00A551;
 }
 
 .btn-delete-single i {
-  color: #e55353;
+color: #e55353;
 }
 
 /* Icônes */
 .btn-edit i, .btn-user i, .btn-delete-single i {
-  line-height: 0;
-  vertical-align: middle;
+line-height: 0;
+vertical-align: middle;
 }
 
 
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1.5rem;
-    gap: 0.5rem;
-  }
-  
-  .pagination button {
-    background-color: #f5f6fa;
-    border: 1px solid #e1e1e1;
-    border-radius: 5px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  .page-number {
-    min-width: 32px;
-    height: 32px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0 5px;
-  }
-  
-  .page-number.active {
-    background-color: #00A551;
-    color: white;
-  }
-  
-  .page-dots {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Style du modal */
-.modal {
-   
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    z-index: 1001;
-    width: 400px; /* Vous pouvez ajuster la largeur selon vos besoins */
-    height: auto; /* Pour que le modal s'ajuste à la largeur de l'écran si nécessaire */
-    overflow: auto; /* Permet le défilement si le contenu dépasse */
-    border: none; /* Enlever le contour noir du modal */
-    box-shadow: none; /* Retirer l'ombre du contour */
-    display: block;
-  }
-  
-  /* Style du contenu du modal */
-  .modal-content {
-    text-align: center;
-    padding: 10px 0;
-    border: none;
-  }
-  
-  /* Style des boutons du modal */
-  .modal-buttons {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    
-  }
-  
-  /* Style du bouton de confirmation */
-  .btn-confirm {
-    background-color: #00A551;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  /* Style du bouton d'annulation */
-  .btn-cancel {
-    background-color: #dc3545;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  /* Style de l'overlay (fond semi-transparent) */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
-  /* Gestion de l'affichage du modal quand il est activé */
-  .modal.show {
-    display: block; /* Afficher le modal lorsqu'il est activé */
-  }
-  
-  /* Masquer le modal par défaut */
-  .modal {
-    display: none; /* Modal masqué par défaut */
-  }
-  
-  /* Rendre les tables spécifiques plus visuelles */
-  .checkbox-column {
-    width: 40px;
-  }
-  
-
-
-  /* modal de succes*/
-  /* Style pour le Success Modal */
-/* Modal Overlay spécifique */
-.status-change-success-modal-overlay {
-  position: fixed;
-  top: -350px;
-  left: 0;
-  width: 100%;
-  height: 100%;
- 
+/* Pagination */
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  margin-top: 1.5rem;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background-color: #f5f6fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-number {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.page-number.active {
+  background-color: #00A551;
+  color: white;
+}
+
+.page-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style du modal */
+.modal {
+ 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1001;
+  width: 400px; /* Vous pouvez ajuster la largeur selon vos besoins */
+  height: auto; /* Pour que le modal s'ajuste à la largeur de l'écran si nécessaire */
+  overflow: auto; /* Permet le défilement si le contenu dépasse */
+  border: none; /* Enlever le contour noir du modal */
+  box-shadow: none; /* Retirer l'ombre du contour */
+  display: block;
+}
+
+/* Style du contenu du modal */
+.modal-content {
+  text-align: center;
+  padding: 10px 0;
+  border: none;
+}
+
+/* Style des boutons du modal */
+.modal-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  
+}
+
+/* Style du bouton de confirmation */
+.btn-confirm {
+  background-color: #00A551;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* Style du bouton d'annulation */
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* Style de l'overlay (fond semi-transparent) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Gestion de l'affichage du modal quand il est activé */
+.modal.show {
+  display: block; /* Afficher le modal lorsqu'il est activé */
+}
+
+/* Masquer le modal par défaut */
+.modal {
+  display: none; /* Modal masqué par défaut */
+}
+
+/* Rendre les tables spécifiques plus visuelles */
+.checkbox-column {
+  width: 40px;
+}
+
+
+
+/* modal de succes*/
+/* Style pour le Success Modal */
+/* Modal Overlay spécifique */
+.status-change-success-modal-overlay {
+position: fixed;
+top: -350px;
+left: 0;
+width: 100%;
+height: 100%;
+
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999;
+visibility: hidden;
+opacity: 0;
+transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 /* Modal Content spécifique */
 .status-change-success-modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
-  text-align: center;
-  color: #00A551;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  animation: fadeIn 0.5s ease-out;
-  margin-top: 100px;
+background-color: white;
+padding: 20px;
+border-radius: 8px;
+width: 400px;
+max-width: 90%;
+text-align: center;
+color: #00A551;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+animation: fadeIn 0.5s ease-out;
+margin-top: 100px;
 }
 
 /* Animation spécifique pour fade-in */
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+0% {
+  opacity: 0;
+}
+100% {
+  opacity: 1;
+}
 }
 
 /* Animation pour l'apparition du modal */
 .status-change-success-modal-overlay.show {
-  visibility: visible;
-  opacity: 1;
+visibility: visible;
+opacity: 1;
 }
-  /* Import Font Awesome */
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-  
