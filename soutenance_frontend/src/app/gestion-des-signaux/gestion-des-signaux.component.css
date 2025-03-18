@@ -29,7 +29,7 @@ body {
   display: flex;
   justify-content: space-between;
   width: 70%;
-  max-width: 100%;
+  max-width: 90%;
   gap: 10px;
   color: #15803D;
   font-size: 1.5rem;

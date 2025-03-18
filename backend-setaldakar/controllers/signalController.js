@@ -72,10 +72,14 @@ class AlerteController {
           });
     
           await nouvelleAlerte.save();
-    
-          // Enregistrer l'action dans l'historique
-          await enregistrerAction(req.utilisateur._id, "A signalé un dépôt", req.utilisateur._id, "Signal de l'utilisateur");
-    
+          const adminId = req.utilisateur._id || req.utilisateur.userId; // Utilisez _id ou userId, selon ce qui est défini
+          const action = "Signal de depots sauvage";
+          const details = `Le signal a été créée avec la description : ${description}`;
+
+        // Appel de la fonction pour enregistrer l'action
+         await enregistrerAction(adminId, action, nouvelleAlerte._id, details);
+
+          
           res.status(201).json({
             message: 'Alerte créée avec succès',
             alerte: {

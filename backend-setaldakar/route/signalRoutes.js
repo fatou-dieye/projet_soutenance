@@ -80,12 +80,7 @@ const compressImages = async (req, res, next) => {
 };
 
 // 1. CRÉER UNE ALERTE (pour les citoyens)
-router.post('/alertes/create', 
-  verifyToken, 
-  upload.array('photos', 4),
-  compressImages,
-  AlerteController.createAlerte
-);
+router.post('/alertes/create', verifyToken, upload.array('photos', 4),compressImages, AlerteController.createAlerte);
 
 // 2. RÉCUPÉRER TOUTES LES ALERTES (filtrage disponible)
 router.get('/alertes', verifyToken, AlerteController.getAlertes);

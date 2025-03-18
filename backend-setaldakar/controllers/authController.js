@@ -7,7 +7,7 @@ const { enregistrerAction } = require('./historiqueController');
 const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const motspassoublierController = require('./motdepasseControllerjs');
+const motspassoublierController = require('./motdepasseController');
 
 // Login
 
@@ -54,8 +54,8 @@ exports.login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-            // Enregistrer l'action de connexion dans l'historique avant de répondre
-            await enregistrerAction(utilisateur._id, "Connexion réussie", utilisateur._id, "Connexion de l'utilisateur");
+      // Enregistrer l'action de connexion dans l'historique avant de répondre
+      await enregistrerAction(utilisateur._id, "Connexion réussie", utilisateur._id, "Connexion de l'utilisateur");
 
 
     // Répondre avec le token et les détails de l'utilisateur

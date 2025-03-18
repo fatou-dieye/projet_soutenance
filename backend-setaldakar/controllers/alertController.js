@@ -61,13 +61,13 @@ const sendTaskEmail = (alert, employee_email) => {
       let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'fatoujeey2001@gmail.com',
+          user: process.env.EMAIL_USER_1,
           pass: 'nqtp vkhf jers mpyf' // Utilisez le mot de passe d'application ici
         }
       });
   
       let mailOptions = {
-        from: 'fatoujeey2001@gmail.com',
+        from: process.env.EMAIL_USER_1,
         to: employee_email,
         subject: 'Nouvelle Alerte de Vidange',
         text: `Bonjour,

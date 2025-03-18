@@ -11,7 +11,7 @@ const authController = require('../controllers/authController');
 
 const { verifyToken, verifyRole, invalidateToken } = require('../middleware/authmiddleware');
 const historiqueController = require('../controllers/historiqueController'); // Assurez-vous de bien l'importer
-const motdepasseController = require('../controllers/motdepasseControllerjs'); // Assurez-vous que le chemin est correct
+const motdepasseController = require('../controllers/motdepasseController'); // Assurez-vous que le chemin est correct
 
 // Login avec email/mot de passe ou téléphone/mot de passe
 
@@ -70,7 +70,6 @@ router.post('/request-reset-password', motdepasseController.requestResetPassword
 
 // Route pour réinitialiser le mot de passe
 router.post('/reset-password', motdepasseController.resetPassword);
-
 
 
 

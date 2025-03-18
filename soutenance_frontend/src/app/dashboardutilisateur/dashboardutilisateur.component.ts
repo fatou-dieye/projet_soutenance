@@ -43,7 +43,7 @@ export class DashboardutilisateurComponent implements OnInit {
   totalAlertes: number = 0;
   currentPage: number = 1;
   totalPages: number = 0;
-  limit: number = 3; // Nombre d'alertes par page
+  limit: number = 4; // Nombre d'alertes par page
   paginationArray: number[] = [];
   nombreUtilisateurs: number = 0;
   

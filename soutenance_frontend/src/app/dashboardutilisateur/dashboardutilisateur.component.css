@@ -1,73 +1,96 @@
-.corps{
-    background-color: #FAFBFF;
-    position: fixed;
-    top: 0;
-    
-    width: 100%;
-    height: 100%;
-
+.corps {
+  background-color: #FAFBFF;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
+
 .utilisateur-main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-   
-    margin-left: 240px; /* Space for sidebar */
-    padding: 12px;
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-left: 240px; /* Espace pour la barre latérale */
+  padding: 12px;
+  overflow-y: auto;
+}
 
-  }
-  
- 
-  
-  /* Content container */
-  .content-container {
-    display: flex;
-    flex-direction: column;
-    gap: 40px; /* Augmente l'espace entre les blocs */
-    margin-left: 320px; /* Space for sidebar */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Augmente l'espace entre les blocs */
+  height: 100%;
+}
 
-  }
-  
-  
-/* Stats row */
+.map-and-stats-container {
+  display: flex;
+  gap: 20px; /* Espace entre la carte et les card-stat */
+  height: 100%;
+}
+
+.chart-box {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  flex-grow: 3; /* Occupe 75% de la largeur */
+  display: flex;
+  flex-direction: column;
+  height: 78vh;
+}
+
+.stats-container {
+  flex-grow: 1; /* Occupe 25% de la largeur */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+#map-container {
+  width: 100%;
+  flex-grow: 1; /* Occupe toute la hauteur disponible */
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+
+
 .stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Ajusté pour 2 colonnes */
-  gap: 40px; /* Augmente l'espace entre les cartes */
-  margin-left: 630px;
+  display: flex;
+  flex-direction: row; /* Aligne les cartes en ligne */
+  gap: 20px; /* Espace entre les cartes */
 }
 
 .stat-card {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 14px; /* Augmente le padding pour plus d'espace interne */
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: 15px; /* Augmente l'espace entre l'icône et le texte */
-  height: 130px; /* Augmente la hauteur de la carte */
-  margin-top: 50px;
+  gap: 15px;
+  height: auto; /* Hauteur automatique */
+  width: 220px; /* Permet aux cartes de s'étendre pour occuper l'espace disponible */
 }
 
 .stat-icon {
-  width: 80px; /* Augmente la taille du conteneur de l'icône */
-  height: 80px; /* Augmente la taille du conteneur de l'icône */
+  width: 60px; /* Ajustement de la taille de l'icône */
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  font-size: 30px; /* Augmente la taille de l'icône */
+  font-size: 30px;
+  background-color: #e0f7fa; /* Nouveau fond pour les icônes */
+  color: #00A86B; /* Nouvelle couleur pour les icônes */
 }
 
 .stat-icon.green {
   background-color: rgba(0, 168, 107, 0.1);
   color: #00A86B;
-}
-
-.stat-icon.blue {
-  background-color: rgba(0, 123, 255, 0.1);
-  color: #007BFF;
+  font-size: 20px;
 }
 
 .stat-info {
@@ -76,179 +99,115 @@
 }
 
 .stat-number {
-  font-size: 32px; /* Augmente la taille du nombre */
+  font-size: 25px;
   font-weight: 600;
   margin: 0;
   color: #333;
 }
 
 .stat-label {
-  font-size: 20px; /* Augmente la taille du label */
+  font-size: 20px;
   color: black;
   margin: 0;
 }
-  
 
- /* Charts container */
-
-  .chart-box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-
-  }
-  
-  .title {
-    color: #6c757d;
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 20px;
-  }
-  
-  #map-container {
-    width: 100%; /* Définit une largeur pour éviter le débordement */
-    height: 300px; /* Garde la hauteur définie */
-    max-width: 100%; /* Empêche la carte de dépasser son conteneur */
-    overflow: hidden; /* Coupe tout dépassement */
-    border-radius: 10px; /* Ajoute un arrondi pour un meilleur rendu */
-}
-
-.chart-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Assure que rien ne dépasse */
+.depots-sauvage {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  flex-grow: 1;
+  width: 90%;
+  margin-bottom: 20px;
+  height: 50vh; /* Hauteur automatique */
 
 
 }
 
-.localisation-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    margin-top: 50px;
-    overflow: hidden; /* Assure que les éléments restent dans leur place */
-    min-height: 100px; /* Augmente la hauteur totale */
-
+.depots-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 6px;
+  width: 90%;
 }
 
-  
-
-  
-
-
-  /* Garbage levels */
-  .depots-sauvage {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-  }
-  
-  .depots-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: repeat(1, 1fr);
-    gap: 20px;
-  }
-
-
-  .depot-item {
-    background-color: #eeeeee;
-    border-radius: 10px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 465px;
-  }
-  
-  .depot-info {
-    display: flex;
-    gap:30px;
-  }
-  
-  .depot-date, .depot-time, .depot-location {
-    font-size: 14px;
-    color: #333;
-    margin: 0;
-  }
-  
-  .depot-icon {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-   
-    color: #000000;
-    font-size: 24px;
-  }
- 
-  
-  
-  @media (max-width: 768px) {
-    .localisation-container {
-        grid-template-columns: 1fr; /* Passe en une seule colonne */
-    }
-    
-    #map-container {
-        height: 300px; /* Augmente la hauteur pour mobile */
-    }
-}
-
- /* Pagination */
-.pagination {
+.depot-item {
+  background-color: #eeeeee;
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
-  justify-content: center;
-  gap: 15px; /* Espace entre les boutons */
-  margin-top: 20px;
+  width: 80%;
 }
 
-/* Pagination */
-.pagination {
+.depot-info {
   display: flex;
-  justify-content: center;
-  gap: 5px; /* Espacement minimal entre les boutons */
-  margin-top: 10px;
+  gap: 30px;
+  width: 100%;
 }
 
-/* Pagination */
-.pagination {
+.depot-date, .depot-time, .depot-location {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+.depot-icon {
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* Espacement entre les éléments */
-  margin-top: 10px;
+  border-radius: 50%;
+  color: #000000;
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .map-and-stats-container {
+    flex-direction: column;
+  }
+
+  .chart-box, .stats-container {
+    flex-grow: 1;
+  }
+
+  #map-container {
+    height: 300px;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px; /* Ajout d'un espace en haut pour la pagination */
 }
 
 .pagination button {
-  background-color: #00A551; /* Bleu pour les boutons */
+  background-color: #00A551;
   color: white;
   border: none;
-  padding: 5px 12px; /* Padding plus large pour les flèches */
+  padding: 5px 12px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 18px; /* Taille des icônes */
+  font-size: 18px;
   transition: background-color 0.3s;
 }
 
 .pagination button:hover {
-  background-color: #00A551 /* Bleu plus foncé au survol */
+  background-color: #00897b; /* Couleur au survol */
 }
 
 .pagination button:disabled {
-  background-color: #cccccc; /* Boutons désactivés en gris */
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .pagination span {
-  font-size: 16px; /* Taille de texte pour afficher la page actuelle */
-  color: #333; /* Couleur du texte */
+  font-size: 16px;
+  color: #333;
 }
+
 
 /* --- Overlay du modal --- */
 .modal-overlay {
