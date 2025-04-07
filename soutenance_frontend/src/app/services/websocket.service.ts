@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 
-
 interface RFIDStatus {
   message: string;
-  data: any;
+  data: {
+    carte_rfid: string;
+    guard_id: string;
+  };
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketService {
- 
   private socket: Socket;
 
   constructor() {
+    // Connectez-vous au serveur WebSocket
     this.socket = io('http://localhost:3000', {
-      transports: ['websocket'], // Forcer l'utilisation de WebSocket
+      transports: ['websocket'], // Utilisation exclusive de WebSocket
     });
 
     // Ajoutez un écouteur pour vérifier la connexion
@@ -33,12 +35,12 @@ export class WebSocketService {
   // Envoie des données RFID au serveur
   sendRFIDData(carte_rfid: string, guard_id: string) {
     console.log('Envoi des données RFID:', { carte_rfid, guard_id });
-    this.socket.emit('rfid-scanned', { carte_rfid, guard_id });
+    this.socket.emit('rfid-scanned', { cardId: carte_rfid, guard_id }); // cardId au lieu de carte_rfid
   }
 
   // Recevoir une réponse du serveur
   receiveRFIDStatus(): Observable<RFIDStatus> {
-    return new Observable<RFIDStatus>(observer => {
+    return new Observable<RFIDStatus>((observer) => {
       this.socket.on('rfid-status', (data: RFIDStatus) => {
         console.log('Réponse RFID reçue:', data);
         observer.next(data);

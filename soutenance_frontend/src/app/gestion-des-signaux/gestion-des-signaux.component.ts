@@ -6,10 +6,27 @@ import { CommonModule } from '@angular/common';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { SafeUrlPipe } from '../../safe-url.pipe';
 
+interface Alerte {
+  dateCreation: Date;
+  adresse: string;
+  description?: string;
+  coordonnees: {
+    latitude: number;
+    longitude: number;
+  };
+  photos?: Photo[];
+}
+
+interface Photo {
+  chemin: string;
+  _id: string;
+  dateAjout: Date;
+}
+
 @Component({
   selector: 'app-gestion-des-signaux',
   standalone: true,
-  imports: [SidebarreComponent, FormsModule, CommonModule ],
+  imports: [SidebarreComponent, FormsModule, CommonModule],
   templateUrl: './gestion-des-signaux.component.html',
   styleUrls: ['./gestion-des-signaux.component.css']
 })
@@ -30,6 +47,15 @@ export class GestionDesSignauxComponent implements AfterViewInit {
   showNextButton = false;
   showErrorMessage: boolean = false;
 
+  alertes: Alerte[] = [];
+  allAlertes: Alerte[] = [];
+  totalAlertes: number = 0;
+  currentPage: number = 1;
+  totalPages: number = 0;
+  limit: number = 3;
+  paginationArray: number[] = [];
+  selectedAlerte: Alerte | null = null;
+
   constructor(
     private utilisateurService: UtilisateurService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -44,6 +70,7 @@ export class GestionDesSignauxComponent implements AfterViewInit {
         console.error('Erreur lors du chargement de Leaflet:', error);
       }
     }
+    this.fetchAlertes();
   }
 
   initMap() {
@@ -68,37 +95,33 @@ export class GestionDesSignauxComponent implements AfterViewInit {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
         this.userLocation = [this.latitude, this.longitude];
-        this.initMap(); // Initialisation de la carte
-  
-        // Centrer la carte sur la localisation de l'utilisateur
+        this.initMap();
+
         this.map.setView(this.userLocation, 13);
-        this.L.marker(this.userLocation, { 
-          icon: this.L.icon({ 
-            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png', 
-            iconSize: [25, 41], 
-            iconAnchor: [12, 41], 
-            popupAnchor: [1, -34], 
-            shadowSize: [41, 41] 
+        this.L.marker(this.userLocation, {
+          icon: this.L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
           })
         }).addTo(this.map);
-  
-        // Afficher le bouton "Suivant" après avoir obtenu la position
+
         this.showNextButton = true;
-  
-        // Cacher le bouton de partage et le texte
+
         const shareButton = document.querySelector('.share-location') as HTMLElement;
         const shareText = document.querySelector('.step-header p') as HTMLElement;
         const icon = document.querySelector('.step-header i') as HTMLElement;
-  
+
         if (shareButton) { shareButton.style.display = 'none'; }
         if (shareText) { shareText.style.display = 'none'; }
         if (icon) { icon.style.display = 'none'; }
-  
-        // Redimensionner la carte après l'affichage
+
         setTimeout(() => {
-          this.map.invalidateSize(); // Redimensionner la carte pour s'adapter au conteneur
-        }, 500); // Le délai garantit que la carte a été affichée avant le redimensionnement
-  
+          this.map.invalidateSize();
+        }, 500);
+
       }, (error) => {
         this.errorMessage = 'Erreur lors de la récupération de la localisation : ' + error.message;
       });
@@ -106,15 +129,14 @@ export class GestionDesSignauxComponent implements AfterViewInit {
       this.errorMessage = "La géolocalisation n'est pas supportée ou la carte n'est pas initialisée.";
     }
   }
-  
 
   onFileChange(event: any) {
     const files = Array.from(event.target.files) as File[];
 
     if (files.length <= 4) {
       this.photos = files;
-      this.photoUrls = files.map(file => URL.createObjectURL(file));  // Crée des URLs pour les aperçus
-      this.errorMessage = '';  // Réinitialise le message d'erreur si le nombre de photos est valide
+      this.photoUrls = files.map(file => URL.createObjectURL(file));
+      this.errorMessage = '';
     } else {
       this.errorMessage = "Vous ne pouvez ajouter que 4 photos maximum.";
     }
@@ -122,62 +144,51 @@ export class GestionDesSignauxComponent implements AfterViewInit {
 
   nextStep() {
     if (this.currentStep === 1) {
-      // Vérification si la géolocalisation est partagée
       if (this.latitude === 0 || this.longitude === 0) {
-        this.showErrorMessage = true; // Afficher un message d'erreur si la géolocalisation n'est pas partagée
+        this.showErrorMessage = true;
         return;
       }
     } else if (this.currentStep === 2) {
-      // Vérification si des photos sont ajoutées (facultatif si besoin)
       if (this.photos.length === 0) {
         this.errorMessage = 'Veuillez ajouter au moins une photo pour continuer.';
         return;
       }
     } else if (this.currentStep === 3) {
-      // Vérification de la description
       if (!this.description.trim()) {
         this.errorMessage = 'Veuillez entrer une description avant de continuer';
         return;
       }
     }
-  
-    // Si tout est validé, on passe à l'étape suivante
+
     if (this.currentStep < 3) {
-      this.currentStep++; // Incrémenter l'étape
-      this.updateProgress(); // Mettre à jour la barre de progression
+      this.currentStep++;
+      this.updateProgress();
     }
   }
-  
-  
-  
-  
 
   prevStep() {
     if (this.currentStep > 1) {
       this.currentStep--;
       this.updateProgress();
-      this.errorMessage = ''; // Réinitialise le message d'erreur
+      this.errorMessage = '';
     }
   }
 
   updateProgress() {
-    const progress = (this.currentStep - 1) * 33; // La barre de progression sera 0% au début, 33% à l'étape 1, etc.
+    const progress = (this.currentStep - 1) * 33;
     const progressBar = document.querySelector('.progress-line') as HTMLElement;
-    
+
     if (progressBar) {
-      progressBar.style.width = `${progress}%`; // Mettre à jour la largeur de la barre de progression
+      progressBar.style.width = `${progress}%`;
     }
   }
-  
-  
-  
+
   finishStep() {
-    // Vérification si la description est remplie
     if (!this.description.trim()) {
       this.errorMessage = 'Veuillez entrer une description avant de continuer';
-      return; // Arrêter le processus si la description est vide
+      return;
     }
-  
+
     const alerte = {
       description: this.description,
       adresse: `Latitude: ${this.latitude}, Longitude: ${this.longitude}`,
@@ -185,39 +196,27 @@ export class GestionDesSignauxComponent implements AfterViewInit {
       longitude: this.longitude,
       photos: this.photos
     };
-  
-    // Appel à la méthode pour créer l'alerte
+
     this.utilisateurService.createAlerte(alerte)
       .then(response => {
-        // Ouvrir le modal de succès
         this.openSuccessModal(response.message);
-  
-        // Mettre à jour la barre de progression à 100%
-        this.updateProgress();  // Cela met immédiatement la barre à 100%
-  
-        // Assurez-vous que la barre de progression atteint 100% avant de réinitialiser
+        this.updateProgress();
+
         const progressBar = document.querySelector('.progress-line') as HTMLElement;
         if (progressBar) {
-          progressBar.style.width = '100%'; // Force la barre à être à 100% avant la réinitialisation
+          progressBar.style.width = '100%';
         }
-  
-        // Attendre quelques secondes pour permettre à l'utilisateur de voir la barre de progression à 100%
+
         setTimeout(() => {
-          // Réinitialisation du formulaire et retour à l'étape 1
-          this.resetForm();  // Réinitialiser le formulaire
-          this.currentStep = 1; // Revenir à l'étape 1 (Géolocalisation)
-  
-          // Réinitialiser la barre de progression à 0% (après l'attente)
+          this.resetForm();
+          this.currentStep = 1;
           this.updateProgress();
-        }, 1500); // Attendre 1.5 secondes avant de réinitialiser
+        }, 1500);
       })
       .catch(error => {
         this.errorMessage = `Erreur: ${error.message}`;
       });
   }
-  
-  
-  
 
   openSuccessModal(message: string): void {
     this.successModalMessage = message;
@@ -233,7 +232,6 @@ export class GestionDesSignauxComponent implements AfterViewInit {
   }
 
   resetForm() {
-    // Réinitialisation des variables nécessaires à l'étape 1
     this.latitude = 0;
     this.longitude = 0;
     this.photos = [];
@@ -242,38 +240,119 @@ export class GestionDesSignauxComponent implements AfterViewInit {
     this.errorMessage = '';
     this.successMessage = '';
     this.showNextButton = false;
-  
-    // Réinitialisation de l'affichage de la carte
+
     const mapElement = document.getElementById('map');
     if (mapElement) {
-      mapElement.classList.remove('show-map'); // Cache la carte
+      mapElement.classList.remove('show-map');
     }
-  
-    // Supprimer la carte Leaflet si elle existe
+
     if (this.map) {
       this.map.remove();
       this.map = null;
     }
-  
-    // Réaffichage du bouton "Partager" et du texte
+
     const shareButton = document.querySelector('.share-location') as HTMLElement;
     if (shareButton) {
-      shareButton.style.display = 'inline-block'; // Réafficher le bouton "Partager"
+      shareButton.style.display = 'inline-block';
     }
-  
+
     const stepHeader = document.querySelector('.step-header p') as HTMLElement;
     if (stepHeader) {
-      stepHeader.style.display = 'block'; // Réafficher le texte "Nous avons besoin de votre position..."
+      stepHeader.style.display = 'block';
     }
-  
+
     const icon = document.querySelector('.step-header i') as HTMLElement;
     if (icon) {
-      icon.style.display = 'inline-block'; // Réafficher l'icône de localisation
+      icon.style.display = 'inline-block';
     }
-  
-    // Masquer les messages d'erreur
+
     this.showErrorMessage = false;
   }
+
+  fetchAlertes() {
+    this.utilisateurService.getAlertesUtilisateur()
+      .then(data => {
+        if (data && data.alertes) {
+          this.allAlertes = data.alertes;
+          this.totalAlertes = this.allAlertes.length;
+          this.totalPages = Math.ceil(this.totalAlertes / this.limit);
+          if (this.totalPages === 0) {
+            this.totalPages = 1;
+          }
+          this.updateDisplayedAlertes();
+          this.paginationArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        } else {
+          console.log('Aucune alerte trouvée.');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des alertes:', error);
+      });
+  }
+
+  updateDisplayedAlertes() {
+    const startIndex = (this.currentPage - 1) * this.limit;
+    this.alertes = this.allAlertes.slice(startIndex, startIndex + this.limit);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updateDisplayedAlertes();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updateDisplayedAlertes();
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.updateDisplayedAlertes();
+  }
+
+  showDetails(alerte: Alerte) {
+    this.selectedAlerte = alerte;
+  }
+
+  closeModal() {
+    this.selectedAlerte = null;
+  }
+
+  openInMaps() {
+    if (this.selectedAlerte) {
+      const latitude = this.selectedAlerte.coordonnees.latitude;
+      const longitude = this.selectedAlerte.coordonnees.longitude;
+      const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+      window.open(url, '_blank');
+    } else {
+      console.error('Aucune alerte sélectionnée.');
+    }
+  }
+ 
   
+  getPhotoUrl(photo: { chemin: string }): string {
+    const baseUrl = 'http://localhost:3000';
+  
+    // Si le chemin contient déjà 'compressed', nous renvoyons directement l'URL complète
+    if (photo.chemin.includes('uploads/alertes/compressed/')) {
+      return `${baseUrl}/${photo.chemin}`;
+    }
+  
+    // Sinon, nous préfixons le chemin avec 'uploads/alertes/compressed/'
+    return `${baseUrl}/uploads/alertes/compressed/${photo.chemin.split('/').pop()}`;
+  }
+  
+  
+  
+  
+  
+  
+  photoLoadError(event: any) {
+    console.error("Erreur de chargement de l'image :", event.target.src);
+  }
   
 }

@@ -13,6 +13,7 @@ import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.compone
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component';
 import { AjouterPersonnelsComponent } from './ajouter-personels/ajouter-personels.component';
+import { AttendanceListComponent } from './attendance-list/attendance-list.component';
 export const routes: Routes = [
     
     { path: 'login', component: LoginComponent },
@@ -27,6 +28,9 @@ export const routes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'gestion-personels', component: GestionPersonelsComponent },
     { path: 'ajouter-personels', component: AjouterPersonnelsComponent },
+    { path: 'attendance-list', component: AttendanceListComponent },
+
+
     { path: '', redirectTo: '/login', pathMatch: 'full' } 
 
 

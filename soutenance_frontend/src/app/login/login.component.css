@@ -1,21 +1,18 @@
-
-
+/* Styles généraux */
 .page-container {
-  background-color: #f6fdf7; /* Couleur verte avec transparence (30%) */
+  background-color: #f6fdf7;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
 
-
-
 .login-container {
   display: flex;
+  flex-direction: row; /* Default pour les grands écrans */
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -23,7 +20,6 @@
   max-width: 1000px;
   margin: 50px auto;
   height: 80vh;
-  
 }
 
 .image-section {
@@ -33,16 +29,14 @@
   justify-content: center;
   align-items: center;
   position: relative;
- 
 }
 
 .image-section img {
   width: 100%;
   height: 100%;
   border-radius: 15px 0 0 15px;
-  object-fit: cover; /* Assure que l'image couvre toute la section sans déborder */
-  object-position: left center; /* Déplace l'image vers la droite */
-
+  object-fit: cover;
+  object-position: left center;
 }
 
 .form-section {
@@ -79,7 +73,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 90%; /* Ajuste la largeur du groupe de formulaire pour centrer les inputs */
+  width: 90%;
   margin-left: 20px;
 }
 
@@ -93,18 +87,18 @@
 }
 
 .form-group input {
-  width: 100%; /* Utilisez 100% pour que les inputs occupent toute la largeur disponible */
+  width: 100%;
   padding: 10px;
   border: 1px solid #f4f4f4;
   border-radius: 5px;
   background-color: #f4f4f4;
-  box-sizing: border-box; /* Assurez-vous que le padding est inclus dans la largeur totale */
+  box-sizing: border-box;
   margin-bottom: 10px;
 }
 
 .password-container {
   position: relative;
-  width: 100%; /* Assurez-vous que le conteneur du mot de passe a la même largeur */
+  width: 100%;
 }
 
 .toggle-password {
@@ -114,8 +108,12 @@
   transform: translateY(-50%);
   cursor: pointer;
   user-select: none;
+  color: #C0C0C0;
 }
-
+.toggle-password .fa {
+  font-size: 18px;
+  color: #C0C0C0
+}
 .forgot-password {
   display: block;
   margin-top: 10px;
@@ -141,12 +139,10 @@ button {
   cursor: pointer;
 }
 
-
 button:disabled {
-  background-color: #00A551; /* Couleur verte plus douce */
-    cursor: not-allowed;
-    opacity: 70%;
-  
+  background-color: #00A551;
+  cursor: not-allowed;
+  opacity: 70%;
 }
 
 a {
@@ -160,7 +156,7 @@ a {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .login-container {
     flex-direction: column;
     height: auto;
@@ -177,6 +173,23 @@ a {
   .form-section {
     padding: 20px;
   }
+}
 
-  
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-left: 0;
+  }
+
+  button {
+    width: 80%; /* Large bouton sur petits écrans */
+  }
 }

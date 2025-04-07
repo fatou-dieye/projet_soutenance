@@ -33,15 +33,17 @@
         </div>
       </div>
 
-      <div class="stat-card">
+      
+      <div class="stat-card" (click)="navigateToAttendanceList()">
         <div class="stat-icon green">
           <i class="fas fa-calendar-check"></i>
         </div>
         <div class="stat-info">
-          <h2 class="stat-number">15</h2>
+          <h2 class="stat-number">{{ totalRecords }}</h2>
           <p class="stat-label">Pointage Journalier</p>
         </div>
       </div>
+      
     </div>
 
     <!-- Charts section with modified layout -->
@@ -93,4 +95,3 @@
       </div>
     </div>
   </div>
-</div>

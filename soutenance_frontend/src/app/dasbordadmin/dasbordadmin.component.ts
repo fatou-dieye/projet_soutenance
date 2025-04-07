@@ -1,8 +1,11 @@
 import { Component, OnInit} from '@angular/core';
 import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { Chart, registerables } from 'chart.js';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
+import { PointageService } from '../services/pointage.service';
+
 @Component({
   selector: 'app-dasbordadmin',
   imports: [SidebarreComponent],
@@ -10,9 +13,11 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './dasbordadmin.component.css'
 })
 export class DasbordadminComponent  implements OnInit {
-  
+
+  totalRecords: number = 0;
+  records: any[] = [];
    
-  constructor() {
+  constructor(private pointageService: PointageService, private router: Router){
     // Enregistrer tous les composants Chart.js
     Chart.register(...registerables);
   }
@@ -20,6 +25,8 @@ export class DasbordadminComponent  implements OnInit {
   ngOnInit(): void {
    this.initAlertChart();
    this.initGarbageLevelCharts();
+   this.loadTodayAttendance();
+
   }
   
   ngAfterViewInit(): void {
@@ -195,4 +202,27 @@ export class DasbordadminComponent  implements OnInit {
     }
   }
 
+
+    // Charger les pointages du jour
+    loadTodayAttendance(): void {
+      this.pointageService.getTodayAttendance().subscribe(
+        (response) => {
+          this.totalRecords = response.data.totalRecords;
+          this.records = response.data.records;
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des enregistrements:', error);
+        }
+      );
+    }
+    
+    navigateToAttendanceList(): void {
+      this.router.navigate(['/attendance-list']);
+    }  
+
+
+  
+
+
+  
 }

@@ -40,11 +40,7 @@ interface Photo {
 export class DashboardutilisateurComponent implements OnInit {
   alertes: any[] = [];
   allAlertes: any[] = []; // Stocker toutes les alertes
-  totalAlertes: number = 0;
-  currentPage: number = 1;
-  totalPages: number = 0;
-  limit: number = 4; // Nombre d'alertes par page
-  paginationArray: number[] = [];
+ 
   nombreUtilisateurs: number = 0;
   
 
@@ -57,12 +53,12 @@ export class DashboardutilisateurComponent implements OnInit {
       coordonnees: { latitude: 14.6937, longitude: -17.4441 },
       photos: [
         {
-          chemin: '/alertes/compressed/alerte-1740967211544-564684978.png',
+          chemin: '/uploads/alertes/compressed/alerte-1740967211544-564684978.png',
           _id: '67c50d2cb7d152c0d5a82053',
           dateAjout: new Date('2025-03-03T02:00:12.676+00:00')
         },
         {
-          chemin: '/alertes/compressed/alerte-1740967211546-260257301.png',
+          chemin: '/uploads/alertes/compressed/alerte-1740967211546-260257301.png',
           _id: '67c50d2cb7d152c0d5a82054',
           dateAjout: new Date('2025-03-03T02:00:12.678+00:00')
         }
@@ -71,6 +67,8 @@ export class DashboardutilisateurComponent implements OnInit {
     // Ajouter d'autres alertes ici
   ];
 
+  
+  
 
   // Fonction pour fermer le modal
  
@@ -94,7 +92,6 @@ export class DashboardutilisateurComponent implements OnInit {
   
   
     
-    this.fetchAlertes();
 
     if (isPlatformBrowser(this.platformId)) {
       try {
@@ -174,91 +171,7 @@ export class DashboardutilisateurComponent implements OnInit {
   }
 
 
-  // Cette méthode récupère les alertes pour la page donnée
-  fetchAlertes() {
-    this.utilisateurService.getAlertesUtilisateur()
-      .then(data => {
-        if (data && data.alertes) {
-          this.allAlertes = data.alertes;
-          this.totalAlertes = this.allAlertes.length;
-
-          // Calculer totalPages en fonction de totalAlertes et de la limite
-          this.totalPages = Math.ceil(this.totalAlertes / this.limit);
-          if (this.totalPages === 0) {
-            this.totalPages = 1;
-          }
-
-          // Afficher les alertes de la page actuelle
-          this.updateDisplayedAlertes();
-
-          // Créer le tableau de pagination
-          this.paginationArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-        } else {
-          console.log('Aucune alerte trouvée.');
-        }
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des alertes:', error);
-      });
-  }
-
-  updateDisplayedAlertes() {
-    const startIndex = (this.currentPage - 1) * this.limit;
-    this.alertes = this.allAlertes.slice(startIndex, startIndex + this.limit);
-  }
-
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updateDisplayedAlertes();
-    }
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateDisplayedAlertes();
-    }
-  }
-
-  goToPage(page: number) {
-    this.currentPage = page;
-    this.updateDisplayedAlertes();
-  }
-
-
-  selectedAlerte: Alerte | null = null;
-
-  showDetails(alerte: Alerte) {
-    console.log("Showing details for alert:", alerte);
-    this.selectedAlerte = alerte;
-  }
-  
-
-  closeModal() {
-    this.selectedAlerte = null;
-  }
-
-  openInMaps() {
-    if (this.selectedAlerte) {
-      const latitude = this.selectedAlerte.coordonnees.latitude;
-      const longitude = this.selectedAlerte.coordonnees.longitude;
-      const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
-      window.open(url, '_blank'); // Ouvre Google Maps dans un nouvel onglet
-    } else {
-      console.error('Aucune alerte sélectionnée.');
-    }
-  }
-  
-
-  getPhotoUrl(photo: { chemin: string }): string {
-    return photo.chemin; // Use the URL directly as constructed by the backend
-  }
-  
-  photoLoadError(event: any) {
-    console.error("Erreur de chargement de l'image :", event.target.src);
-    event.target.src = 'assets/images/default-image.jpg'; // Image par défaut
-  }
+ 
   
   
 }

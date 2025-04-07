@@ -41,7 +41,7 @@
               (input)="validatePassword()"
             >
             <span class="toggle-password" (click)="togglePasswordVisibility()">
-              <i class="fa" [ngClass]="{'fa-eye-slash': showPassword, 'fa-eye': !showPassword}"></i>
+              <i class="fa" [ngClass]="{'fa-eye-slash': !showPassword, 'fa-eye': showPassword}"></i>
             </span>
           </div>
           <div *ngIf="passwordError" class="error-message">
