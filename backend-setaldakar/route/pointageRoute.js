@@ -15,6 +15,12 @@ router.post('/record-attendance', pointageController.recordAttendance);
 router.get('/attendance-records', verifyToken, verifyRole(['administrateur']), pointageController.getAttendanceRecords);
 //voir les pointage journaliers
 router.get('/getTodayAttendanceRecords', verifyToken, verifyRole(['administrateur']), pointageController.getTodayAttendanceRecords);
+router.get('/attendance-by-date',verifyToken, verifyRole(['administrateur']), pointageController.getAttendanceByDate);
+
 
 router.get('/all-gardiens', verifyToken, verifyRole(['administrateur']), pointageController.getAllGardiens);
+
+router.post('/block-rfid',verifyToken, verifyRole(['administrateur']), pointageController.blockRFID);
+router.post('/unblock-rfid',verifyToken, verifyRole(['administrateur']), pointageController.unblockRFID);
+
 module.exports = router;

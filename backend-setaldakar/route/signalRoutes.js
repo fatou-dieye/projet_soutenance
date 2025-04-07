@@ -15,7 +15,7 @@ const getAlertesByUser  = require('../controllers/signalController');
 // Configuration de multer pour l'upload des photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = 'uploads/alertes';
+    const uploadDir = 'uploads/alertes/compressed';
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -44,6 +44,7 @@ const upload = multer({
 });
 
 // Middleware pour compresser les images
+// Middleware pour compresser les images
 const compressImages = async (req, res, next) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -54,22 +55,26 @@ const compressImages = async (req, res, next) => {
     
     for (const file of req.files) {
       const filename = path.basename(file.path);
-      const outputPath = path.join('uploads/alertes/compressed', filename);
+      const ext = path.extname(file.originalname); // Récupère l'extension du fichier original
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const outputPath = path.join('uploads/alertes/compressed', `compressed-${uniqueSuffix}${ext}`); // Nouveau nom unique pour l'image compressée
       
       // Créer le dossier s'il n'existe pas
       if (!fs.existsSync('uploads/alertes/compressed')) {
         fs.mkdirSync('uploads/alertes/compressed', { recursive: true });
       }
       
-      // Compresser l'image
+      // Compresser l'image et sauvegarder sous le nouveau nom
       await sharp(file.path)
         .resize(800) // Redimensionner à max 800px de large
         .jpeg({ quality: 80 }) // Compression JPEG
         .toFile(outputPath);
       
+            // Compress and store images in the 'uploads/alertes/compressed' directory
       compressedFiles.push({
-        chemin: `/alertes/compressed/${filename}`
+        chemin: `/uploads/alertes/compressed/${path.basename(outputPath)}`
       });
+
     }
     
     req.compressedFiles = compressedFiles;
@@ -78,6 +83,7 @@ const compressImages = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // 1. CRÉER UNE ALERTE (pour les citoyens)
 router.post('/alertes/create', verifyToken, upload.array('photos', 4),compressImages, AlerteController.createAlerte);

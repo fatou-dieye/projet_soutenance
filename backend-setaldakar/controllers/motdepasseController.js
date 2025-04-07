@@ -21,7 +21,7 @@ const sendResetEmail = async (email, token) => {
     html: `
       <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
       <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
-      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
+      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #00A551; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
       <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
     `
   };
@@ -108,7 +108,6 @@ exports.requestResetPassword = async (req, res) => {
 
     // Si le token est valide et non utilisé, procéder à la réinitialisation du mot de passe
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    console.log(`Mot de passe haché : ${hashedPassword}`);
 
     // Mise à jour de l'utilisateur avec le nouveau mot de passe et suppression du token
     const updatedUtilisateur = await Utilisateur.findOneAndUpdate(
@@ -125,9 +124,7 @@ exports.requestResetPassword = async (req, res) => {
 
     // Vérification si le token a bien été supprimé
     if (updatedUtilisateur.resetPasswordToken === null) {
-      console.log(`Token supprimé avec succès pour l'utilisateur : ${updatedUtilisateur.email}`);
     } else {
-      console.error(`Le token n'a pas été supprimé pour l'utilisateur : ${updatedUtilisateur.email}`);
       return res.status(500).json({ message: 'Erreur interne : Le token n\'a pas été supprimé de la base de données.' });
     }
 
