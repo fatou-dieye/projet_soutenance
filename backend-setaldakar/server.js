@@ -61,7 +61,6 @@ async function findArduinoPort() {
 
 
 // Gestion du scan RFID et pointage
-// Gestion du scan RFID et pointage
 async function setupSerialCommunication() {
   try {
     const portPath = await findArduinoPort();
