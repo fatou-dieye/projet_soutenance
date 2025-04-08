@@ -90,7 +90,7 @@ export class ModalDetailSignalComponent {
     if (!this.selectedVideur || !this.alerteId) return;
     
     this.signalService.assignerVideur(this.alerteId, this.selectedVideur).then(response => {
-      alert('Mission envoyée avec succès!');
+     
       this.close();
       this.missionEnvoyee.emit('Mission envoyée avec succès!'); // Envoie l'événement de succès
     }).catch(error => {

@@ -34,6 +34,7 @@ export class AuthService {
 
 
 
+
   checkExistence(email: string, telephone: string) {
     return axiosInstance.post('/check-existence', { email, telephone })
       .then(response => {

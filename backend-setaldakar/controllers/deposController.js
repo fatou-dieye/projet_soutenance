@@ -34,3 +34,13 @@ exports.getDepots = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+//lister le nmbre de depos
+// Ajouter cette fonction dans votre contrôleur (../controllers/depotController.js)
+exports.getDepotsCount = async (req, res) => {
+  try {
+    const count = await Depot.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

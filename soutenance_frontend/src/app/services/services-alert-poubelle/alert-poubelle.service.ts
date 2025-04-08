@@ -116,4 +116,19 @@ updateAlert(alertId: string, updateData: any): Observable<any> {
   addDepot(depotData: any) {
     return axiosInstance.post('/depots', depotData);
   }
+
+  // Dans AlertPoubelleService, ajoutez cette méthode
+getDepotsCount(): Observable<number> {
+  return new Observable((observer) => {
+    axiosInstance.get('/depots/count')
+      .then((response) => {
+        observer.next(response.data.count);
+        observer.complete();
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération du nombre de dépôts:', error);
+        observer.error(error);
+      });
+  });
+}
 }

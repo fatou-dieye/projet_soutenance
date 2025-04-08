@@ -172,4 +172,8 @@
     border: 1px solid #ccc;
   }
   
- 
+  @media (max-width: 768px) {
+    .admin-main{
+      
+        margin-left: 80px; /* Space for sidebar */
+      }}

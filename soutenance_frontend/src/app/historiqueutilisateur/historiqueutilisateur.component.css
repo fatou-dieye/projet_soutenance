@@ -12,7 +12,14 @@ body {
     
 }
 
-.content-container {
+@media (max-width: 768px) {
+    .admin-main{
+      
+        margin-left: 80px; /* Space for sidebar */
+      }}
+
+      
+      .utilisateur-main {
     display: flex;
     flex-direction: column;
     gap: 20px;

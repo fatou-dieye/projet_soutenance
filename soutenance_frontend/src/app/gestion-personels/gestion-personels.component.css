@@ -30,6 +30,13 @@ body{
   font-family: 'Poppins', sans-serif;
 }
 
+@media (max-width: 768px) {
+  .container {
+    
+      margin-left: 80px; /* Space for sidebar */
+    }}
+
+
 /* Contenu principal */
 .content {
   flex-grow: 1;

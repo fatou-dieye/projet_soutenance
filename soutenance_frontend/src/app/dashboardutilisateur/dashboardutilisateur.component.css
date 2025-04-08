@@ -18,7 +18,12 @@
 
   }
   
- 
+  @media (max-width: 768px) {
+    .utilisateur-main {
+      
+        margin-left: 80px; /* Space for sidebar */
+      }}
+
   
   /* Content container */
   .content-container {

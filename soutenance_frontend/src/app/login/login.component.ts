@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  identifiant: string = ''; // Peut contenir un email ou un téléphone
+   identifiant: string = ''; // Peut contenir un email ou un téléphone
   mot_passe: string = '';
   errorMessage: string = '';
   identifiantError: string = '';

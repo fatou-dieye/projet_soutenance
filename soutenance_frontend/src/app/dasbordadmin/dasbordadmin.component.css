@@ -13,6 +13,8 @@
     overflow-y: auto;
   }
   
+  
+
   /* Content container */
   .content-container {
     display: flex;
@@ -199,6 +201,4 @@
 color: #FF6347; /* Rouge orangé pour le premier dépôt */
   }
   
-  /* Styles existants */
-
-/* Badge pour indiquer les données en temps réel */
+ 

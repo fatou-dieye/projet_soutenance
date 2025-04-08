@@ -19,7 +19,7 @@
             <img src="Group.png" alt=""> <!-- Nouvelle icône pour les dépôts disponibles -->
           </div>
           <div class="stat-info">
-            <h2 class="stat-number">05</h2>
+            <h2 class="stat-number">{{ depotCount < 10 ? '0' + depotCount : depotCount }}</h2>
             <p class="stat-label">Points de dépôt disponibles</p>
           </div>
         </div>

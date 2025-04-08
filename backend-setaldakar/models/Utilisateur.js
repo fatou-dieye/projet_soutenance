@@ -25,11 +25,12 @@ const utilisateurSchema = new mongoose.Schema({
   telephone: { type: String, required: false, unique: true },
   role: { type: String, required: true, enum: ['administrateur', 'utilisateur', 'videur', 'gardient'] },
   statut: { type: String, required: false, enum: ['active', 'bloquer'] },
-  carte_rfid: { type: String, unique: true, sparse: true, default: null }, // rfid_id reste null jusqu'à l'assignation
+  carte_rfid: { type: String, unique: true, sparse: true, default: null },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date }
 }, {
   timestamps: true // Ajoute des champs createdAt et updatedAt
 });
-
 
 // Hacher le mot de passe avant de sauvegarder
 utilisateurSchema.pre('save', async function (next) {

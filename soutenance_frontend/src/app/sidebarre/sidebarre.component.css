@@ -15,7 +15,16 @@
   
  
 }
-
+.profile-img-placeholder{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #00A551;
+  background-color: #00A551;
+  padding-left: 16px;
+  padding-top: 17px;
+  font-size: 20px;
+}
 /* Logo Section */
 .navbar-logo {
   display: flex;
@@ -240,6 +249,7 @@
 .logout-icon {
   color: red; /* Red color for the logout icon */
   margin-right: 10px;
+
 }
 
 
@@ -251,4 +261,60 @@
 
 .nav-link.active i {
   color: #00A551; /* Changer la couleur de l'icône pour le lien actif */
+}
+
+/* ========================= */
+/* ===== Media Queries ===== */
+/* ========================= */
+
+/* Pour les tablettes et petits écrans (max 1024px) */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px; /* Réduction modérée de la largeur */
+  }
+  
+  .navbar {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  main {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+}
+
+/* Pour les smartphones (max 768px) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px; /* Réduction importante de la largeur */
+  }
+  
+  .logo-img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .sidebar-nav {
+    padding-top: 10px;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 10px 0;
+    font-size: 0; /* Cache le texte des liens */
+  }
+
+  .nav-link i {
+    font-size: 22px;
+  }
+  
+  /* Le contenu s'ajuste en conséquence */
+ 
+    /* Navbar prend toute la largeur */
+   
+  main {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
 }

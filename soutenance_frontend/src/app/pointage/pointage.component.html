@@ -21,7 +21,7 @@
   <tbody>
     <tr *ngFor="let gardien of gardiens; let i = index">
       <td>
-        <img [src]="gardien.photo || 'chemin/vers/photo-par-defaut.jpg'" alt="Photo">
+        <img [src]="gardien.photo ||  'avatar.png'" alt="Photo">
       </td>
       <td>{{ gardien.prenom }} {{ gardien.nom }}</td>
       <td>{{ gardien.carte_rfid }}</td>
