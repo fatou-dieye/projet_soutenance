@@ -52,6 +52,29 @@
   
 
 }
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .navbar-logo span {
+    font-size: 20px;
+  }
+
+  .profile-img, .avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .profile-name {
+    font-size: 14px;
+  }
+
+  .profile-role {
+    font-size: 12px;
+  }
+}
 
 .profile {
   display: flex;
@@ -99,6 +122,7 @@
 }
 
 /* sidebar.component.css */
+/* Style de base pour le sidebar */
 .sidebar {
   width: 250px;
   height: 100vh;
@@ -110,6 +134,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  transition: all 0.3s ease;
 }
 
 .sidebar-logo {
@@ -124,7 +149,6 @@
   width: 160px;
   height: 160px;
   border-radius: 50%;
- 
 }
 
 .sidebar-nav {
@@ -155,7 +179,6 @@
   font-size: 18px;
 }
 
-
 .logout {
   padding: 15px;
   text-align: center;
@@ -163,33 +186,135 @@
 }
 
 .button {
-  color: #FF0000;                
-  font-size: 16px;               
-  font-weight: 600;              
-  background-color: transparent; 
-  border: none;                 
-  padding: 0;                    
-  margin: 0;                     
-  text-align: left;              
-  cursor: pointer;              
-  font-family: inherit;          
-  text-decoration: none;         
+  color: #FF0000;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
 }
 
-
-
 .logout-icon {
-  color: red; /* Red color for the logout icon */
+  color: red; 
   margin-right: 10px;
 }
 
-
-/* sidebar.component.css */
+/* Sidebar active state */
 .nav-link.active {
-  color: #00A551; /* Couleur de fond pour le lien actif */
- 
+  color: #00A551;
 }
 
 .nav-link.active i {
-  color: #00A551; /* Changer la couleur de l'icône pour le lien actif */
+  color: #00A551;
 }
+
+/* Pour les petits écrans (tablettes et téléphones) */
+@media (max-width: 768px) {
+  /* Sidebar toujours visible */
+  .sidebar {
+    width: 60px; /* Réduire la taille du sidebar */
+  }
+
+  .sidebar-logo {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .logo-img {
+    width: 40px; /* Réduire la taille du logo */
+    height: 40px;
+  }
+
+  /* Masquer les textes des liens et du bouton */
+  .nav-link span, .button {
+    display: none; /* Masquer le texte */
+  }
+
+  .nav-link i {
+    font-size: 22px; /* Agrandir les icônes */
+    margin-right: 0; /* Enlever l'espace entre l'icône et le texte */
+  }
+
+  .logout {
+    padding: 10px;
+    text-align: center;
+  }
+   /* Le contenu doit être à côté du sidebar */
+   .content {
+    margin-left: 60px; /* S'assurer que le contenu est décalé correctement */
+    padding: 20px;
+  }
+}
+
+
+
+/* Pour les très petits écrans (smartphones) */
+@media (max-width: 480px) {
+  /* Sidebar toujours visible mais très réduit */
+  .sidebar {
+    width: 60px; /* Sidebar réduit à 60px */
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+  }
+
+  .logo-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Masquer le texte et garder les icônes */
+  .nav-link span, .button {
+    display: none; /* Masquer le texte */
+  }
+
+  .nav-link i {
+    font-size: 22px; /* Agrandir les icônes */
+  }
+
+  .logout {
+    padding: 5px;
+  }
+
+  /* Le contenu doit être à côté du sidebar */
+  .content {
+    margin-left: 60px; /* Déplacer le contenu pour qu'il ne se superpose pas */  }
+}
+
+/* Pour les grands écrans (à partir de 1024px) */
+@media (min-width: 1024px) {
+  .sidebar {
+    width: 250px; /* Sidebar à sa taille normale */
+  }
+
+  .sidebar-logo {
+    padding: 20px;
+  }
+
+  .logo-img {
+    width: 160px;
+    height: 160px;
+  }
+
+  .nav-link {
+    font-size: 20px;
+    padding: 12px 20px;
+  }
+
+  .logout {
+    padding: 15px;
+  }
+
+  /* Le contenu doit être à côté du sidebar */
+  .content {
+    margin-left: 250px; /* Laisser de l'espace pour le sidebar */
+  }
+}
+
+

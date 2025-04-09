@@ -101,7 +101,7 @@ margin: 0;
 
 #map-container {
   width: 100%; /* Définit une largeur pour éviter le débordement */
-  height: 340px; /* Garde la hauteur définie */
+  height: 342px; /* Garde la hauteur définie */
   max-width: 100%; /* Empêche la carte de dépasser son conteneur */
   overflow: hidden; /* Coupe tout dépassement */
   border-radius: 10px; /* Ajoute un arrondi pour un meilleur rendu */

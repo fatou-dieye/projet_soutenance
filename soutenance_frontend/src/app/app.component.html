@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<!-- app.component.html -->
+<div *ngIf="shouldShowSidebar()">
+    <app-sidebarre></app-sidebarre>
+  </div>
+  
+  <!-- Le reste du contenu de l'application -->
+  <router-outlet></router-outlet>
+  

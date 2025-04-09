@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import axiosInstance from '../../environements.ts/axios.service';
 import { Observable, from } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';  // Ajoutez tap ici
+
 
 
 @Injectable({
@@ -125,23 +126,69 @@ import { catchError } from 'rxjs/operators';
   }
 
    // Récupérer le pointage du jour
-   getTodayAttendance(): Observable<any> {
-    return from(axiosInstance.get('/getTodayAttendanceRecords', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }
-    }));
-  }
-
-    // Récupérer les pointages par date
-    getAttendanceByDate(date: string): Observable<any> {
-      return from(axiosInstance.get(`/attendance-by-date?date=${date}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-      );
+getTodayAttendance(): Observable<any> {
+  return from(axiosInstance.get('/getTodayAttendanceRecords', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     }
+  })).pipe(
+    tap((response) => {
+      console.log('Réponse du pointage du jour:', response);
+    }),
+    catchError((error) => {
+      console.error('Erreur lors de la récupération des pointages du jour:', error.response ? error.response.data : error.message);
+      let errorMessage = 'Erreur lors de la récupération des pointages du jour';
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error;
+      }
+      throw new Error(errorMessage);
+    })
+  );
+}
+
+ // Récupérer les pointages par date
+getAttendanceByDate(date: string): Observable<any> {
+  return from(axiosInstance.get(`/attendance-by-date?date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    }
+  })).pipe(
+    tap((response) => {
+      console.log(`Réponse pour la date ${date}:`, response);
+    }),
+    catchError((error) => {
+      console.error(`Erreur lors de la récupération des pointages pour la date ${date}:`, error.response ? error.response.data : error.message);
+      let errorMessage = `Erreur lors de la récupération des pointages pour la date ${date}`;
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error;
+      }
+      throw new Error(errorMessage);
+    })
+  );
+}
+
+// Récupérer les enregistrements de pointage
+getAttendanceRecords(): Observable<any> {
+  return from(axiosInstance.get(`/attendance-records`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,  // Récupération du token d'authentification
+    }
+  })).pipe(
+    catchError((error) => {
+      console.error('Erreur lors de l\'appel API pour récupérer les pointages:', error.response ? error.response.data : error.message);
+      
+      // Récupérer un message d'erreur plus spécifique si disponible
+      let errorMessage = 'Erreur lors de la récupération des pointages';
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error; // Message d'erreur spécifique
+      }
+      
+      // Propager l'erreur avec un message spécifique
+      throw new Error(errorMessage);  // Utilisation de throwError avec l'API moderne
+    })
+  );
+}
+
 
  
   

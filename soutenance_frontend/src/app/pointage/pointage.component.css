@@ -16,12 +16,15 @@
 .pointage-container {
   padding: 20px;
   overflow-x: auto; /* Permet le défilement horizontal si nécessaire */
+
 }
 
 .pointage-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed; /* Pour garantir que les colonnes ont une largeur fixe */
+  margin-top: 50px;
+
 }
 
 .pointage-table thead {
@@ -74,6 +77,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .pagination button:disabled {
@@ -90,6 +94,8 @@
   justify-content: center;
   cursor: pointer;
   padding: 0 5px;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .page-number.active {
@@ -97,11 +103,42 @@
   color: white;
 }
 
+.page-number:hover {
+  background-color: #f1f1f1;
+}
+
 .page-dots {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
+  color: #aaa;
+  padding: 0 5px;
 }
+
+.page-number:focus {
+  outline: none;
+}
+
+.pagination button:hover {
+  background-color: #e1e1e1;
+}
+
+.pagination .page-number:hover {
+  background-color: #e1e1e1;
+}
+
+/* Optionnel : Styles supplémentaires pour améliorer l'apparence */
+.pagination {
+  padding: 1rem 0;
+}
+
+.page-number.active:hover {
+  background-color: #00A551;
+  cursor: default;
+}
+
+
 
 
 .assign-card:hover {
@@ -155,19 +192,9 @@
   cursor: pointer;
 }
 
-button {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
+ 
+ 
+  
 
 input {
   padding: 8px;
@@ -209,32 +236,41 @@ input {
 
 /* Styles pour le bouton de blocage */
 .lock-btn {
-  background: none;  /* Enlever le fond du bouton */
   border: none;      /* Enlever la bordure */
-  padding: 0;        /* Retirer le padding */
+  padding: 8px;        /* Retirer le padding */
   cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
+  border-radius: 5px;
+
 }
 
 /* Styles pour le bouton de déblocage */
 .unlock-btn {
-  background: none;  /* Enlever le fond du bouton */
   border: none;      /* Enlever la bordure */
-  padding: 0;        /* Retirer le padding */
+  padding: 8px;        /* Retirer le padding */
   cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
+  border-radius: 5px;
+
 }
 
-/* Appliquer la couleur #00A551 à l'icône dans le bouton de blocage */
+/* Style pour l'icône de verrouillage (fa-lock) */
 .lock-btn i {
-  font-size: 24px;   /* Ajuster la taille de l'icône */
-  color: #00A551;    /* Appliquer la couleur verte à l'icône */
+  color: white; /* Icône de couleur blanche */
 }
 
-/* Appliquer la couleur #00A551 à l'icône dans le bouton de déblocage */
+/* Style pour l'icône de déverrouillage (fa-lock-open) */
 .unlock-btn i {
-  font-size: 24px;   /* Ajuster la taille de l'icône */
-  color: #00A551;    /* Appliquer la couleur verte à l'icône */
+  color: white; /* Icône de couleur blanche */
 }
 
+/* Styles spécifiques pour le bouton de verrouillage */
+.lock-btn {
+  background-color: #4CAF50; /* Fond vert pour le bouton de verrouillage */
+}
+
+/* Styles spécifiques pour le bouton de déverrouillage */
+.unlock-btn {
+  background-color: #ff9800; /* Un fond orange pour le bouton de déverrouillage */
+}
 /* Espacement entre les boutons */
 .lock-btn + .unlock-btn,
 .unlock-btn + .lock-btn {
@@ -247,16 +283,27 @@ input {
   color: #007a39;    /* Couleur de l'icône au survol */
 }
 
+
+button {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .bouton {
   padding: 8px 16px; /* Ajuste la taille du bouton */
   margin-right: 10px; /* Espace entre les boutons */
-  background-color: #00A551; /* Exemple de couleur, vous pouvez changer */
   border: none;
   color: white;
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
 }
+
 
 .bouton:last-child {
   margin-right: 0; /* Supprimer l'espace à droite du dernier bouton */
@@ -266,6 +313,9 @@ input {
   background-color: red; /* Fond rouge pour le bouton "Non" */
 }
 
+.oui {
+  background-color: #00A551; /* Exemple de couleur, vous pouvez changer */
+}
 /* Styles pour les statuts */
 .status-active {
   color: green;

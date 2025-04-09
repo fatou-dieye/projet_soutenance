@@ -1,9 +1,11 @@
-<app-sidebarre></app-sidebarre>
 <div class="utilisateur-main">
   <div>
-    <h1>Pointages du Jour</h1>
+    <h1>Pointages </h1>
     <input type="date" [value]="selectedDate" (change)="onDateChange($event)" />
-    <div *ngIf="!records.length">
+    <div *ngIf="records && records.length > 0">
+      <!-- Votre code d'affichage ici -->
+    </div>
+    <div *ngIf="!records || records.length === 0">
       <p>Pas de pointages pour cette date.</p>
     </div>
 
@@ -19,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let record of records">
+        <tr *ngFor="let record of getPagedRecords()">
           <td>{{ record.name }}</td>
           <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
           <td [ngClass]="{'retard': record.status === 'retard', 'present': record.status === 'présent'}">{{ record.status }}</td>
@@ -30,5 +32,33 @@
       </tbody>
     </table>
 
+    <!-- Pagination -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    
+      <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
+      <span *ngIf="currentPage > 3" class="page-dots">...</span>
+    
+      <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
+        {{currentPage - 1}}
+      </span>
+    
+      <span class="page-number active">{{currentPage}}</span>
+    
+      <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
+        {{currentPage + 1}}
+      </span>
+    
+      <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
+      <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
+        {{totalPages}}
+      </span>
+    
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
 </div>

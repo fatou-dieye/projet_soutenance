@@ -69,3 +69,50 @@
     font-weight: bold;
   }
   
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background-color: #f5f6fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-number {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.page-number.active {
+  background-color: #00A551;
+  color: white;
+}
+
+.page-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

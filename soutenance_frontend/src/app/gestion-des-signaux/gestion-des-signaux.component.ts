@@ -3,7 +3,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { UtilisateurService } from '../services/utilisateur.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { SafeUrlPipe } from '../../safe-url.pipe';
 
 interface Alerte {
@@ -26,7 +25,7 @@ interface Photo {
 @Component({
   selector: 'app-gestion-des-signaux',
   standalone: true,
-  imports: [SidebarreComponent, FormsModule, CommonModule],
+  imports: [ FormsModule, CommonModule],
   templateUrl: './gestion-des-signaux.component.html',
   styleUrls: ['./gestion-des-signaux.component.css']
 })

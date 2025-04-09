@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { PointageService } from '../services/pointage.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -32,15 +31,16 @@ interface ApiResponse {
 @Component({
   selector: 'app-pointage',
   standalone: true,
-  imports: [SidebarreComponent, CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule],
   templateUrl: './pointage.component.html',
   styleUrls: ['./pointage.component.css']
 })
 export class PointageComponent implements OnInit {
   gardiens: Gardien[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 1; // Nombre d'éléments à afficher par page
-  totalPages: number = 0;
+  recordsPerPage: number = 4; // Nombre d'éléments par page
+  totalRecords: number = 0;  // Nombre total d'éléments dans la base de données
+  totalPages: number = 0;  // Nombre total de pages
   showModal: boolean = false;
   selectedGardien: Gardien | null = null;
   rfidCardNumber: string = '';
@@ -78,12 +78,14 @@ export class PointageComponent implements OnInit {
   }
   
 
+
+
+ 
   loadAllGardiens(): void {
-    this.pointageService.getAllGardiens(this.currentPage, this.itemsPerPage).subscribe(
+    this.pointageService.getAllGardiens(this.currentPage, this.recordsPerPage).subscribe(
       (data: ApiResponse) => {
-        console.log('Données reçues:', data);
         this.gardiens = data.data || [];
-        this.totalPages = data.totalPages || 1;
+        this.totalPages = data.totalPages; // ✅ Corrigé ici
       },
       error => {
         console.error('Erreur lors de la récupération des gardiens', error);
@@ -92,15 +94,6 @@ export class PointageComponent implements OnInit {
     );
   }
 
-  // Fonction pour changer de page
-  goToPage(page: number): void {
-    if (page !== this.currentPage) {
-      this.currentPage = page;
-      this.loadAllGardiens();
-    }
-  }
-
-  // Cette méthode permet de naviguer vers la page précédente
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -108,18 +101,26 @@ export class PointageComponent implements OnInit {
     }
   }
 
-  // Cette méthode permet de naviguer vers la page suivante
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.loadAllGardiens();
     }
   }
-   // Méthode pour changer le nombre d'éléments par page
-   changeItemsPerPage(newLimit: number): void {
-    this.itemsPerPage = newLimit;
-    this.loadAllGardiens();
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadAllGardiens();
+    }
   }
+
+  getPagedGardiens(): Gardien[] {
+    const startIndex = (this.currentPage - 1) * this.recordsPerPage;
+    const endIndex = startIndex + this.recordsPerPage;
+    return this.gardiens.slice(startIndex, endIndex);
+  }
+
 
   openAssignModal(gardien: Gardien): void {
     this.selectedGardien = gardien;
