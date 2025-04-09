@@ -240,6 +240,14 @@ function formatTime(time) {
 exports.getAttendanceRecords = async (req, res) => {
   try {
     const records = await Attendance.find();
+
+    // Trier les enregistrements par date (du plus récent au plus ancien)
+    records.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
+
     res.status(200).json(records);
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la récupération des enregistrements de pointage' });

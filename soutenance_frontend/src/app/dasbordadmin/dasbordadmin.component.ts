@@ -11,6 +11,8 @@ import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubell
 @Component({
   selector: 'app-dasbordadmin',
   imports: [ RouterModule,  CommonModule ],
+  providers: [NiveauPoubelleService],
+
   templateUrl: './dasbordadmin.component.html',
   styleUrl: './dasbordadmin.component.css'
 })
@@ -36,7 +38,7 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
   private subscription!: Subscription; // 
 
   constructor(private DasbordadminService: DasbordadminService,
-    private  niveauPoubelleService:  NiveauPoubelleService,
+    private  websocketService:  NiveauPoubelleService,
     private pointageService: PointageService, private router: Router
    
   ) {
@@ -54,23 +56,19 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
    this.fetchDepots();
    this.fetchDailyAlertCount();
     this.fetchDailyAttendanceCount();
-    this.subscription = this. niveauPoubelleService.getSensorData().subscribe(
-      data => {
-        if (data && data.pourcentage !== undefined) {
-          this.niveauPoubelle = data.pourcentage;
-        }
-      },
-      err => console.error(err)
-    );
-    }
-    
-  
-    ngOnDestroy() {
-      if (this.subscription) {
-        this.subscription.unsubscribe();
-      }
-    }
-  
+     // Souscription aux mises à jour du niveau de la poubelle
+     this.subscription = this.websocketService.getTrashLevelUpdates()
+     .subscribe(level => {
+       this.niveauPoubelle = level;
+     });
+ }
+
+ ngOnDestroy() {
+   // Nettoyage des souscriptions pour éviter les fuites de mémoire
+   if (this.subscription) {
+     this.subscription.unsubscribe();
+   }
+ }
 
   fetchStatistics(): void {
     this.DasbordadminService .getUserStatistics().subscribe(

@@ -154,6 +154,8 @@
   padding: 8px;        /* Retirer le padding */
   cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
   border-radius: 5px;
+  width: 30px;
+
 
 }
 
@@ -163,6 +165,8 @@
   padding: 8px;        /* Retirer le padding */
   cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
   border-radius: 5px;
+  width: 30px;
+
 
 }
 
@@ -200,7 +204,6 @@
        /* Conteneur des boutons */
 .button-container {
   display: flex;
-  justify-content: center;  /* Centrer les boutons horizontalement */
   gap: 20px;  /* Espace entre les boutons */
   margin-top: 10px;  /* Un peu d'espace au-dessus des boutons */
 }
@@ -218,9 +221,22 @@
   display: inline-block;  /* Pour que les boutons s'affichent sur la même ligne */
 }
 
+button {
+  padding: 5px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+
+
+}
+
 /* Bouton Oui */
 .oui {
   background-color: #00A551;
+  
 }
 
 .oui:hover {

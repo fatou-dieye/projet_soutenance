@@ -4,6 +4,7 @@ import { AuthService } from '../services/serviceslogin/auth.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-historique-admin',
   standalone: true, 
@@ -21,7 +22,9 @@ export class HistoriqueAdminComponent implements OnInit {
   searchQuery: string = ''; // Variable pour la recherche
   selectedDate: string = ''; // Variable pour le filtre de date
 
-  constructor(private historiqueService: AuthService, private datePipe: DatePipe) {}
+
+  constructor(private historiqueService: AuthService, private datePipe: DatePipe
+  ) {}
 
   ngOnInit(): void {
     // Récupérer l'historique de l'utilisateur connecté
@@ -35,7 +38,12 @@ export class HistoriqueAdminComponent implements OnInit {
       .catch((error) => {
         console.error('Erreur lors de la récupération de l\'historique :', error);
       });
-  }
+      
+      }
+      
+    
+      
+  
   // Fonction pour changer de page
   goToPage(page: number): void {
     if (page < 1 || page > this.totalPages) return;  // Si la page est hors des limites

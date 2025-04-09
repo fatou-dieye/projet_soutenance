@@ -42,6 +42,8 @@ class SensorService {
 
         // Émettre les données via Socket.IO
         if (parsedData && parsedData.pourcentage !== undefined) {
+          console.log('Émission des données via Socket.IO :', parsedData.pourcentage);
+
           this.io.emit('sensorData', { pourcentage: parsedData.pourcentage });
         }
 
