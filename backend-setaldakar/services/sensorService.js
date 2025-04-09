@@ -1,4 +1,3 @@
-
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 const Alert = require('../models/Alert');
