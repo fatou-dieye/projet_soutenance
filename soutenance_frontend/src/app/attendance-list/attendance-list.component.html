@@ -1,0 +1,33 @@
+<div class="utilisateur-main">
+  <div>
+    <h1>Pointages du Jour</h1>
+    <input type="date" [value]="selectedDate" (change)="onDateChange($event)" />
+    <div *ngIf="!records.length">
+      <p>Pas de pointages pour cette date.</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Premier Pointage</th>
+          <th>Deuxième Pointage</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records">
+          <td>{{ record.name }}</td>
+          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+          <td [ngClass]="{'retard': record.status === 'retard', 'present': record.status === 'présent'}">{{ record.status }}</td>
+          <td>{{ record.check_in_time }}</td>
+          <td>{{ record.check_out_time | date: 'HH:mm:ss' }}</td>
+          <td>{{ record.location }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

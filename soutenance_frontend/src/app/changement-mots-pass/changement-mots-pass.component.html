@@ -3,7 +3,7 @@
     <div class="modal-header">
       <div class="user-info">
         <div class="avatar">
-          <img src="avatar.png" alt="User avatar">
+          <img [src]="currentUser?.photo || 'avatar.png'" alt="User avatar">
         </div>
         <div class="user-details">
           <div class="username">{{ currentUser?.nom }} {{ currentUser?.prenom }}</div>

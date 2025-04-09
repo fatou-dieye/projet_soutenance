@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { Chart, registerables } from 'chart.js';
-
+import { PointageService } from '../services/pointage.service';
+import { Router } from '@angular/router';
 import { DasbordadminService } from '../services/servicedasbordadmin/dasbordadmin.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+
 @Component({
   selector: 'app-dasbordadmin',
-  imports: [SidebarreComponent, RouterModule,  CommonModule ],
+  imports: [ RouterModule,  CommonModule ],
   templateUrl: './dasbordadmin.component.html',
   styleUrl: './dasbordadmin.component.css'
 })
@@ -19,7 +20,8 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
   private depotPercentages: Map<number, number> = new Map();
  
    // Déclarer les variables pour les statistiques
-
+   totalRecords: number = 0;
+   records: any[] = [];
    totalCitoyens: number = 0;
    totalPersonnel: number = 0;
    totalAdministrateurs: number = 0;
@@ -34,7 +36,8 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
   private subscription!: Subscription; // 
 
   constructor(private DasbordadminService: DasbordadminService,
-    private  niveauPoubelleService:  NiveauPoubelleService
+    private  niveauPoubelleService:  NiveauPoubelleService,
+    private pointageService: PointageService, private router: Router
    
   ) {
     // Enregistrer tous les composants Chart.js
@@ -43,7 +46,7 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
   
   ngOnInit(): void {
    // Dans votre composant
-   
+   this.loadTodayAttendance();
 
    this.initGarbageLevelCharts();
    this.fetchStatistics();
@@ -52,22 +55,22 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
    this.fetchDailyAlertCount();
     this.fetchDailyAttendanceCount();
     this.subscription = this. niveauPoubelleService.getSensorData().subscribe(
-    data => {
-      if (data && data.pourcentage !== undefined) {
-        this.niveauPoubelle = data.pourcentage;
-      }
-    },
-    err => console.error(err)
-  );
-  }
-  
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+      data => {
+        if (data && data.pourcentage !== undefined) {
+          this.niveauPoubelle = data.pourcentage;
+        }
+      },
+      err => console.error(err)
+    );
     }
-  }
-
+    
+  
+    ngOnDestroy() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+    }
+  
   
 
   fetchStatistics(): void {
@@ -354,5 +357,22 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
     }
   }
   
+   // Charger les pointages du jour
+   loadTodayAttendance(): void {
+    this.pointageService.getTodayAttendance().subscribe(
+      (response) => {
+        this.totalRecords = response.data.totalRecords;
+        this.records = response.data.records;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des enregistrements:', error);
+      }
+    );
+  }
+  
+  navigateToAttendanceList(): void {
+    this.router.navigate(['/attendance-list']);
+  }  
+
 
 }

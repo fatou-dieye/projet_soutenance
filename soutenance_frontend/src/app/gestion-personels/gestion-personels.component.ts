@@ -1,7 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 
 import { AjouterPersonnelsComponent } from '../ajouter-personnels/ajouter-personnels.component';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +11,7 @@ import { ModifierPersonnelsComponent } from '../modifier-personnels/modifier-per
 
 @Component({
   selector: 'app-gestion-personels',
-  imports: [SidebarreComponent, CommonModule,FormsModule,AjouterPersonnelsComponent,ModifierPersonnelsComponent],
+  imports: [ CommonModule,FormsModule,AjouterPersonnelsComponent,ModifierPersonnelsComponent],
   templateUrl: './gestion-personels.component.html',
   styleUrl: './gestion-personels.component.css'
 })

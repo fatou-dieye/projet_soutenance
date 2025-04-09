@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { UtilisateurService } from '../services/utilisateur.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-historiqueutilisateur',
-  imports: [SidebarreComponent, CommonModule],
+  imports: [ CommonModule],
   templateUrl: './historiqueutilisateur.component.html',
   styleUrls: ['./historiqueutilisateur.component.css']
 })

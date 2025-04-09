@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import axiosInstance from '../../environements.ts/axios.service';
 
+import axiosInstance from '../../environnement/axios';
 import { Observable, from } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import axiosInstance from '../../environements.ts/axios.service';
-
+import axiosInstance from '../../environnement/axios';
 export interface User {
   _id: string;
   nom: string;

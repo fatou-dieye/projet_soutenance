@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { Router } from '@angular/router';
 import { AuthService } from '../services/serviceslogin/auth.service';
+import { Router } from '@angular/router';
+
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-   identifiant: string = ''; // Peut contenir un email ou un téléphone
+  identifiant: string = ''; // Peut contenir un email ou un téléphone
   mot_passe: string = '';
   errorMessage: string = '';
   identifiantError: string = '';

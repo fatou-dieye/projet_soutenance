@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import {  OnInit } from '@angular/core';
 import { SignalService } from '../services/serviceSignal/signal.service';
 import { CommonModule } from '@angular/common';
@@ -8,7 +7,7 @@ import { ModalDetailSignalComponent } from '../modal-detail-signal/modal-detail-
 import { MessageSuccesComponent } from '../message-succes/message-succes.component';
 @Component({
   selector: 'app-gestion-des-signaux',
-  imports: [SidebarreComponent,CommonModule,FormsModule, ModalDetailSignalComponent, MessageSuccesComponent],
+  imports: [CommonModule,FormsModule, ModalDetailSignalComponent, MessageSuccesComponent],
   templateUrl: './gestion-des-signaux.component.html',
   styleUrl: './gestion-des-signaux.component.css'
 })

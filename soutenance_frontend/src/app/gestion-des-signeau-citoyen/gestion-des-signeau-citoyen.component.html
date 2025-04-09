@@ -1,6 +1,3 @@
-
-
-<app-sidebarre></app-sidebarre>
 <div class="utilisateur-main">
   <div class="content-container">
     <div class="step-labels">
@@ -26,45 +23,33 @@
           <div id="map" class="map-container"></div>
         </div>
 
-       
-                  <!-- Étape 2 : Photos -->
-      <div class="step" [class.active]="currentStep === 2">
-        <div class="step-header">
-          <p class="step-title">Ajouter des photos</p>
-        </div>
-
-        <!-- Section pour uploader des photos -->
-        <div class="photo-options">
-          <div class="photo-block">
-            <label for="photo-upload" class="add-photo-icon">
-              <i class="fas fa-plus"></i>
-              <input 
-                type="file" 
-                id="photo-upload" 
-                (change)="onFileChange($event)" 
-                multiple 
-                accept="image/*" 
-                hidden 
-              />
-            </label>
+        <!-- Étape 2 : Photos -->
+        <div class="step" [class.active]="currentStep === 2">
+          <div class="step-header">
+            <p class="step-title">Ajouter des photos</p>
+          </div>
+          <div class="photo-options">
+            <div class="photo-block">
+              <label for="photo-upload" class="add-photo-icon">
+                <i class="fas fa-plus"></i>
+                <input
+                  type="file"
+                  id="photo-upload"
+                  (change)="onFileChange($event)"
+                  multiple
+                  accept="image/*"
+                  hidden
+                />
+              </label>
+            </div>
+          </div>
+          <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
+          <div class="photo-preview">
+            <div *ngFor="let photoUrl of photoUrls">
+              <img [src]="photoUrl" alt="Preview" width="130px" />
+            </div>
           </div>
         </div>
-        
-        <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
-
-        <!-- Affichage des aperçus des photos sélectionnées -->
-        <div class="photo-preview">
-          <div *ngFor="let photoUrl of photoUrls">
-            <img [src]="photoUrl" alt="Preview" width="130px" />
-          </div>
-        </div>
-
-        <!-- Afficher le message d'erreur -->
-      </div>
-
-
-
-
 
         <!-- Étape 3 : Description -->
         <div class="step" [class.active]="currentStep === 3">
@@ -85,9 +70,77 @@
 
     <div class="message success" *ngIf="successMessage">{{ successMessage }}</div>
     <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+    <!-- Nouvelle section pour les dépôts signalés -->
+    <div class="depots-sauvage">
+      <h3 class="title">Les Dépôts Signalés</h3>
+      <div class="depots-grid" id="depots-grid">
+        <div *ngFor="let alerte of alertes" class="depot-item">
+          <div class="depot-info">
+            <p class="depot-date">{{ alerte.dateCreation | date: 'dd/MM/yyyy' }}</p>
+            <p class="depot-time">{{ alerte.dateCreation | date: 'HH:mm' }}</p>
+            <p class="depot-location">{{ alerte.adresse }}</p>
+          </div>
+          <div class="depot-icon" (click)="showDetails(alerte)">
+            <i class="fas fa-eye"></i>
+          </div>
+        </div>
+      </div>
+      <ng-template #noAlertes>
+        <p>Aucune alerte disponible.</p>
+      </ng-template>
+      <div class="pagination" id="pagination">
+        <button (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Page précédente">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span> {{ currentPage }} sur {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Page suivante">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- Modale pour afficher les détails de l'alerte -->
+<div class="modal-overlay" *ngIf="selectedAlerte">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Détails du Signal</h2>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+    <div class="modal-content">
+      <div class="details-section">
+        <p><strong>Date :</strong> {{ selectedAlerte.dateCreation | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Adresse :</strong> {{ selectedAlerte.adresse }}</p>
+      </div>
+      <div class="location-container">
+        <div class="location-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
+            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div class="location-details">
+          <button (click)="openInMaps()" class="localisation"><h3> Localisation</h3></button>
+          <p><strong>Coordonnées :</strong> Latitude: {{ selectedAlerte.coordonnees.latitude }}, Longitude: {{ selectedAlerte.coordonnees.longitude }}</p>
+        </div>
+      </div>
+      <div class="description-section">
+        <h3>Description</h3>
+        <p>{{ selectedAlerte.description || 'Aucune description' }}</p>
+      </div>
+      <div *ngIf="selectedAlerte.photos && selectedAlerte.photos.length > 0" class="photos-section">
+        <h3>Photos</h3>
+        <div class="photos-grid">
+          <div class="photo-container" *ngFor="let photo of selectedAlerte.photos">
+            <img [src]="getPhotoUrl(photo)" (error)="photoLoadError($event)" alt="Image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal de succès -->
 <div class="status-change-success-modal-overlay" [class.visible]="showSuccessModal">
   <div class="status-change-success-modal-content">

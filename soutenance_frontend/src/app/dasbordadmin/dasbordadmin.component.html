@@ -1,5 +1,4 @@
 <div class="dasbord">
-  <app-sidebarre></app-sidebarre>
   
   <div class="dashboard-main">
     <div class="content-container">
@@ -38,18 +37,18 @@
           </div>
         </div>
   
-        <div class="stat-card">
+        <div class="stat-card" (click)="navigateToAttendanceList()">
           <div class="stat-icon green">
             <i class="fas fa-calendar-check"></i>
           </div>
           <div class="stat-info">
-            <h2 class="stat-number">{{ dailyAttendanceCount }}</h2>
+            <h2 class="stat-number">{{ totalRecords }}</h2>
             <p class="stat-label">Pointage Journalier</p>
           </div>
         </div>
       </div>
       <div>
-      <!--  Niveau poubelle = {{ niveauPoubelle }}%-->
+    Niveau poubelle = {{ niveauPoubelle }}% 
       </div>
       <!-- Charts section with modified layout -->
       <div class="charts-container">

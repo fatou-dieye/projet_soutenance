@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { AlertPoubelleService, User } from '../services/services-alert-poubelle/alert-poubelle.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
@@ -7,7 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { MessageSuccesComponent } from '../message-succes/message-succes.component';
 @Component({
   selector: 'app-alerte-poubelle',
-  imports: [SidebarreComponent, CommonModule, FormsModule, NgxPaginationModule,  MessageSuccesComponent ],
+  imports: [CommonModule, FormsModule, NgxPaginationModule,  MessageSuccesComponent ],
   templateUrl: './alerte-poubelle.component.html',
   styleUrl: './alerte-poubelle.component.css'
 })

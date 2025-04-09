@@ -1,4 +1,3 @@
-//environement/axios.ts// src/environments/axios.ts
 import axios from 'axios';
 
 // Configurer Axios avec l'URL de l'API et les en-têtes par défaut
@@ -24,13 +23,19 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Vous pouvez également gérer les erreurs globalement ici
+// Gérer les erreurs globalement avec une logique de redirection intelligente
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Par exemple, rediriger l'utilisateur vers la page de login en cas de token expiré
-      window.location.href = '/login'; // Modifiez selon votre logique
+      // Vérifier si nous sommes déjà sur la page de connexion
+      const currentPath = window.location.pathname;
+      
+      // Ne redirige que si nous ne sommes PAS déjà sur la page de connexion
+      if (currentPath !== '/login') {
+        window.location.href = '/login';
+      }
+      // Si nous sommes déjà sur la page de login, ne fait rien et laisse l'erreur se propager
     }
     return Promise.reject(error);
   }

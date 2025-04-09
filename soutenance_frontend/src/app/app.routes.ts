@@ -16,7 +16,7 @@ import { InscriptionutilisateurComponent } from './inscriptionutilisateur/inscri
 import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component';
-
+import { AttendanceListComponent } from './attendance-list/attendance-list.component';
 
 export const routes: Routes = [
     
@@ -35,6 +35,7 @@ export const routes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'gestion-personels', component: GestionPersonelsComponent },
     { path: 'gestion-des-signeau-citoyen', component:  GestionDesSigneauCitoyenComponent },
+    { path: 'attendance-list', component: AttendanceListComponent },
     { path: '', redirectTo: '/login', pathMatch: 'full' } 
 
 

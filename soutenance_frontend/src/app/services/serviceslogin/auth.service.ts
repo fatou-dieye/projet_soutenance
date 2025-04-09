@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(private router: Router) { }
 
-  login(email: string, telephone: string, mot_passe: string) {
+ login(email: string, telephone: string, mot_passe: string) {
     return axiosInstance.post('/login', { email, telephone, mot_passe })
       .then(response => {
         const user = response.data.user;
@@ -31,7 +31,6 @@ export class AuthService {
         throw error;
       });
   }
-
 
 
 

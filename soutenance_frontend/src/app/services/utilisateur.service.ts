@@ -1,6 +1,7 @@
 // depot.service.ts
 import { Injectable } from '@angular/core';
-import axiosInstance from '../../environements.ts/axios.service';
+
+import axiosInstance from '../../environnement/axios';
 
 interface Signal {
     nom: string;

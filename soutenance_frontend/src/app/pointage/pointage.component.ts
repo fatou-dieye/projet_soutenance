@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarreComponent } from '../sidebarre/sidebarre.component';
 import { PointageService } from '../services/pointage.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +31,7 @@ interface ApiResponse {
 @Component({
   selector: 'app-pointage',
   standalone: true,
-  imports: [SidebarreComponent, CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule],
   templateUrl: './pointage.component.html',
   styleUrls: ['./pointage.component.css']
 })

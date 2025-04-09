@@ -1,4 +1,3 @@
-<app-sidebarre></app-sidebarre>
 <div class="admin-main">
   <div class="content-container">
     <div class="pointage-container">
@@ -18,7 +17,7 @@
         <tbody>
           <tr *ngFor="let gardien of gardiens; let i = index">
             <td>
-              <img [src]="gardien.photo || 'chemin/vers/photo-par-defaut.jpg'" alt="Photo">
+              <img [src]="gardien.photo ||'avatar.png'" alt="Photo">
             </td>
             <td>{{ gardien.prenom }} {{ gardien.nom }}</td>
             <td>{{ gardien.email || 'Non renseigné' }}</td>
@@ -29,11 +28,13 @@
             </td>
             <td>
               <img
-                [src]="gardien.carte_rfid ? '/assigner.png'  : '/nonassigner.png'"
-                alt="Assignation Carte"
-                 title="Assigner une carte"
-                class="assign-card"
-                (click)="openAssignModal(gardien)">
+              [src]="gardien.carte_rfid ? '/assigner.png'  : '/nonassigner.png'"
+              alt="Assignation Carte"
+              title="Assigner une carte"
+              class="assign-card"
+              (click)=" gardien.carte_rfid ? null : openAssignModal(gardien)"
+              [ngClass]="{'assign-card-disabled': gardien.carte_rfid}" 
+            >
 
               <!-- Icônes pour bloquer/débloquer la carte -->
               <button *ngIf="gardien.carte_etat === 'active'" (click)="blockRFID(gardien)" class="lock-btn">
@@ -85,8 +86,10 @@
 <div *ngIf="showConfirmationModal" class="modal">
   <div class="modal-content">
     <p>Êtes-vous sûr de vouloir {{ confirmationAction === 'bloquer' ? 'bloquer' : 'débloquer' }} cette carte RFID ?</p>
-    <button (click)="confirmAction(true)" class="bouton">Oui</button>
-    <button (click)="confirmAction(false)" class="bouton non">Non</button>
+    <div class="button-container">
+      <button (click)="confirmAction(true)" class="bouton oui">Oui</button>
+      <button (click)="confirmAction(false)" class="bouton non">Non</button>
+    </div>
   </div>
 </div>
 
