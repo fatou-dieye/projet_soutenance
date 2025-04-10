@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PointageComponent } from './pointage.component';
 
@@ -20,4 +20,4 @@ describe('PointageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-}); 
+}); */

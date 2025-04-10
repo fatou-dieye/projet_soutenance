@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component';
+/* import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component'; */
 import { SidebarreComponent } from './sidebarre/sidebarre.component';
 
 @Component({
@@ -26,12 +26,13 @@ export class AppComponent {
 
   // Méthode pour vérifier si la route actuelle est l'une des pages sans sidebar
   shouldShowSidebar(): boolean {
-    const currentRoute = this.router.url;
+    const currentRoute = this.router.url.split('?')[0];  // Ignore les paramètres de requête
+
     // Liste des routes où le sidebar ne doit pas s'afficher
     const noSidebarRoutes = [
       '/login', 
       '/inscriptionutilisateur', 
-      '/reset-password', 
+      '/reset-password',
       '/forgetpassword'
     ];
 

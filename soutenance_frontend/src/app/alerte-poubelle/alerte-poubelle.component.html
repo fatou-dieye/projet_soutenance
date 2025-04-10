@@ -1,244 +1,244 @@
 <div class="gestion">
 
-<!-- Conteneur principal -->
-<div class="container">
-  <div class="content">
-    <div class="table-container">
-      
-      <!-- En-tête du tableau avec le bouton Ajouter -->
-      <div class="table-header">
-        <button class="btn-add" (click)="openAddAlertModal()">Ajouter Dépôt</button>
-        <div class="search-container">
-          <div class="search-wrapper">
-            <input type="text" class="search-input" placeholder="Rechercher..."  [(ngModel)]="searchText" 
-            (input)="filterAlerts()">
-            <i class="search-icon fas fa-search"></i>
+  <!-- Conteneur principal -->
+  <div class="container">
+    <div class="content">
+      <div class="table-container">
+        
+        <!-- En-tête du tableau avec le bouton Ajouter -->
+        <div class="table-header">
+          <button class="btn-add" (click)="openAddAlertModal()">Ajouter Dépôt</button>
+          <div class="search-container">
+            <div class="search-wrapper">
+              <input type="text" class="search-input" placeholder="Rechercher..."  [(ngModel)]="searchText" 
+              (input)="filterAlerts()">
+              <i class="search-icon fas fa-search"></i>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <!-- Tableau des alertes -->
-      <table>
-        <thead>
-          <tr>
-            <th>Lieu</th>
-            <th>Niveau</th>
-            <th>Date</th>
-            <th>Heure</th>
-            <th>Statut</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr *ngIf="filteredAlerts.length === 0">
-                <td colspan="6" class="no-results">Aucun résultat trouvé.</td>
-              </tr>
-          <tr *ngFor="let alert  of filteredAlerts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)">
-            <td>{{ alert.depot_id.lieu}}</td>
-            <td id="niveau">{{ alert.niveau }}%</td>
-            <td>{{ alert.date | date }}</td>
-            <td>{{ alert.heure }}</td>
-            <td>  <span [ngClass]="getStatusClass(alert.status)">{{ alert.status }}</span></td>
-            <td>
-            <button class="btn-action"  (click)="openTraiterAlertModal(alert)">  <i class="fas fa-file-alt"></i> </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  <div class="pagination">
-    <!-- Bouton précédent -->
-    <button (click)="previousPage()" [disabled]="currentPage === 1">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-  
-    <!-- Affichage de la première page -->
-    <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
-    <span *ngIf="currentPage > 3" class="page-dots">...</span>
-  
-    <!-- Page précédente (si nécessaire) -->
-    <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
-      {{ currentPage - 1 }}
-    </span>
-  
-    <!-- Page actuelle -->
-    <span class="page-number active">{{ currentPage }}</span>
-  
-    <!-- Page suivante (si nécessaire) -->
-    <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
-      {{ currentPage + 1 }}
-    </span>
-  
-    <!-- Affichage de la dernière page -->
-    <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
-    <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
-      {{ totalPages }}
-    </span>
-  
-    <!-- Bouton suivant -->
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-      <i class="fas fa-chevron-right"></i>
-    </button>
-  </div>
-</div>
-
-<!-- Modal d'ajout (exemple pour le bouton "Ajouter") -->
-<div *ngIf="isAddAlertModalOpen" class="modal-overlay">
-  <div class="modal-container">
-    <div class="modal-header">
-      <div class="user-info">
-        <div class="avatar">
-          <img src="logosetal.png" alt="User avatar">
-        </div>
         
-      </div>
-      <button class="close-btn" (click)="closeAddAlertModal()">&times;</button>
-    </div>
-
-    <div class="modal-body">
-        <!-- Formulaire d'ajout de dépôt -->
-       <!-- Formulaire d'ajout de dépôt -->
-<form (ngSubmit)="submitNewDepot()">
-  <div class="form-group">
-    <label for="lieu">Lieu</label>
-    <input 
-      type="text" 
-      id="lieu" 
-      [(ngModel)]="newDepot.lieu" 
-      name="lieu" 
-      class="form-control" 
-      required>
-    <div *ngIf="validationErrors.lieu" class="error-message text-danger">
-      {{ validationErrors.lieu }}
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label for="latitude">Latitude</label>
-    <input 
-      type="number" 
-      id="latitude" 
-      [(ngModel)]="newDepot.latitude" 
-      name="latitude" 
-      class="form-control" 
-      required
-      (input)="onCoordinateChange()">
-    <div *ngIf="validationErrors.latitude" class="error-message text-danger">
-      {{ validationErrors.latitude }}
-    </div>
-    <small class="form-text text-muted">
-      Les valeurs valides pour Dakar sont entre {{ dakarLimits.latMin }} et {{ dakarLimits.latMax }}
-    </small>
-  </div>
-  
-  <div class="form-group">
-    <label for="longitude">Longitude</label>
-    <input 
-      type="number" 
-      id="longitude" 
-      [(ngModel)]="newDepot.longitude" 
-      name="longitude" 
-      class="form-control" 
-      required
-      (input)="onCoordinateChange()">
-    <div *ngIf="validationErrors.longitude" class="error-message text-danger">
-      {{ validationErrors.longitude }}
-    </div>
-    <small class="form-text text-muted">
-      Les valeurs valides pour Dakar sont entre {{ dakarLimits.lngMin }} et {{ dakarLimits.lngMax }}
-    </small>
-  </div>
-  
-  <div class="form-group">
-    <label for="gardien">Gardien</label>
-    <select 
-      id="gardien" 
-      [(ngModel)]="newDepot.gardien_id" 
-      name="gardien" 
-      class="form-control" 
-      required>
-      <option value="">Sélectionner un gardien</option>
-      <option *ngFor="let gardien of gardiens" [value]="gardien._id">
-        {{ gardien.nom }} - {{ gardien.adresse }}
-      </option>
-    </select>
-    <div *ngIf="validationErrors.gardien_id" class="error-message text-danger">
-      {{ validationErrors.gardien_id }}
-    </div>
-  </div>
-  
-  <div class="form-actions">
-    <button 
-      type="submit" 
-      class="btn-add" 
-      [disabled]="!isFormValid">
-      Ajouter Dépôt
-    </button>
-  </div>
-</form>
+        <!-- Tableau des alertes -->
+        <table>
+          <thead>
+            <tr>
+              <th>Lieu</th>
+              <th>Niveau</th>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngIf="filteredAlerts.length === 0">
+                  <td colspan="6" class="no-results">Aucun résultat trouvé.</td>
+                </tr>
+            <tr *ngFor="let alert  of filteredAlerts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)">
+              <td>{{ alert.depot_id.lieu}}</td>
+              <td id="niveau">{{ alert.niveau }}%</td>
+              <td>{{ alert.date | date }}</td>
+              <td>{{ alert.heure }}</td>
+              <td>  <span [ngClass]="getStatusClass(alert.status)">{{ alert.status }}</span></td>
+              <td>
+              <button class="btn-action"  (click)="openTraiterAlertModal(alert)">  <i class="fas fa-file-alt"></i> </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+    
+    <div class="pagination">
+      <!-- Bouton précédent -->
+      <button (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    
+      <!-- Affichage de la première page -->
+      <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
+      <span *ngIf="currentPage > 3" class="page-dots">...</span>
+    
+      <!-- Page précédente (si nécessaire) -->
+      <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
+        {{ currentPage - 1 }}
+      </span>
+    
+      <!-- Page actuelle -->
+      <span class="page-number active">{{ currentPage }}</span>
+    
+      <!-- Page suivante (si nécessaire) -->
+      <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
+        {{ currentPage + 1 }}
+      </span>
+    
+      <!-- Affichage de la dernière page -->
+      <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
+      <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
+        {{ totalPages }}
+      </span>
+    
+      <!-- Bouton suivant -->
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
-</div>
-
-<!-- Modal pour traiter une alerte -->
-<div class="modal" *ngIf="isTraiterAlertModalOpen">
-    <div class="modal-content">
+  
+  <!-- Modal d'ajout (exemple pour le bouton "Ajouter") -->
+  <div *ngIf="isAddAlertModalOpen" class="modal-overlay">
+    <div class="modal-container">
       <div class="modal-header">
-        <h2>Traiter l'alerte</h2>
-        <button class="close-btn" (click)="closeTraiterAlertModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="localisation-section">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
-                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              <a href="https://www.google.com/maps/search/?api=1&query={{ selectedAlert?.depot_id?.coordonnees?.latitude }},{{ selectedAlert?.depot_id?.coordonnees?.longitude }}" target="_blank">
-                <h3>Localisation</h3>
-              </a>
-        
-          <div class="detail-localisation">
-            <p><strong>Adresse:</strong> {{ selectedAlert?.depot_id?.lieu }}</p>
-            <p><strong>Coordonnées:</strong> {{ selectedAlert?.depot_id?.coordonnees?.latitude }}° N, {{ selectedAlert?.depot_id?.coordonnees?.longitude }}° W</p>
-            <p><strong>Niveau de remplissage:</strong> {{ selectedAlert?.niveau }}%</p>
+        <div class="user-info">
+          <div class="avatar">
+            <img src="logosetal.png" alt="User avatar">
           </div>
           
         </div>
-        
-        <div class="videur-section">
-          <h3>Assigner à un videur</h3>
-          
-          <!-- Ajout du filtre par adresse -->
-           <!-- Ajout du filtre par adresse -->
-  <div class="address-filter">
-    <label for="addressFilter"></label>
-    <div class="select-wrapper">
-      <select id="addressFilter" [(ngModel)]="selectedAddress" (change)="filterVideursByAddress()">
-        <option value="">Selectionner une Zone</option>
-        <option *ngFor="let address of addresses" [value]="address">{{ address }}</option>
+        <button class="close-btn" (click)="closeAddAlertModal()">&times;</button>
+      </div>
+  
+      <div class="modal-body">
+          <!-- Formulaire d'ajout de dépôt -->
+         <!-- Formulaire d'ajout de dépôt -->
+  <form (ngSubmit)="submitNewDepot()">
+    <div class="form-group">
+      <label for="lieu">Lieu</label>
+      <input 
+        type="text" 
+        id="lieu" 
+        [(ngModel)]="newDepot.lieu" 
+        name="lieu" 
+        class="form-control" 
+        required>
+      <div *ngIf="validationErrors.lieu" class="error-message text-danger">
+        {{ validationErrors.lieu }}
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="latitude">Latitude</label>
+      <input 
+        type="number" 
+        id="latitude" 
+        [(ngModel)]="newDepot.latitude" 
+        name="latitude" 
+        class="form-control" 
+        required
+        (input)="onCoordinateChange()">
+      <div *ngIf="validationErrors.latitude" class="error-message text-danger">
+        {{ validationErrors.latitude }}
+      </div>
+      <small class="form-text text-muted">
+        Les valeurs valides pour Dakar sont entre {{ dakarLimits.latMin }} et {{ dakarLimits.latMax }}
+      </small>
+    </div>
+    
+    <div class="form-group">
+      <label for="longitude">Longitude</label>
+      <input 
+        type="number" 
+        id="longitude" 
+        [(ngModel)]="newDepot.longitude" 
+        name="longitude" 
+        class="form-control" 
+        required
+        (input)="onCoordinateChange()">
+      <div *ngIf="validationErrors.longitude" class="error-message text-danger">
+        {{ validationErrors.longitude }}
+      </div>
+      <small class="form-text text-muted">
+        Les valeurs valides pour Dakar sont entre {{ dakarLimits.lngMin }} et {{ dakarLimits.lngMax }}
+      </small>
+    </div>
+    
+    <div class="form-group">
+      <label for="gardien">Gardien</label>
+      <select 
+        id="gardien" 
+        [(ngModel)]="newDepot.gardien_id" 
+        name="gardien" 
+        class="form-control" 
+        required>
+        <option value="">Sélectionner un gardien</option>
+        <option *ngFor="let gardien of gardiens" [value]="gardien._id">
+          {{ gardien.nom }} - {{ gardien.adresse }}
+        </option>
       </select>
+      <div *ngIf="validationErrors.gardien_id" class="error-message text-danger">
+        {{ validationErrors.gardien_id }}
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        class="btn-add" 
+        [disabled]="!isFormValid">
+        Ajouter Dépôt
+      </button>
+    </div>
+  </form>
+        </div>
+      </div>
     </div>
   </div>
   
-  <!-- Masquer le sélecteur de videur si aucune zone n'est sélectionnée -->
-  <div class="select-wrapper" *ngIf="selectedAddress">
-    <select [(ngModel)]="selectedVideur">
-      <option value="">Sélectionnez un videur</option>
-      <option *ngFor="let videur of filteredVideurs" [value]="videur._id">
-        {{ videur.nom }} {{ videur.prenom }} - {{ videur.email }}
-      </option>
-    </select>
-          </div>
+  <!-- Modal pour traiter une alerte -->
+  <div class="modal" *ngIf="isTraiterAlertModalOpen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Traiter l'alerte</h2>
+          <button class="close-btn" (click)="closeTraiterAlertModal()">&times;</button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-submit" (click)="assignerAVideur()">Envoyer Mission</button>
+        <div class="modal-body">
+          <div class="localisation-section">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
+                  <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ selectedAlert?.depot_id?.coordonnees?.latitude }},{{ selectedAlert?.depot_id?.coordonnees?.longitude }}" target="_blank">
+                  <h3>Localisation</h3>
+                </a>
+          
+            <div class="detail-localisation">
+              <p><strong>Adresse:</strong> {{ selectedAlert?.depot_id?.lieu }}</p>
+              <p><strong>Coordonnées:</strong> {{ selectedAlert?.depot_id?.coordonnees?.latitude }}° N, {{ selectedAlert?.depot_id?.coordonnees?.longitude }}° W</p>
+              <p><strong>Niveau de remplissage:</strong> {{ selectedAlert?.niveau }}%</p>
+            </div>
+            
+          </div>
+          
+          <div class="videur-section">
+            <h3>Assigner à un videur</h3>
+            
+            <!-- Ajout du filtre par adresse -->
+             <!-- Ajout du filtre par adresse -->
+    <div class="address-filter">
+      <label for="addressFilter"></label>
+      <div class="select-wrapper">
+        <select id="addressFilter" [(ngModel)]="selectedAddress" (change)="filterVideursByAddress()">
+          <option value="">Selectionner une Zone</option>
+          <option *ngFor="let address of addresses" [value]="address">{{ address }}</option>
+        </select>
       </div>
     </div>
-  </div>
-  <!--message de succes -->
-  <app-message-succes  [showSuccessModal]="showSuccessModal"
-  [successModalMessage]="successModalMessage"></app-message-succes>
+    
+    <!-- Masquer le sélecteur de videur si aucune zone n'est sélectionnée -->
+    <div class="select-wrapper" *ngIf="selectedAddress">
+      <select [(ngModel)]="selectedVideur">
+        <option value="">Sélectionnez un videur</option>
+        <option *ngFor="let videur of filteredVideurs" [value]="videur._id">
+          {{ videur.nom }} {{ videur.prenom }} - {{ videur.email }}
+        </option>
+      </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-submit" (click)="assignerAVideur()">Envoyer Mission</button>
+        </div>
+      </div>
+    </div>
+    <!--message de succes -->
+    <app-message-succes  [showSuccessModal]="showSuccessModal"
+    [successModalMessage]="successModalMessage"></app-message-succes>

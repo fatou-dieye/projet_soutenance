@@ -28,14 +28,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Vérifier si nous sommes déjà sur la page de connexion
       const currentPath = window.location.pathname;
-      
-      // Ne redirige que si nous ne sommes PAS déjà sur la page de connexion
       if (currentPath !== '/login') {
         window.location.href = '/login';
       }
-      // Si nous sommes déjà sur la page de login, ne fait rien et laisse l'erreur se propager
     }
     return Promise.reject(error);
   }
