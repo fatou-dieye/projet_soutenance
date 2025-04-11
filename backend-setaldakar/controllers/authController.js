@@ -178,6 +178,7 @@ exports.verifyOldPassword = async (req, res) => {
   }
 };
 
+
 // Fonction pour gérer le mot de passe oublié (moved to motspassoublierController)
 exports.forgotPassword = motspassoublierController.forgotPassword;
 

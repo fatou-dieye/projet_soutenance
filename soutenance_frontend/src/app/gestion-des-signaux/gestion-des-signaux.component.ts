@@ -5,9 +5,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { ModalDetailSignalComponent } from '../modal-detail-signal/modal-detail-signal.component';
 import { MessageSuccesComponent } from '../message-succes/message-succes.component';
+
+import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertPoubelleService } from '../services/services-alert-poubelle/alert-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 @Component({
+  providers: [ AlertPoubelleService,
+    NiveauPoubelleService],
   selector: 'app-gestion-des-signaux',
-  imports: [CommonModule,FormsModule, ModalDetailSignalComponent, MessageSuccesComponent],
+  imports: [CommonModule,FormsModule, ModalDetailSignalComponent, MessageSuccesComponent, AlertModalComponent],
   templateUrl: './gestion-des-signaux.component.html',
   styleUrl: './gestion-des-signaux.component.css'
 })
@@ -26,7 +32,10 @@ export class GestionDesSignauxComponent  implements OnInit {
   filteredAlertes: any[] = [];
   selectedDate: string | null = null;
 
-  constructor(private signalService: SignalService) {}
+  constructor(private signalService: SignalService,
+    private alertModalService:AlertPoubelleService 
+
+  ) {}
   
   ngOnInit(): void {
     this.loadAlertes();
@@ -40,6 +49,11 @@ export class GestionDesSignauxComponent  implements OnInit {
     }).catch(error => {
       console.error('Erreur lors de la récupération des alertes:', error);
     });
+  }
+  
+  testAlertModal() {
+    console.log('Test: Affichage de la modale');
+    this.alertModalService.showModal('Ceci est un test de modale d\'alerte', 95);
   }
   
 

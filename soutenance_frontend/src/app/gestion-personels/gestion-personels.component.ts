@@ -9,9 +9,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/serviceslogin/auth.service';
 import { ModifierPersonnelsComponent } from '../modifier-personnels/modifier-personnels.component';
 
+import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertPoubelleService } from '../services/services-alert-poubelle/alert-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 @Component({
   selector: 'app-gestion-personels',
-  imports: [ CommonModule,FormsModule,AjouterPersonnelsComponent,ModifierPersonnelsComponent],
+  imports: [ CommonModule,FormsModule,AjouterPersonnelsComponent,ModifierPersonnelsComponent, AlertModalComponent],
   templateUrl: './gestion-personels.component.html',
   styleUrl: './gestion-personels.component.css'
 })
@@ -40,7 +43,8 @@ export class GestionPersonelsComponent implements OnInit {
   constructor(
     private GestionpersonnelService: GestionpersonnelService, 
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertModalService:AlertPoubelleService 
   ) {}
   
   ngAfterViewInit() {
@@ -93,6 +97,12 @@ export class GestionPersonelsComponent implements OnInit {
       }
     });
   }
+  testAlertModal() {
+    console.log('Test: Affichage de la modale');
+    this.alertModalService.showModal('Ceci est un test de modale d\'alerte', 95);
+  }
+  
+
   onUserAdded() {
     // Recharge la liste des utilisateurs après un ajout
     this.loadUsers();

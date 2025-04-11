@@ -4,12 +4,16 @@ import { AuthService } from '../services/serviceslogin/auth.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
-
+import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertPoubelleService } from '../services/services-alert-poubelle/alert-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 @Component({
   selector: 'app-historique-admin',
   standalone: true, 
-  imports: [ CommonModule, FormsModule],
-  providers: [DatePipe], 
+  imports: [ CommonModule, FormsModule, AlertModalComponent],
+ 
+  providers: [DatePipe, AlertPoubelleService,
+    NiveauPoubelleService], 
   templateUrl: './historique-admin.component.html',
   styleUrl: './historique-admin.component.css'
 })
@@ -23,7 +27,9 @@ export class HistoriqueAdminComponent implements OnInit {
   selectedDate: string = ''; // Variable pour le filtre de date
 
 
-  constructor(private historiqueService: AuthService, private datePipe: DatePipe
+  constructor(private historiqueService: AuthService, private datePipe: DatePipe,
+    private alertModalService:AlertPoubelleService 
+
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +47,10 @@ export class HistoriqueAdminComponent implements OnInit {
       
       }
       
-    
+      testAlertModal() {
+        console.log('Test: Affichage de la modale');
+        this.alertModalService.showModal('Ceci est un test de modale d\'alerte', 95);
+      }
       
   
   // Fonction pour changer de page

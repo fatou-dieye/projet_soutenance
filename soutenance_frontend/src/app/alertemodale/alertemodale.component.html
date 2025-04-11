@@ -1,0 +1,16 @@
+<div *ngIf="showModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🚨 ALERTE!</h2>
+      </div>
+      <div class="modal-body">
+        <p>{{ message }}</p>
+        <div class="niveau-container">
+          <p>Niveau de remplissage: <strong>{{ niveau }}%</strong></p>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="niveau"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

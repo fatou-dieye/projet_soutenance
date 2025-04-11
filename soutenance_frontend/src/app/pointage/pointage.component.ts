@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../services/websocket.service';
 
+import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertPoubelleService } from '../services/services-alert-poubelle/alert-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 interface RFIDData {
   cardId: string;
 }
@@ -29,9 +32,12 @@ interface ApiResponse {
 }
 
 @Component({
+
+  providers: [ AlertPoubelleService,
+    NiveauPoubelleService], 
   selector: 'app-pointage',
   standalone: true,
-  imports: [ CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule, AlertModalComponent ],
   templateUrl: './pointage.component.html',
   styleUrls: ['./pointage.component.css']
 })

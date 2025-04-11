@@ -7,10 +7,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 
 @Component({
   selector: 'app-dasbordadmin',
-  imports: [ RouterModule,  CommonModule ],
+  imports: [ RouterModule,  CommonModule, AlertModalComponent ],
   providers: [NiveauPoubelleService],
 
   templateUrl: './dasbordadmin.component.html',

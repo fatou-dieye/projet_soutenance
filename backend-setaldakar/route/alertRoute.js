@@ -4,7 +4,7 @@ const alertController = require('../controllers/alertController');
 const { verifyToken, verifyRole,invalidateToken } = require('../middleware/authmiddleware');
 const depotController = require('../controllers/deposController');
 // Route pour créer une nouvelle alerte
-router.post('/alerts/create',verifyToken,verifyRole(['administrateur']), alertController.createAlert);
+router.post('/alerts/create', alertController.createAlert);
 
 // Route pour lister toutes les alertes
 router.get('/alerts',verifyToken,verifyRole(['administrateur']), alertController.getAlerts);

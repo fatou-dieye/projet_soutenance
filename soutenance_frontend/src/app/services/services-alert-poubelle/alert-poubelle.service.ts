@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import axiosInstance from '../../../environnement/axios';
 import { Observable } from 'rxjs';
@@ -16,10 +17,18 @@ export interface User {
   mot_passe?: string;
   adresse: string;
 }
+
+
+export interface AlertModalData {
+  show: boolean;
+  message: string;
+  niveau?: number;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class AlertPoubelleService {
+  private alertModalSubject = new Subject<AlertModalData>();
 
   constructor() { }
 
@@ -130,5 +139,26 @@ getDepotsCount(): Observable<number> {
         observer.error(error);
       });
   });
+}
+
+
+ // Observable pour l'état de la modale
+ getAlertModalState() {
+  return this.alertModalSubject.asObservable();
+}
+
+// Afficher la modale
+showModal(message: string, niveau?: number) {
+  this.alertModalSubject.next({ show: true, message, niveau });
+  
+  // Fermer automatiquement la modale après 2 secondes
+  setTimeout(() => {
+    this.closeModal();
+  }, 4000);
+}
+
+// Fermer la modale
+closeModal() {
+  this.alertModalSubject.next({ show: false, message: '' });
 }
 }

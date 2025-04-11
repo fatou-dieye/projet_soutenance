@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PointageService } from '../services/pointage.service';
 import { WebSocketService } from '../services/websocket.service';
-
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 // Définition du modèle de données pour un pointage (Record)
 interface Record {
   carte_rfid: string;
@@ -19,7 +19,7 @@ interface Record {
 
 @Component({
   selector: 'app-attendance-list',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,  AlertModalComponent],
   templateUrl: './attendance-list.component.html',
   styleUrls: ['./attendance-list.component.css'] // Notez le pluriel ici: styleUrls
 })

@@ -19,7 +19,9 @@ const mongoose = require('mongoose'); // Assurez-vous d'importer Mongoose
 const Utilisateur = require('./models/Utilisateur');
 const { Pointage, Attendance } = require('./models/Pointage');
 
-
+// Add these imports at the top with your other imports
+const Alert = require('./models/Alert');
+const Depot = require('./models/depos');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -97,6 +99,8 @@ async function setupSerialCommunication() {
               
               // Émission de l'événement via websocket
               io.emit('trash-level', { niveauPoubelle });
+                 // Vérification du seuil et création d'alerte si nécessaire
+      verifierNiveauEtCreerAlerte(niveauPoubelle);
             }
           } catch (error) {
             console.error('Erreur lors du traitement des données de niveau de poubelle:', error);
@@ -114,8 +118,47 @@ async function setupSerialCommunication() {
     console.error('Erreur lors de la configuration de la communication série :', error.message);
   }
 }
+// Ajoutez cette variable pour suivre quand la dernière alerte a été créée
+let derniereAlerteCreeA = null;
 
-
+// Modifiez cette fonction pour récupérer dynamiquement le dépôt
+async function verifierNiveauEtCreerAlerte(niveauPoubelle) {
+  if (niveauPoubelle > 80) {
+    const maintenant = new Date();
+    // Créer une nouvelle alerte seulement si ça fait plus de 15 minutes depuis la dernière
+    if (!derniereAlerteCreeA || (maintenant - derniereAlerteCreeA) > 5 * 60 * 1000) {
+      try {
+        // Récupérer le premier dépôt disponible dans la base de données
+        const depot = await Depot.findOne().sort({ _id: 1 });
+        
+        if (!depot) {
+          console.error("Aucun dépôt trouvé dans la base de données");
+          return;
+        }
+        
+        const alert = new Alert({
+          depot_id: depot._id, // Utiliser l'ID du dépôt récupéré
+          niveau: niveauPoubelle,
+          date: new Date(),
+          heure: new Date().toLocaleTimeString()
+        });
+        
+        await alert.save();
+        console.log(`Alerte créée automatiquement - Niveau: ${niveauPoubelle}%, Dépôt: ${depot._id}`);
+        derniereAlerteCreeA = maintenant;
+        
+        // Émettre un événement pour informer les clients de la nouvelle alerte
+        io.emit('new-alert', { 
+          message: 'Nouveau niveau d\'alerte détecté', 
+          niveau: niveauPoubelle,
+          depot: depot._id 
+        });
+      } catch (error) {
+        console.error("Erreur lors de la création automatique d'alerte:", error);
+      }
+    }
+  }
+}
 // Fonction pour déterminer le statut en fonction de l'heure de pointage
 function determineStatus(checkInTime) {
   const checkInStartLimit = '07:00:00';

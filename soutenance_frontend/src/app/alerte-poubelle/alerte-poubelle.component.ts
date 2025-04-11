@@ -4,9 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MessageSuccesComponent } from '../message-succes/message-succes.component';
+import { NiveauPoubelleService } from '../services/servicesSensor/niveau-poubelle.service';
+import { AlertModalComponent } from '../alertemodale/alertemodale.component';
 @Component({
+  providers: [ AlertPoubelleService,
+    NiveauPoubelleService],
   selector: 'app-alerte-poubelle',
-  imports: [CommonModule, FormsModule, NgxPaginationModule,  MessageSuccesComponent ],
+  imports: [CommonModule, FormsModule, NgxPaginationModule,  MessageSuccesComponent,AlertModalComponent  ],
   templateUrl: './alerte-poubelle.component.html',
   styleUrl: './alerte-poubelle.component.css'
 })
