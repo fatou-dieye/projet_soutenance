@@ -19,7 +19,10 @@ import { GestionPersonelsComponent } from './gestion-personels/gestion-personels
 import { AttendanceListComponent } from './attendance-list/attendance-list.component';
 
 export const routes: Routes = [
-    
+    { path: 'inscriptionutilisateur', component: InscriptionutilisateurComponent },
+    { path: 'forgetpassword', component: ForgetpasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
+
     { path: 'login', component: LoginComponent },
     { path: 'dasbordadmin', component: DasbordadminComponent },
 
@@ -29,10 +32,7 @@ export const routes: Routes = [
     { path: 'dashboardutilisateur', component: DashboardutilisateurComponent },
     { path: 'historiqueutilisateur', component: HistoriqueutilisateurComponent },
     { path: 'pointage', component: PointageComponent },
-    { path: 'inscriptionutilisateur', component: InscriptionutilisateurComponent },
    
-    { path: 'forgetpassword', component: ForgetpasswordComponent },
-    { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'gestion-personels', component: GestionPersonelsComponent },
     { path: 'gestion-des-signeau-citoyen', component:  GestionDesSigneauCitoyenComponent },
     { path: 'attendance-list', component: AttendanceListComponent },

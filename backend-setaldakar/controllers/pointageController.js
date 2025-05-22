@@ -8,7 +8,7 @@ const { Attendance } = require('../models/Pointage'); // Utiliser destructuring 
 const moment = require('moment');
 
 
-
+const Depot = require('../models/depos'); // Assure-toi que ce chemin est correct
 
 
 // Assigner une carte RFID
@@ -161,8 +161,6 @@ exports.recordAttendance = async (req, res) => {
     }
 
     const guard_id = pointage.guard_id;
-    const location = pointage.location;
-
     const now = new Date();
     const date = now.toISOString().split('T')[0];  // Format "YYYY-MM-DD"
     const checkInTime = now.toISOString().substr(11, 8);  // Format "HH:mm:ss"
@@ -177,6 +175,17 @@ exports.recordAttendance = async (req, res) => {
 
     const name = `${utilisateur.prenom} ${utilisateur.nom}`;
     const status = determineStatus(checkInTime);  // Calculer le statut (présent/retard)
+
+    // 🔥 Récupération du dépôt associé au gardien
+    const depot = await Depot.findOne({ gardien_id: guardObjectId });
+
+    let location = "Non spécifié"; // Valeur par défaut
+    if (depot) {
+      location = depot.lieu;
+      console.log(`Dépôt trouvé : ${location}`);
+    } else {
+      console.log("Aucun dépôt trouvé pour ce gardien.");
+    }
 
     // Vérifier si un pointage existe déjà pour ce gardien à cette date
     let attendance = await Attendance.findOne({ guard_id: guardObjectId, date });
@@ -195,8 +204,8 @@ exports.recordAttendance = async (req, res) => {
         guard_id: guardObjectId,
         name,
         date,
-        check_in_time: checkInTime,  // Enregistrer l'heure d'entrée
-        check_out_time: null,  // Pas de check-out pour l'instant
+        check_in_time: checkInTime,
+        check_out_time: null,
         location,
         status
       });
@@ -214,6 +223,7 @@ exports.recordAttendance = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l\'enregistrement du pointage', details: error.message });
   }
 };
+
 
 
 

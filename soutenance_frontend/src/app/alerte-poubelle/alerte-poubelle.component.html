@@ -101,84 +101,107 @@
     <div class="modal-body">
         <!-- Formulaire d'ajout de dépôt -->
        <!-- Formulaire d'ajout de dépôt -->
-<form (ngSubmit)="submitNewDepot()">
-  <div class="form-group">
-    <label for="lieu">Lieu</label>
-    <input 
-      type="text" 
-      id="lieu" 
-      [(ngModel)]="newDepot.lieu" 
-      name="lieu" 
-      class="form-control" 
-      required>
-    <div *ngIf="validationErrors.lieu" class="error-message text-danger">
-      {{ validationErrors.lieu }}
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label for="latitude">Latitude</label>
-    <input 
-      type="number" 
-      id="latitude" 
-      [(ngModel)]="newDepot.latitude" 
-      name="latitude" 
-      class="form-control" 
-      required
-      (input)="onCoordinateChange()">
-    <div *ngIf="validationErrors.latitude" class="error-message text-danger">
-      {{ validationErrors.latitude }}
-    </div>
-    <small class="form-text text-muted">
-      Les valeurs valides pour Dakar sont entre {{ dakarLimits.latMin }} et {{ dakarLimits.latMax }}
-    </small>
-  </div>
-  
-  <div class="form-group">
-    <label for="longitude">Longitude</label>
-    <input 
-      type="number" 
-      id="longitude" 
-      [(ngModel)]="newDepot.longitude" 
-      name="longitude" 
-      class="form-control" 
-      required
-      (input)="onCoordinateChange()">
-    <div *ngIf="validationErrors.longitude" class="error-message text-danger">
-      {{ validationErrors.longitude }}
-    </div>
-    <small class="form-text text-muted">
-      Les valeurs valides pour Dakar sont entre {{ dakarLimits.lngMin }} et {{ dakarLimits.lngMax }}
-    </small>
-  </div>
-  
-  <div class="form-group">
-    <label for="gardien">Gardien</label>
-    <select 
-      id="gardien" 
-      [(ngModel)]="newDepot.gardien_id" 
-      name="gardien" 
-      class="form-control" 
-      required>
-      <option value="">Sélectionner un gardien</option>
-      <option *ngFor="let gardien of gardiens" [value]="gardien._id">
-        {{ gardien.nom }} - {{ gardien.adresse }}
-      </option>
-    </select>
-    <div *ngIf="validationErrors.gardien_id" class="error-message text-danger">
-      {{ validationErrors.gardien_id }}
-    </div>
-  </div>
-  
-  <div class="form-actions">
-    <button 
-      type="submit" 
-      class="btn-add" 
-      [disabled]="!isFormValid">
-      Ajouter Dépôt
-    </button>
-  </div>
-</form>
+       <form (ngSubmit)="submitNewDepot()">
+        <div class="form-group">
+          <label for="lieu">Lieu</label>
+          <input 
+            type="text" 
+            id="lieu" 
+            [(ngModel)]="newDepot.lieu" 
+            name="lieu" 
+            class="form-control" 
+            required>
+          <div *ngIf="validationErrors.lieu" class="error-message text-danger">
+            {{ validationErrors.lieu }}
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="latitude">Latitude</label>
+          <input 
+            type="number" 
+            id="latitude" 
+            [(ngModel)]="newDepot.latitude" 
+            name="latitude" 
+            class="form-control" 
+            required
+            (input)="onCoordinateChange()">
+          <div *ngIf="validationErrors.latitude" class="error-message text-danger">
+            {{ validationErrors.latitude }}
+          </div>
+          <small class="form-text text-muted">
+            Les valeurs valides pour Dakar sont entre {{ dakarLimits.latMin }} et {{ dakarLimits.latMax }}
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label for="longitude">Longitude</label>
+          <input 
+            type="number" 
+            id="longitude" 
+            [(ngModel)]="newDepot.longitude" 
+            name="longitude" 
+            class="form-control" 
+            required
+            (input)="onCoordinateChange()">
+          <div *ngIf="validationErrors.longitude" class="error-message text-danger">
+            {{ validationErrors.longitude }}
+          </div>
+          <small class="form-text text-muted">
+            Les valeurs valides pour Dakar sont entre {{ dakarLimits.lngMin }} et {{ dakarLimits.lngMax }}
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label for="zone">Zone</label>
+          <select
+            id="zone"
+            [(ngModel)]="selectedZone"
+            name="zone"
+            class="form-control"
+            required
+            (change)="onZoneChange()"
+          >
+            <option value="">Sélectionner une zone</option>
+            <option *ngFor="let address of addresses" [value]="address">
+              {{ address }}
+            </option>
+          </select>
+          <div *ngIf="validationErrors.zone" class="error-message text-danger">
+            {{ validationErrors.zone }}
+          </div>
+        </div>
+      
+        <!-- Gardien (affiché uniquement si une zone est sélectionnée) -->
+        <div class="form-group" *ngIf="selectedZone">
+          <label for="gardien">Gardien</label>
+          <select
+            id="gardien"
+            [(ngModel)]="newDepot.gardien_id"
+            name="gardien"
+            class="form-control"
+            required
+          >
+            <option value="">Sélectionner un gardien</option>
+            <option *ngFor="let gardien of filteredGardiens" [value]="gardien._id">
+              {{ gardien.nom }} {{ gardien.prenom }} - {{ gardien.email }}
+            </option>
+          </select>
+          <div *ngIf="validationErrors.gardien_id" class="error-message text-danger">
+            {{ validationErrors.gardien_id }}
+          </div>
+        </div>
+      
+        
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn-add" 
+            [disabled]="!isFormValid">
+            Ajouter Dépôt
+          </button>
+        </div>
+      </form>
       </div>
     </div>
   </div>

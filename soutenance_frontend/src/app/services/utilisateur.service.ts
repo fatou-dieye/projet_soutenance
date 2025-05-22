@@ -144,7 +144,14 @@ export class UtilisateurService {
         throw error;  // Jeter l'erreur pour que le composant puisse la gérer
       });
   }
- 
+  getDepotsCount(): Promise<number> {
+    return axiosInstance.get('/depots/count')
+      .then(response => response.data.count)
+      .catch(error => {
+        console.error('Erreur lors de la récupération du nombre de dépôts:', error);
+        return 0; // Valeur par défaut en cas d’erreur
+      });
+  }
   
   }
   

@@ -12,7 +12,7 @@ router.get('/alerts',verifyToken,verifyRole(['administrateur']), alertController
 //pour les dopos
 
 router.post('/depots', verifyToken,verifyRole(['administrateur']), depotController.createDepot);
-router.get('/depots',  depotController.getDepots);
+router.get('/depots',  verifyToken, depotController.getDepots);
 
 // Route pour traiter une alerte (mettre à jour le statut et envoyer un email au videur)
 router.put('/alerts/:id',verifyToken,verifyRole(['administrateur']), alertController.updateAlert);
@@ -24,4 +24,7 @@ router.get('/confirm-vidange/:id', alertController.confirmVidange);
 
 //pour afficher le nombre de depos
 router.get('/depots/count', verifyToken, depotController.getDepotsCount);
+// Obtenir les gardiens disponibles pour une zone (non assignés à un dépôt)
+router.get('/gardiens-disponibles',verifyToken,verifyRole(['administrateur']), depotController.getAvailableGardiensByAdresse);
+
 module.exports = router;

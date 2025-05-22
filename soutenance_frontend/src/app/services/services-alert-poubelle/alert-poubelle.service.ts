@@ -142,6 +142,8 @@ getDepotsCount(): Observable<number> {
 }
 
 
+
+
  // Observable pour l'état de la modale
  getAlertModalState() {
   return this.alertModalSubject.asObservable();
@@ -161,4 +163,19 @@ showModal(message: string, niveau?: number) {
 closeModal() {
   this.alertModalSubject.next({ show: false, message: '' });
 }
+
+// ✅ Nouveau : récupérer les gardiens disponibles pour une zone
+getAvailableGardiensByZone(adresse: string): Observable<any[]> {
+  return new Observable((observer) => {
+    axiosInstance.get('/gardiens-disponibles', { params: { adresse } })
+      .then((response) => {
+        observer.next(response.data);
+        observer.complete();
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des gardiens disponibles :', error);
+        observer.error(error);
+      });
+  });
+ }
 }
