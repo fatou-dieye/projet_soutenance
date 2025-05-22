@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
@@ -6,7 +6,9 @@ import { GestionpersonnelService, User } from '../services/gestionpersonnel-serv
 
 import { AuthService } from '../services/serviceslogin/auth.service';
 import { ChangementMotsPassComponent } from '../changement-mots-pass/changement-mots-pass.component';
-import { CommonModule } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-sidebarre',
@@ -29,10 +31,12 @@ export class SidebarreComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router ,
     private GestionpersonnelService: GestionpersonnelService, 
+     @Inject(PLATFORM_ID) private platformId: Object 
   ) {}
 
   ngOnInit(): void {
     // Récupérer les informations de l'utilisateur depuis le localStorage
+     if (isPlatformBrowser(this.platformId)) {
     const user = localStorage.getItem('user');
     if (user) {
       const userData = JSON.parse(user);
@@ -42,6 +46,7 @@ export class SidebarreComponent implements OnInit {
       this.isAdmin = userData.role === 'administrateur';
       this.userRole = this.isAdmin ? 'Administrateur' : 'Utilisateur';
       this.currentUser = userData;
+    }
     }
 
    
@@ -75,40 +80,41 @@ export class SidebarreComponent implements OnInit {
       this.router.navigate(['/dashboardutilisateur']);
     }
   }
-  loadUsers(): void {
-    this.GestionpersonnelService.getAllUsers().subscribe({
-      next: (data) => {
-       
-        this.users = data.filter(user => 
-          ['administrateur', 'utilisateur'].includes(user.role)
-        );
-        this.filteredUsers = [...this.users];
-        
-      },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-        
-        // If unauthorized, token might be expired or invalid
-        if (error.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          this.router.navigate(['/login']);
-        }
+ loadUsers(): void {
+  this.GestionpersonnelService.getAllUsers().subscribe({
+    next: (data) => {
+      this.users = data.filter(user =>
+        ['administrateur', 'utilisateur'].includes(user.role)
+      );
+      this.filteredUsers = [...this.users];
+    },
+    error: (error) => {
+      console.error('Error fetching users:', error);
+      
+      if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.router.navigate(['/login']);
       }
-    });
+    }
+  });
+}
+
+ updateActiveLink(): void {
+  if (!isPlatformBrowser(this.platformId)) {
+    return;
   }
 
-  updateActiveLink(): void {
-    const currentRoute = this.router.url.split('?')[0]; 
+  const currentRoute = this.router.url.split('?')[0];
+  const links = document.querySelectorAll('.nav-link');
 
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === currentRoute) {
-        link.classList.add('active');
-      }
-    });
-  }
+  links.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === currentRoute) {
+      link.classList.add('active');
+    }
+  });
+}
 
 
   getInitials(): string {

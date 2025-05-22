@@ -55,7 +55,7 @@ export class DashboardutilisateurComponent implements OnInit {
  
   nombreUtilisateurs: number = 0;
 
-  depotCount: number = 0;
+  nombreDepots: number = 0;
   depots: Depot[] = [];
   map: any;
   userLocation: { latitude: number, longitude: number } | null = null;
@@ -100,6 +100,9 @@ export class DashboardutilisateurComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+
+    this.chargerNombreDepots();
+
 
     this.loadDepots();
     this.utilisateurService.getTotalUsers()
@@ -180,17 +183,16 @@ export class DashboardutilisateurComponent implements OnInit {
     }
   
   //recupere le nombre de depos
-    loadDepotCount(): void {
-      this.alertService.getDepotsCount().subscribe({
-        next: (count) => {
-          this.depotCount = count;
-        },
-        error: (error) => {
-          console.error('Erreur:', error);
-          this.depotCount = 0; // Valeur par défaut en cas d'erreur
-        }
-      });
-    }
+  chargerNombreDepots(): void {
+    this.alertService.getDepotsCount().subscribe({
+      next: (count: number) => {
+        this.nombreDepots = count;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement du nombre de dépôts', err);
+      }
+    });
+  }
   
     addUserMarker(L: any): void {
       if (this.userLocation) {

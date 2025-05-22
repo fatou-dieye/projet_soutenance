@@ -131,4 +131,19 @@ getDepotsCount(): Observable<number> {
       });
   });
 }
+
+// ✅ Nouveau : récupérer les gardiens disponibles pour une zone
+getAvailableGardiensByZone(adresse: string): Observable<any[]> {
+  return new Observable((observer) => {
+    axiosInstance.get(`/gardiens-disponibles`, { params: { adresse } })
+      .then((response) => {
+        observer.next(response.data);
+        observer.complete();
+      }) 
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des gardiens disponibles :', error);
+        observer.error(error);
+      });
+  });
+}
 }

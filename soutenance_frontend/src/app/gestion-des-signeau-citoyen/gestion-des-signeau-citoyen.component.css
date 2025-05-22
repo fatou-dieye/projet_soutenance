@@ -40,22 +40,22 @@ body {
 }
 
 .signal-container {
-  width: 90%;
+  width: 80%;
   max-width: 1000px;
   margin: auto;
   padding: 20px;
   border-radius: 50px;
   box-shadow: 0 4px 8px rgba(187, 247, 208, 0.7);
   background-color: white;
-  height: 300px; /* Fixed height */
+  height: 400px; /* Fixed height */
   position: relative;
 }
 
 .step-content {
   position: relative;
-  height: 220px; /* Fixed height */
+  height: 310px; /* Fixed height */
   padding: 13px;
-  width: 80%;
+  width: 90%;
   border-radius: 30px;
   margin-left: 60px;
 }
@@ -194,13 +194,14 @@ button.next-step {
 
 .share-location {
   display: block;
-  margin: 20px auto;
+  margin:  auto;
   color: #ffffff;
   background-color: #00A551;
   font-weight: 600;
-  font-size: 1.5rem;
-  width: 150px;
-  margin-top: 40px;
+  font-size: 1.3rem;
+  width: 120px;
+  margin-top: 10px;
+  padding: 5px;
 }
 
 .message.success {
@@ -299,8 +300,9 @@ button.next-step {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  margin-top: 20px;
+  padding: 18px;
+  margin-top: 130px;
+  margin-left: 40px;
 }
 
 .depots-grid {

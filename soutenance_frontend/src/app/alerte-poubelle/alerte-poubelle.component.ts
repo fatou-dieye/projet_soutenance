@@ -45,9 +45,12 @@ dakarLimits = {
     lieu: '',
     latitude: '',
     longitude: '',
-    gardien_id: ''
+    gardien_id: '',
+    zone: ''
   };
-  
+  selectedZone: string = '';
+  filteredGardiens: any[] = [];
+
   // Indicateur si le formulaire est valide
   isFormValid = false;
 
@@ -163,7 +166,8 @@ dakarLimits = {
       lieu: '',
       latitude: '',
       longitude: '',
-      gardien_id: ''
+      gardien_id: '',
+      zone: ''
     };
     
     // Validation du lieu
@@ -216,19 +220,56 @@ dakarLimits = {
     this.showSuccessModal = false;
   }
 
+
+
+
   submitNewDepot() {
-    if (this.validateCoordinates()) {
-      this.alertService.addDepot(this.newDepot).then(response => {
+    if (!this.selectedZone) {
+      this.validationErrors.zone = 'Veuillez sélectionner une zone.';
+      return;
+    }
+  
+    if (this.validateCoordinates() && this.newDepot.gardien_id) {
+      const depotData = {
+        lieu: this.newDepot.lieu,
+        latitude: this.newDepot.latitude,
+        longitude: this.newDepot.longitude,
+        gardien_id: this.newDepot.gardien_id
+      };
+  
+      this.alertService.addDepot(depotData).then(response => {
         console.log('Dépôt ajouté avec succès', response);
-        this.openSuccessModal('Dépôt ajouté avec succès succès !');
+        this.openSuccessModal('Dépôt ajouté avec succès !');
         this.closeAddAlertModal();
+  
+        // Réinitialiser les champs
         this.newDepot = { lieu: '', latitude: 0, longitude: 0, gardien_id: '' };
-        this.validationErrors = { lieu: '', latitude: '', longitude: '', gardien_id: '' };
+        this.selectedZone = '';
+        this.filteredGardiens = [];
+        this.validationErrors = { lieu: '', latitude: '', longitude: '', gardien_id: '', zone: '' };
       }).catch(error => {
         console.error('Erreur lors de l\'ajout du dépôt', error);
       });
     }
   }
+
+  onZoneChange() {
+    if (this.selectedZone) {
+      this.alertService.getAvailableGardiensByZone(this.selectedZone).subscribe(
+        (gardiens) => {
+          this.filteredGardiens = gardiens;
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des gardiens disponibles :', error);
+          this.filteredGardiens = [];
+        }
+      );
+    } else {
+      this.filteredGardiens = [];
+    }
+  }
+  
+  
   // Ouvrir le modal pour traiter une alerte
   openTraiterAlertModal(alert: any) {
     this.selectedAlert = alert;

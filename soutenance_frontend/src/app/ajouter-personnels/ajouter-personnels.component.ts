@@ -1,5 +1,4 @@
 
-
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
@@ -104,7 +103,7 @@ export class AjouterPersonnelsComponent {
       photo: this.photo,
       mot_passe: this.password
     };
-  
+    
     this.GestionpersonnelService.addUser(newUser).subscribe(
       (response) => {
         console.log('Utilisateur créé avec succès', response);
@@ -114,29 +113,35 @@ export class AjouterPersonnelsComponent {
       (error) => {
         console.error('Erreur lors de la création de l\'utilisateur', error);
         
-        // Check for a specific server-side error
+        // Extraire le message d'erreur de la réponse
         let errorMessage = '';
-        if (error.status === 500) {
-          errorMessage = 'Erreur serveur : Impossible de traiter la demande. Veuillez réessayer plus tard.';
-        } else if (error.error && error.error.message) {
+        if (error.error && error.error.message) {
+          // Si l'erreur vient du serveur avec une structure standard
           errorMessage = error.error.message;
         } else if (typeof error === 'string') {
+          // Si l'erreur est déjà une chaîne
           errorMessage = error;
         } else if (error.message) {
+          // Si l'erreur est un objet Error standard
           errorMessage = error.message;
         } else {
+          // Fallback
           errorMessage = 'Une erreur est survenue';
         }
         
-        // Log the extracted error message
         console.log('Message d\'erreur extrait:', errorMessage);
         
-        // Display the error message to the user
-        alert('Une erreur est survenue lors de l\'inscription: ' + errorMessage);
+        // Affecter les messages d'erreur en fonction du contenu
+        if (errorMessage.includes('email')) {
+          this.emailErrorMessage = errorMessage;
+        } else if (errorMessage.includes('téléphone')) {
+          this.telephoneErrorMessage = errorMessage;
+        } else {
+          alert('Une erreur est survenue lors de l\'inscription: ' + errorMessage);
+        }
       }
     );
   }
-  
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
