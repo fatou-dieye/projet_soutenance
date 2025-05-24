@@ -1,6 +1,10 @@
-/* navbar.component.css */
-/* Navbar Styles */
-/* navbar.component.css */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 /* Navbar Styles */
 .navbar {
   display: flex;
@@ -45,6 +49,9 @@
 @media (max-width: 768px) {
   .navbar-brand span {
     font-size: 20px; /* Réduire davantage si nécessaire */
+  }
+   .custom-navbar {
+    margin-left: 90px !important;
   }
 }
 
@@ -174,7 +181,10 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 70px; /* Réduction importante de la largeur */
+  
+   
   }
+
   
   .logo-img {
     width: 50px;

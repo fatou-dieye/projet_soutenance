@@ -21,16 +21,18 @@
           </tr>
         </tbody>
       </table>
+
+                      <!-- Pagination -->
+            <div class="pagination">
+              <button (click)="changePage(page - 1)" [disabled]="page === 1">Précédent</button>
+              
+              <!-- Affichage de la page actuelle -->
+              <span>{{ page }}</span>
+
+              <button (click)="changePage(page + 1)" [disabled]="page * size >= totalItems">Suivant</button>
+            </div>
     </div>
   </div>
 </div>
 
-<!-- Pagination -->
-<div class="pagination">
-  <button (click)="changePage(page - 1)" [disabled]="page === 1">Précédent</button>
-  
-  <!-- Affichage de la page actuelle -->
-  <span>{{ page }}</span>
 
-  <button (click)="changePage(page + 1)" [disabled]="page * size >= totalItems">Suivant</button>
-</div>

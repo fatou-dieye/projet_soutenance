@@ -2,20 +2,23 @@ body {
     background-color: #FAFBFF;
 }
 
+
 .utilisateur-main {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-left: 240px; /* Space for sidebar */
+    margin-left: 250px; /* Space for sidebar */
     padding: 20px;
     overflow-y: auto;
     
 }
 
+
+
 @media (max-width: 768px) {
-    .admin-main{
+    .utilisateur-main{
       
-        margin-left: 80px; /* Space for sidebar */
+        margin-left: 60px; /* Space for sidebar */
       }}
 
       

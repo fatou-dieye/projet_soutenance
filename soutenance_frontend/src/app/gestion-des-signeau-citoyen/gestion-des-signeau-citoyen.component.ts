@@ -2,6 +2,8 @@ import { Component, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { UtilisateurService } from '../services/utilisateur.service';
 import { FormsModule } from '@angular/forms';
+import L from 'leaflet';
+
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../../safe-url.pipe';
 interface Alerte {

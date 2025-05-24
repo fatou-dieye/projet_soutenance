@@ -1,7 +1,4 @@
-.corps{
-  background-color: #FAFBFF
 
-}
 .utilisateur-main {
   display: flex;
   flex-direction: column;
@@ -9,8 +6,7 @@
  
   margin-left: 270px; /* Space for sidebar */
   padding: 12px;
-  overflow-y: auto;
-
+ 
 }
 
 
@@ -25,24 +21,25 @@
 
 /* Stats row */
 .stats-row {
-display: grid;
-grid-template-columns: repeat(3, 1fr); /* Ajusté pour 2 colonnes */
-gap: 60px; /* Augmente l'espace entre les cartes */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* Ajuste automatiquement le nombre de colonnes */
+  gap: 60px; /* Augmente l'espace entre les cartes */
+  justify-content: center; /* Centre les cartes */
 }
 
 .stat-card {
-background-color: white;
-border-radius: 10px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-padding: 16px; /* Augmente le padding pour plus d'espace interne */
-display: flex;
-align-items: center;
-gap: 30px; /* Augmente l'espace entre l'icône et le texte */
-height: 170px; /* Augmente la hauteur de la carte */
-margin-top: 30px;
-width: 360px; /* Augmente la hauteur de la carte */
-
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 16px; /* Augmente le padding pour plus d'espace interne */
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Augmente l'espace entre l'icône et le texte */
+  height: 170px; /* Augmente la hauteur de la carte */
+  width: 100%; /* Largeur complète */
+  max-width: 360px; /* Largeur maximale */
 }
+
 
 .stat-icon {
 width: 90px; /* Augmente la taille du conteneur de l'icône */
@@ -134,13 +131,17 @@ margin: 0;
 
 
 @media (max-width: 768px) {
-  .localisation-container {
+  .localisation-container, .stats-row {
       grid-template-columns: 1fr; /* Passe en une seule colonne */
   }
   
   #map-container {
       height: 300px; /* Augmente la hauteur pour mobile */
   }
+   .utilisateur-main {
+    margin-left: 80px; /* Supprime le décalage à gauche sur petit écran */
+  }
+  
 }
 
 

@@ -128,7 +128,7 @@ input {
 
 .toggle-password {
     position: absolute;
-    right: 43px;
+    right: 47px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
