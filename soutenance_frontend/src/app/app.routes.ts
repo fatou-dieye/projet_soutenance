@@ -17,27 +17,39 @@ import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.compone
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { GestionPersonelsComponent } from './gestion-personels/gestion-personels.component';
 import { AttendanceListComponent } from './attendance-list/attendance-list.component';
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
+import { PrivateLayoutComponent } from './layouts/private-layout/private-layout.component';
+import { AuthGuard } from './guards/auth.guard'; // À créer
 
 export const routes: Routes = [
-    { path: 'inscriptionutilisateur', component: InscriptionutilisateurComponent },
-    { path: 'forgetpassword', component: ForgetpasswordComponent },
-    { path: 'reset-password', component: ResetPasswordComponent },
-
-    { path: 'login', component: LoginComponent },
-    { path: 'dasbordadmin', component: DasbordadminComponent },
-
-    { path: 'alerte-poubelle', component: AlertePoubelleComponent  },
-    { path: 'gestion-des-signaux', component: GestionDesSignauxComponent },
-    { path: 'historique-admin', component: HistoriqueAdminComponent },
-    { path: 'dashboardutilisateur', component: DashboardutilisateurComponent },
-    { path: 'historiqueutilisateur', component: HistoriqueutilisateurComponent },
-    { path: 'pointage', component: PointageComponent },
-   
-    { path: 'gestion-personels', component: GestionPersonelsComponent },
-    { path: 'gestion-des-signeau-citoyen', component:  GestionDesSigneauCitoyenComponent },
-    { path: 'attendance-list', component: AttendanceListComponent },
-    { path: '', redirectTo: '/login', pathMatch: 'full' } 
-
-
-
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: 'login', component: LoginComponent },
+      { path: 'inscriptionutilisateur', component: InscriptionutilisateurComponent },
+      { path: 'forgetpassword', component: ForgetpasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent }
+    ]
+  },
+  {
+    path: '',
+    component: PrivateLayoutComponent,
+    canActivateChild: [AuthGuard],
+    children: [
+      { path: 'dashboardutilisateur', component: DashboardutilisateurComponent },
+      { path: 'dasbordadmin', component: DasbordadminComponent },
+      { path: 'gestion-des-signeau-citoyen', component: GestionDesSigneauCitoyenComponent },
+      { path: 'historiqueutilisateur', component: HistoriqueutilisateurComponent },
+      { path: 'gestion-des-signaux', component: GestionDesSignauxComponent },
+      { path: 'historique-admin', component: HistoriqueAdminComponent },
+      { path: 'pointage', component: PointageComponent },
+      { path: 'gestion-personels', component: GestionPersonelsComponent },
+      { path: 'attendance-list', component: AttendanceListComponent },
+      { path: 'alerte-poubelle', component: AlertePoubelleComponent }
+    ]
+  },
+  {
+     path: '**', redirectTo: 'login' }
 ];

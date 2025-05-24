@@ -20,6 +20,7 @@ export class AppComponent {
 
   constructor(private router: Router) {}
 
+  
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }

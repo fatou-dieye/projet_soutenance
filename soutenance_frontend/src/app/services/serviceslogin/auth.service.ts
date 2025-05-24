@@ -22,8 +22,12 @@ export class AuthService {
         // Rediriger en fonction du rôle
         if (user.role === 'administrateur') {
           this.router.navigate(['/dasbordadmin']);
-        } else {
+        } else if(user.role === 'utilisateur') {
           this.router.navigate(['/dashboardutilisateur']);
+        }
+        else{
+          this.router.navigate(['/login']);
+
         }
       })
       .catch(error => {

@@ -5,7 +5,9 @@ import { UtilisateurService } from '../services/utilisateur.service';
 import { CommonModule } from '@angular/common';
 import { DasbordadminService } from '../services/servicedasbordadmin/dasbordadmin.service';
 import { AlertPoubelleService } from '../services/services-alert-poubelle/alert-poubelle.service';
+import { HttpClient } from '@angular/common/http';
 declare var L: any; // Ajoutez cette déclaration globale
+
 
 
 interface Signal {
@@ -55,12 +57,13 @@ export class DashboardutilisateurComponent implements OnInit {
  
   nombreUtilisateurs: number = 0;
 
-  nombreDepots: number = 0;
+  depotCount: number = 0;
   depots: Depot[] = [];
   map: any;
   userLocation: { latitude: number, longitude: number } | null = null;
   closestDepot: Depot | null = null;
-  
+  nombreDepots: number = 0;
+
 
   
   signals: Alerte[] = [
@@ -96,13 +99,12 @@ export class DashboardutilisateurComponent implements OnInit {
     private utilisateurService: UtilisateurService,
     private depotService: DasbordadminService,
     private alertService: AlertPoubelleService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   async ngOnInit() {
-
     this.chargerNombreDepots();
-
 
     this.loadDepots();
     this.utilisateurService.getTotalUsers()
@@ -117,14 +119,21 @@ export class DashboardutilisateurComponent implements OnInit {
     
 
       if (isPlatformBrowser(this.platformId)) {
-        try {
-          const L = await import('leaflet');
+         try {
+           const leafletModule = await import('leaflet');
+          (window as any).L = leafletModule;  // 👈 Obligatoire AVANT routing-machine
+
+          // ✅ Maintenant L est défini globalement, routing machine va pouvoir l'étendre
+          await import('leaflet-routing-machine');
+
+          const L = leafletModule;
+          console.log("L.Routing est défini ?", typeof L.Routing !== 'undefined');
+
           const mapContainer = document.getElementById('map-container');
           if (!mapContainer) {
             console.error("Le conteneur de la carte n'a pas été trouvé");
             return;
           }
-  
           this.map = L.map('map-container', {
             center: [14.6928, -17.4467], // Centre de Dakar
             zoom: 13,
@@ -181,9 +190,8 @@ export class DashboardutilisateurComponent implements OnInit {
         }
       });
     }
-  
-  //recupere le nombre de depos
-  chargerNombreDepots(): void {
+   //recupere le nombre de depos
+   chargerNombreDepots(): void {
     this.alertService.getDepotsCount().subscribe({
       next: (count: number) => {
         this.nombreDepots = count;
@@ -193,6 +201,19 @@ export class DashboardutilisateurComponent implements OnInit {
       }
     });
   }
+
+  //recupere le nombre de depos
+    loadDepotCount(): void {
+      this.alertService.getDepotsCount().subscribe({
+        next: (count) => {
+          this.depotCount = count;
+        },
+        error: (error) => {
+          console.error('Erreur:', error);
+          this.depotCount = 0; // Valeur par défaut en cas d'erreur
+        }
+      });
+    }
   
     addUserMarker(L: any): void {
       if (this.userLocation) {
@@ -210,120 +231,119 @@ export class DashboardutilisateurComponent implements OnInit {
       }
     }
   
-    addDepotsToMap(L: any): void {
-      const depotIcon = L.icon({
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',// Icône de dépôt avec une couleur plus pâle
-        iconSize: [14, 22], // Taille plus petite
-        iconAnchor: [12, 42], // Ancrage centré et en bas
-        popupAnchor: [1, -34],
-      });
+  addDepotsToMap(L: any): void {
+  const depotIcon = L.icon({
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    iconSize: [14, 22], // Taille plus petite
+    iconAnchor: [12, 42], // Ancrage centré et en bas
+    popupAnchor: [1, -34],
+  });
+
   // Appliquer un filtre CSS pour colorier l'icône des dépôts en vert
   const style = document.createElement('style');
   style.innerHTML = `
     .leaflet-marker-icon.depot-icon {
-      filter: hue-rotate(90deg) saturate(2) brightness(1.2); /* Applique une couleur verte à l'icône */
+      filter: hue-rotate(90deg) saturate(2) brightness(1.2);
     }
   `;
   document.head.appendChild(style);
-      
-      this.depots.forEach(depot => {
-        const marker = L.marker([depot.coordonnees.latitude, depot.coordonnees.longitude], { icon: depotIcon })
-          .addTo(this.map)
-          .bindPopup(`Dépôt: ${depot.lieu}`);
-  
-        marker.on('click', () => this.findRouteToDepot(depot, L));
-      });
-  
-      this.findClosestDepot(L);
-    }
-  
-    findClosestDepot(L: any): void {
-      if (this.userLocation && this.depots.length > 0) {
-        this.closestDepot = this.depots.reduce((closest, depot) => {
-          const distance = this.calculateDistance(
-            this.userLocation!.latitude, this.userLocation!.longitude,
-            depot.coordonnees.latitude, depot.coordonnees.longitude
-          );
-          return distance < this.calculateDistance(
-            this.userLocation!.latitude, this.userLocation!.longitude,
-            closest.coordonnees.latitude, closest.coordonnees.longitude
-          ) ? depot : closest;
-        });
-  
-        console.log('Dépôt le plus proche:', this.closestDepot);
-      }
-    }
-  
-    calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-      const R = 6371; // Rayon de la Terre en kilomètres
-      const dLat = this.deg2rad(lat2 - lat1);
-      const dLon = this.deg2rad(lon2 - lon1);
-      const a = 
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
-        Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-      return R * c;
-    }
-  
-    deg2rad(deg: number): number {
-      return deg * (Math.PI/180);
-    }
-  
-    //route pour trouver un depos 
-    findRouteToDepot(depot: Depot, L: any = window.L): void {
-      // Vérifications de sécurité
-      if (!L || !L.Routing) {
-        console.error('Leaflet ou Routing Machine non chargé');
-        return;
-      }
-  
-      // Vérifier la présence de la position utilisateur
+
+  this.depots.forEach(depot => {
+    const marker = L.marker([depot.coordonnees.latitude, depot.coordonnees.longitude], { icon: depotIcon })
+      .addTo(this.map)
+      .bindPopup(`Dépôt: ${depot.lieu} <br><i>Chargement distance et temps...</i>`);
+
+    marker.on('click', () => {
       if (!this.userLocation) {
-        console.error('Position utilisateur non disponible');
+        marker.getPopup()?.setContent(`Dépôt: ${depot.lieu} <br><b>Position utilisateur non disponible</b>`);
+        marker.openPopup();
         return;
       }
-  
-      // Supprimer les anciens calques de routage
-      this.map.eachLayer((layer: any) => {
-        if (layer instanceof L.Routing.Control) {
-          this.map.removeControl(layer);
-        }
-      });
-  
-      // Créer le contrôle de routage
-      const routingControl = L.Routing.control({
-        waypoints: [
-          L.latLng(this.userLocation.latitude, this.userLocation.longitude),
-          L.latLng(depot.coordonnees.latitude, depot.coordonnees.longitude)
-        ],
-        routeWhileDragging: false,
-        addWaypoints: false,
-        fitSelectedRoutes: true,
-        lineOptions: {
-          styles: [{ 
-            color: 'blue', 
-            opacity: 0.8, 
-            weight: 5 
-          }]
-        }
-      }).addTo(this.map);
-  
-      // Gérer les événements de routage
-      routingControl.on('routesfound', (e: any) => {
-        const routes = e.routes;
-        if (routes && routes.length > 0) {
-          const bounds = L.latLngBounds(routes[0].coordinates);
-          this.map.fitBounds(bounds);
-        }
-      });
-  
-      routingControl.on('routingerror', (error: Error) => {
-        console.error('Erreur de routage:', error.message);
-      });
+
+      // Ouvre le popup avec message de chargement immédiatement
+      marker.getPopup()?.setContent(`Dépôt: ${depot.lieu}<br><i>Chargement distance et temps...</i>`);
+      marker.openPopup();
+
+      // Lance le calcul et mise à jour du popup
+      this.findRouteAndDisplayInfo(depot, marker, L);
+    });
+  });
+}
+
+
+    findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
+  if (!L.Routing) {
+    console.error('Leaflet Routing Machine non chargé.');
+    marker.getPopup()?.setContent(`
+      <b>Dépôt: ${depot.lieu}</b><br>
+      <span style="color:red;">Service de routage non disponible</span>
+    `);
+    marker.openPopup();
+    return;
+  }
+
+  if (!this.userLocation) {
+    console.error('Position utilisateur non disponible');
+    return;
+  }
+
+  // Supprime les anciens contrôles de routing
+  this.map.eachLayer((layer: any) => {
+    if (layer._container && layer._container.classList.contains('leaflet-routing-container')) {
+      this.map.removeControl(layer);
     }
+  });
+
+  const routingControl = L.Routing.control({
+    waypoints: [
+      L.latLng(this.userLocation.latitude, this.userLocation.longitude),
+      L.latLng(depot.coordonnees.latitude, depot.coordonnees.longitude)
+    ],
+    router: new L.Routing.OSRMv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1'
+    }),
+    createMarker: () => null,
+    addWaypoints: false,
+    routeWhileDragging: false,
+    show: false,
+    fitSelectedRoutes: false
+  }).addTo(this.map);
+
+  routingControl.on('routesfound', (e: any) => {
+    const route = e.routes[0];
+    const distanceKm = (route.summary.totalDistance / 1000).toFixed(2);
+    const durationMin = Math.round(route.summary.totalTime / 60);
+
+    marker.getPopup()?.setContent(`
+      <b>Dépôt: ${depot.lieu}</b><br>
+      Distance: ${distanceKm} km<br>
+      Durée estimée: ${durationMin} min
+    `);
+    marker.openPopup();
+
+    this.map.fitBounds(L.latLngBounds(route.coordinates));
+
+    // Supprimer le tracé après affichage
+    this.map.removeControl(routingControl);
+  });
+
+  routingControl.on('routingerror', (error: any) => {
+    console.error('Erreur de routage :', error);
+    marker.getPopup()?.setContent(`
+      <b>Dépôt: ${depot.lieu}</b><br>
+      <span style="color:red;">Erreur de calcul du trajet</span>
+    `);
+    marker.openPopup();
+
+    this.map.removeControl(routingControl);
+  });
+}
+
+
+  
+}
+      
 
  
   
   
-}

@@ -47,17 +47,17 @@ body {
   border-radius: 50px;
   box-shadow: 0 4px 8px rgba(187, 247, 208, 0.7);
   background-color: white;
-  height: 300px; /* Fixed height */
+  height: 350px; /* Fixed height */
   position: relative;
 }
 
 .step-content {
   position: relative;
-  height: 220px; /* Fixed height */
+  height: 285px; /* Fixed height */
   padding: 13px;
-  width: 80%;
+  width: 90%;
   border-radius: 30px;
-  margin-left: 60px;
+  margin-left: 50px;
 }
 
 .step-header {
@@ -159,16 +159,21 @@ button:hover {
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
+
 }
 
 button.prev-step {
   color: red;
   margin-right: auto;
+  margin-top: -20px;
+
 }
 
 button.next-step {
   color: #00A551;
   cursor: pointer;
+  margin-top: -20px;
+
 }
 
 .step-indicator {
@@ -190,16 +195,18 @@ button.next-step {
 
 .finish-step {
   display: block;
+  margin-top: -20px;
+
 }
 
 .share-location {
   display: block;
-  margin: 20px auto;
+  margin: 18px auto;
   color: #ffffff;
   background-color: #00A551;
   font-weight: 600;
-  font-size: 1.5rem;
-  width: 150px;
+  font-size: 1rem;
+  width: 100px;
   margin-top: 40px;
 }
 
@@ -300,13 +307,13 @@ button.next-step {
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin-top: 20px;
+  margin-top: 65px;
 }
 
 .depots-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 46px;
+  gap: 112px;
 }
 
 .depot-item {
@@ -515,3 +522,5 @@ button.next-step {
 .photo-container:hover {
   transform: scale(1.05);
 }
+/*responsibiter
+/////////////////////////////////////////////*/
