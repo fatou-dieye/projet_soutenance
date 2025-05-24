@@ -1,19 +1,15 @@
-.corps{
-  background-color: #FAFBFF
-
+.corps {
+  background-color: #FAFBFF;
 }
+
 .utilisateur-main {
   display: flex;
   flex-direction: column;
   height: 100%;
- 
   margin-left: 270px; /* Space for sidebar */
   padding: 12px;
   overflow-y: auto;
-
 }
-
-
 
 /* Content container */
 .content-container {
@@ -22,74 +18,72 @@
   gap: 40px; /* Augmente l'espace entre les blocs */
 }
 
-
 /* Stats row */
 .stats-row {
-display: grid;
-grid-template-columns: repeat(3, 1fr); /* Ajusté pour 2 colonnes */
-gap: 60px; /* Augmente l'espace entre les cartes */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* Ajuste automatiquement le nombre de colonnes */
+  gap: 60px; /* Augmente l'espace entre les cartes */
+  justify-content: center; /* Centre les cartes */
 }
 
 .stat-card {
-background-color: white;
-border-radius: 10px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-padding: 16px; /* Augmente le padding pour plus d'espace interne */
-display: flex;
-align-items: center;
-gap: 30px; /* Augmente l'espace entre l'icône et le texte */
-height: 170px; /* Augmente la hauteur de la carte */
-margin-top: 30px;
-width: 360px; /* Augmente la hauteur de la carte */
-
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 16px; /* Augmente le padding pour plus d'espace interne */
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Augmente l'espace entre l'icône et le texte */
+  height: 170px; /* Augmente la hauteur de la carte */
+  width: 100%; /* Largeur complète */
+  max-width: 360px; /* Largeur maximale */
 }
 
 .stat-icon {
-width: 90px; /* Augmente la taille du conteneur de l'icône */
-height: 90px; /* Augmente la taille du conteneur de l'icône */
-display: flex;
-justify-content: center;
-align-items: center;
-border-radius: 50%;
-font-size: 40px; /* Augmente la taille de l'icône */
+  width: 90px; /* Augmente la taille du conteneur de l'icône */
+  height: 90px; /* Augmente la taille du conteneur de l'icône */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 40px; /* Augmente la taille de l'icône */
 }
 
 .stat-icon.green {
-background-color: rgba(0, 168, 107, 0.1);
-color: #00A86B;
+  background-color: rgba(0, 168, 107, 0.1);
+  color: #00A86B;
 }
 
 .stat-icon.blue {
-background-color: rgba(0, 123, 255, 0.1);
-color: #007BFF;
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #007BFF;
 }
 
 .stat-info {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-number {
-font-size: 42px; /* Augmente la taille du nombre */
-font-weight: 600;
-margin: 0;
-color: #333;
+  font-size: 42px; /* Augmente la taille du nombre */
+  font-weight: 600;
+  margin: 0;
+  color: #333;
 }
 
 .stat-label {
-font-size: 25px; /* Augmente la taille du label */
-color: black;
-margin: 0;
+  font-size: 25px; /* Augmente la taille du label */
+  color: black;
+  margin: 0;
 }
 
-
 /* Charts container */
-
 .chart-box {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
+  width: 100%;
 }
 
 .title {
@@ -122,25 +116,24 @@ margin: 0;
   margin-top: 100px;
   overflow: hidden; /* Assure que les éléments restent dans leur place */
   min-height: 500px; /* Augmente la hauteur totale */
-
 }
 
-
-
-
-
-
-
-
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .localisation-container {
-      grid-template-columns: 1fr; /* Passe en une seule colonne */
+  .stats-row {
+    grid-template-columns: 1fr; /* Passe en une seule colonne */
   }
-  
+
+  .stat-card {
+    width: 100%; /* Largeur complète */
+    max-width: 100%; /* Largeur maximale */
+  }
+
   #map-container {
-      height: 300px; /* Augmente la hauteur pour mobile */
+    height: 300px; /* Augmente la hauteur pour mobile */
+  }
+
+  .utilisateur-main {
+    margin-left: 0; /* Supprime la marge pour les petits écrans */
   }
 }
-
-

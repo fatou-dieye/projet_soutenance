@@ -2,159 +2,51 @@
 /* Navbar Styles */
 .navbar {
   display: flex;
-  justify-content: center; /* Centrage horizontal de la navbar */
-  align-items: center; /* Centrage vertical de la navbar */
-  background-color: white;
-
-
-  box-shadow: 0 4px 6px rgba(0.1, 0.1, 0.1, 0.1);
-  border-radius: 15px;
-  width: 80%;
-  margin-left: 300px;
-  height: 130px;
-  
- 
-}
-.profile-img-placeholder{
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #00A551;
-  background-color: #00A551;
-  padding-left: 16px;
-  padding-top: 17px;
-  font-size: 20px;
-}
-/* Logo Section */
-.navbar-logo {
-  display: flex;
-  justify-content: center; /* Centrer le texte */
-  align-items: center;
-  flex-grow: 1;
-}
-
-.navbar-logo span {
-  font-size: 36px;
-  font-weight: bold;
-  color: #00A551; /* Vert */
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),  /* Ombre noire avec flou léger */
-    0px 0px 8px rgba(255, 255, 255, 1);
-  opacity: 80%;
-}
-
-/* Profile Section */
-.navbar-profile {
-  display: flex;
-  flex-direction: column; /* Mise en colonne pour l'image, nom et rôle */
-  align-items: center;
-  gap: 5px; /* Espacement entre l'image et les infos */
-}
-
-
-/* Modifications pour le bouton triangle */
-.triangle-btn {
-  background-color: transparent; /* Pas de fond */
-  border: none; /* Pas de bordure */
-  font-size: 15px; /* Taille du triangle */
-  color: #00A551; /* Couleur verte pour le triangle */
-  cursor: pointer; /* Curseur pointer pour montrer que c'est cliquable */
-  
-
-}
-
-.profile-img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #00A551; /* Bordure verte autour de l'image */
-}
-
-/* Logo Section */
-.navbar-logo {
-  display: flex;
-  justify-content: center; /* Centrer le texte */
-  align-items: center;
-  flex-grow: 1;
-
-}
-
-.navbar-logo span {
-  font-size: 36px;
-  font-weight: bold;
-  color: #00A551; /* Vert */
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),  /* Ombre noire avec flou léger */
-    0px 0px 8px rgba(255, 255, 255, 1);
-  opacity: 80%;
-
-}
-
-/* Profile Section */
-.navbar-profile {
-  display: flex;
-  flex-direction: column; /* Mise en colonne pour l'image, nom et rôle */
-  align-items: center;
-  gap: 5px; /* Espacement entre l'image et les infos */
-}
-
-
-/* Modifications pour le bouton triangle */
-.triangle-btn {
-  background-color: transparent; /* Pas de fond */
-  border: none; /* Pas de bordure */
-  font-size: 15px; /* Taille du triangle */
-  color: #00A551; /* Couleur verte pour le triangle */
-  cursor: pointer; /* Curseur pointer pour montrer que c'est cliquable */
-  
-
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-}
-
-
-.profile-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.2rem;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 5.3); /* plus grand et plus visible */
+
+
+}
+
+/* Logo Section */
+.navbar-brand span {
+  font-size: 36px;
   font-weight: bold;
-  
+  color: #00A551; /* Vert */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),  /* Ombre noire avec flou léger */
+    0px 0px 8px rgba(255, 255, 255, 1);
+  opacity: 80%;
+}
+
+/* Modifications pour le bouton triangle */
+.triangle-btn {
+  background-color: transparent; /* Pas de fond */
+  border: none; /* Pas de bordure */
+  cursor: pointer; /* Curseur pointer pour montrer que c'est cliquable */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .navbar-brand span {
+    font-size: 28px; /* Réduire la taille du texte si nécessaire */
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-brand span {
+    font-size: 24px; /* Réduire davantage si nécessaire */
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand span {
+    font-size: 20px; /* Réduire davantage si nécessaire */
+  }
 }
 
 
-
-.profile-info {
-  display: flex;
-  flex-direction: column; /* Alignement vertical pour nom et rôle */
-  text-align: center; /* Centrer le texte */
-}
-
-.profile-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-top: 5px; /* Marge au-dessus du nom pour l'espacer de l'image */
-}
-
-.profile-role {
-  font-size: 14px;
-  color: gray;
-  margin-top: 2px; /* Marge au-dessus du rôle pour l'espacer du nom */
-}
 
 /* sidebar.component.css */
 .sidebar {
@@ -214,43 +106,35 @@
 
 
 .logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 15px;
-  text-align: center;
   margin-top: auto;
+  gap: 8px;
 }
 
+.logout-icon {
+  color: red;
+  font-size: 20px;
+}
 
+/* Le bouton garde le style */
 .logout button {
   color: #FF0000;
   font-size: 16px;
-  text-decoration: none;
   font-weight: 600;
   border: none;
-  background-color: #FFFFFF;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
 }
 
-
-.button {
-  color: #FF0000;                
-  font-size: 16px;               
-  font-weight: 600;              
-  background-color: transparent; 
-  border: none;                 
-  padding: 0;                    
-  margin: 0;                     
-  text-align: left;              
-  cursor: pointer;              
-  font-family: inherit;          
-  text-decoration: none;         
+/* Par défaut, texte visible */
+.logout-text {
+  display: inline;
 }
 
-
-
-.logout-icon {
-  color: red; /* Red color for the logout icon */
-  margin-right: 10px;
-
-}
 
 
 /* sidebar.component.css */
@@ -276,6 +160,29 @@
   .navbar {
     margin-left: 200px;
     width: calc(100% - 200px);
+  }
+  .navbar {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+  .navbar-logo {
+    margin-bottom: 10px;
+  }
+
+  .navbar-profile {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .profile-info {
+    text-align: left;
   }
 
   main {
@@ -308,6 +215,49 @@
   .nav-link i {
     font-size: 22px;
   }
+
+
+  .logout-text {
+    display: none;
+  }
+  
+  .logout {
+    justify-content: center;
+  }
+  
+  /* Eventuellement ajuster taille icône */
+  .logout-icon {
+    font-size: 24px;
+  }
+
+
+    .navbar {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  /* Masquer l'avatar uniquement */
+  .profile-img,
+  .profile-img-placeholder {
+    display: none;
+  }
+
+  .navbar-logo span {
+    font-size: 22px;
+  }
+
+  .profile-info {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .profile-name {
+    font-size: 14px;
+  }
+
+  .profile-role {
+    font-size: 12px;
+  }
   
   /* Le contenu s'ajuste en conséquence */
  
@@ -317,4 +267,5 @@
     margin-left: 70px;
     width: calc(100% - 70px);
   }
+  
 }

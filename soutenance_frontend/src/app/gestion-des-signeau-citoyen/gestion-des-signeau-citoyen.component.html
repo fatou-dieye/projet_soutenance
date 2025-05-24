@@ -24,11 +24,12 @@
         </div>
 
         <!-- Étape 2 : Photos -->
+       <!-- Étape 2 : Photos -->
         <div class="step" [class.active]="currentStep === 2">
-          <div class="step-header">
+          <div class="step-header text-center">
             <p class="step-title">Ajouter des photos</p>
           </div>
-          <div class="photo-options">
+          <div class="photo-options d-flex justify-content-center">
             <div class="photo-block">
               <label for="photo-upload" class="add-photo-icon">
                 <i class="fas fa-plus"></i>
@@ -43,13 +44,14 @@
               </label>
             </div>
           </div>
-          <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
-          <div class="photo-preview">
-            <div *ngFor="let photoUrl of photoUrls">
-              <img [src]="photoUrl" alt="Preview" width="130px" />
+          <p class="subtext text-center">Vous pouvez ajouter jusqu'à 4 photos.</p>
+          <div class="photo-preview d-flex flex-wrap justify-content-center">
+            <div *ngFor="let photoUrl of photoUrls" class="m-2">
+              <img [src]="photoUrl" alt="Preview" class="img-thumbnail" style="width: 130px; height: 130px; object-fit: cover;" />
             </div>
           </div>
         </div>
+
 
         <!-- Étape 3 : Description -->
         <div class="step" [class.active]="currentStep === 3">

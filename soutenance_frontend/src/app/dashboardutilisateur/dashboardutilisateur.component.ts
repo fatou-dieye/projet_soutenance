@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 declare var L: any; // Ajoutez cette déclaration globale
 
 
+
 interface Signal {
   nom: string;
   distance: number;
@@ -116,14 +117,21 @@ export class DashboardutilisateurComponent implements OnInit {
     
 
       if (isPlatformBrowser(this.platformId)) {
-        try {
-          const L = await import('leaflet') ;
+         try {
+           const leafletModule = await import('leaflet');
+          (window as any).L = leafletModule;  // 👈 Obligatoire AVANT routing-machine
+
+          // ✅ Maintenant L est défini globalement, routing machine va pouvoir l'étendre
+          await import('leaflet-routing-machine');
+
+          const L = leafletModule;
+          console.log("L.Routing est défini ?", typeof L.Routing !== 'undefined');
+
           const mapContainer = document.getElementById('map-container');
           if (!mapContainer) {
             console.error("Le conteneur de la carte n'a pas été trouvé");
             return;
           }
-  
           this.map = L.map('map-container', {
             center: [14.6928, -17.4467], // Centre de Dakar
             zoom: 13,
@@ -248,29 +256,44 @@ export class DashboardutilisateurComponent implements OnInit {
     });
   });
 }
-findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
-  // Supprime les anciens contrôles de routing
-  this.map.eachLayer((layer: any) => {
-    if (layer instanceof L.Routing.Control) {
-      this.map.removeControl(layer);
-    }
-  });
+
+
+    findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
+  if (!L.Routing) {
+    console.error('Leaflet Routing Machine non chargé.');
+    marker.getPopup()?.setContent(`
+      <b>Dépôt: ${depot.lieu}</b><br>
+      <span style="color:red;">Service de routage non disponible</span>
+    `);
+    marker.openPopup();
+    return;
+  }
 
   if (!this.userLocation) {
     console.error('Position utilisateur non disponible');
     return;
   }
 
+  // Supprime les anciens contrôles de routing
+  this.map.eachLayer((layer: any) => {
+    if (layer._container && layer._container.classList.contains('leaflet-routing-container')) {
+      this.map.removeControl(layer);
+    }
+  });
+
   const routingControl = L.Routing.control({
     waypoints: [
       L.latLng(this.userLocation.latitude, this.userLocation.longitude),
       L.latLng(depot.coordonnees.latitude, depot.coordonnees.longitude)
     ],
+    router: new L.Routing.OSRMv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1'
+    }),
     createMarker: () => null,
     addWaypoints: false,
     routeWhileDragging: false,
     show: false,
-    fitSelectedRoutes: false,
+    fitSelectedRoutes: false
   }).addTo(this.map);
 
   routingControl.on('routesfound', (e: any) => {
@@ -285,22 +308,24 @@ findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
     `);
     marker.openPopup();
 
-    const bounds = L.latLngBounds(route.coordinates);
-    this.map.fitBounds(bounds);
+    this.map.fitBounds(L.latLngBounds(route.coordinates));
 
+    // Supprimer le tracé après affichage
     this.map.removeControl(routingControl);
   });
 
   routingControl.on('routingerror', (error: any) => {
+    console.error('Erreur de routage :', error);
     marker.getPopup()?.setContent(`
       <b>Dépôt: ${depot.lieu}</b><br>
       <span style="color:red;">Erreur de calcul du trajet</span>
     `);
     marker.openPopup();
-    console.error('Erreur de routage:', error);
+
     this.map.removeControl(routingControl);
   });
 }
+
 
   
 }
