@@ -3,8 +3,9 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const Utilisateur = require('../models/Utilisateur');
 
+
 // Fonction pour envoyer un email
-const sendResetEmail = async (email, token) => {
+const sendResetEmail = async (email, utilisateur, token) => {
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,15 +14,17 @@ const sendResetEmail = async (email, token) => {
     }
   });
 
+  const nomComplet = `${utilisateur.prenom} ${utilisateur.nom}`;
   const resetLink = `http://localhost:4200/reset-password?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL_USER_1,
     to: email,
     subject: 'Réinitialisation de votre mot de passe',
     html: `
+      <p>Bonjour <strong>${nomComplet}</strong>,</p>
       <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
       <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
-      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
+      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #00A86B; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
       <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
     `
   };
@@ -38,6 +41,8 @@ const sendResetEmail = async (email, token) => {
 exports.requestResetPassword = async (req, res) => {
   try {
     const { email } = req.body;
+
+    // Rechercher l'utilisateur dans la base de données
     const utilisateur = await Utilisateur.findOne({ email });
 
     if (!utilisateur) {
@@ -62,14 +67,16 @@ exports.requestResetPassword = async (req, res) => {
     console.log(`Token enregistré dans la base de données: ${updatedUtilisateur.resetPasswordToken}`);
     console.log(`Expiration du token enregistré dans la base de données: ${new Date(updatedUtilisateur.resetPasswordExpires).toISOString()}`);
 
-    await sendResetEmail(email, resetToken);
+    // Appel correct à sendResetEmail
+    await sendResetEmail(email, utilisateur, resetToken);
 
-    res.status(200).json({ message: 'Email de réinitialisation vous a ete envoyé' });
+    res.status(200).json({ message: 'Email de réinitialisation vous a été envoyé' });
   } catch (error) {
     console.error(`Erreur lors de la demande de réinitialisation: ${error.message}`);
     res.status(500).json({ message: 'Erreur lors de la demande de réinitialisation', error: error.message });
   }
 };
+
 
 (exports.resetPassword = async (req, res) => {
   try {
