@@ -18,9 +18,7 @@ export class WebSocketService {
 
   constructor() {
     // Connectez-vous au serveur WebSocket
-    this.socket = io('http://localhost:3000/api', {
-
-    //this.socket = io('http://backend:3000', {
+    this.socket = io('http://localhost:3000', {
       transports: ['websocket'], // Utilisation exclusive de WebSocket
     });
 

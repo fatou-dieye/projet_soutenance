@@ -15,87 +15,143 @@ const jwt = require('jsonwebtoken');
 class AlerteController {
 
 
-
-    static async createAlerte(req, res) {
-      try {
-        const { description, adresse, latitude, longitude } = req.body;
-    
-        // Validation des données
-        if (!description || !adresse || !latitude || !longitude) {
-          return res.status(400).json({
-            message: 'Veuillez fournir toutes les informations nécessaires (titre, description, adresse, coordonnées)'
-          });
-        }
-    
-        // Vérifiez que l'utilisateur est défini
-        if (!req.utilisateur || !req.utilisateur.userId) {
-          return res.status(400).json({
-            message: 'Utilisateur non défini ou identifiant utilisateur manquant'
-          });
-        }
-    
-        // Log des paramètres pour vérification
-        console.log('Paramètres envoyés à l\'API:', {
-          q: `${latitude}+${longitude}`,
-          key: 'a8bed81fc2474a77b2f174abf82715c1' // Remplacez par votre clé API OpenCage
-        });
-    
-        // Appel à l'API de géocodage inversé pour obtenir le lieu
-        const response = await axios.get(
-          'https://api.opencagedata.com/geocode/v1/json',
-          {
-            params: {
-              q: `${latitude}+${longitude}`,
-              key: 'a8bed81fc2474a77b2f174abf82715c1' // Remplacez par votre clé API OpenCage
-            }
-          }
-        );
-    
-        // Log de la réponse complète pour diagnostic
-        console.log('Réponse de l\'API:', response.data);
-    
-        // Vérifiez que la réponse contient des résultats
-        if (response.data && response.data.results && response.data.results.length > 0) {
-          const lieu = response.data.results[0].formatted;
-    
-          // Création de l'alerte
-          const nouvelleAlerte = new Alerte({
-            description,
-            adresse: lieu,
-            coordonnees: {
-              latitude: parseFloat(latitude),
-              longitude: parseFloat(longitude)
-            },
-            photos: req.compressedFiles || [],
-            declarant: req.utilisateur.userId
-          });
-    
-          await nouvelleAlerte.save();
-    
-          // Enregistrer l'action dans l'historique
-          await enregistrerAction(req.utilisateur._id, "A signalé un dépôt", req.utilisateur._id, "Signal de l'utilisateur");
-    
-          res.status(201).json({
-            message: 'Alerte créée avec succès',
-            alerte: {
-              id: nouvelleAlerte._id,
-              statut: nouvelleAlerte.statut,
-              adresse: nouvelleAlerte.adresse,
-            }
-          });
-        } else {
-          return res.status(400).json({
-            message: 'Impossible de récupérer le lieu à partir des coordonnées fournies.'
-          });
-        }
-      } catch (error) {
-        console.error('Erreur lors de la création de l\'alerte:', error);
-        res.status(500).json({
-          message: 'Erreur lors de la création de l\'alerte',
-          error: error.message
+  static async createAlerte(req, res) {
+    try {
+      const { description, adresse, latitude, longitude } = req.body;
+  
+      // Validation des données
+      if (!adresse || !latitude || !longitude) {
+        return res.status(400).json({
+          message: 'Veuillez fournir toutes les informations nécessaires (adresse, coordonnées)'
         });
       }
+  
+      // Vérifiez que l'utilisateur est défini
+      if (!req.utilisateur || !req.utilisateur.userId) {
+        return res.status(400).json({
+          message: 'Utilisateur non défini ou identifiant utilisateur manquant'
+        });
+      }
+  
+      // Log des paramètres pour vérification
+      console.log('Paramètres envoyés à l\'API:', {
+        q: `${latitude}+${longitude}`,
+        key: 'a8bed81fc2474a77b2f174abf82715c1' // Remplacez par votre clé API OpenCage
+      });
+  
+      // Appel à l'API de géocodage inversé pour obtenir le lieu
+      const response = await axios.get(
+        'https://api.opencagedata.com/geocode/v1/json',
+        {
+          params: {
+            q: `${latitude}+${longitude}`,
+            key: 'a8bed81fc2474a77b2f174abf82715c1' // Remplacez par votre clé API OpenCage
+          }
+        }
+      );
+  
+      // Log de la réponse complète pour diagnostic
+      console.log('Réponse de l\'API:', response.data);
+  
+      // Vérifiez que la réponse contient des résultats
+      if (response.data && response.data.results && response.data.results.length > 0) {
+        const lieu = response.data.results[0].formatted;
+  
+        // Création de l'alerte
+        const nouvelleAlerte = new Alerte({
+          description: description || '', // Utilisez une chaîne vide si la description n'est pas fournie
+          adresse: lieu,
+          coordonnees: {
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude)
+          },
+          photos: req.compressedFiles || [],
+          declarant: req.utilisateur.userId
+        });
+  
+        await nouvelleAlerte.save();
+  
+        // Enregistrer l'action dans l'historique
+        await enregistrerAction(req.utilisateur._id, "A signalé un dépôt", req.utilisateur._id, "Signal de l'utilisateur");
+  
+        res.status(201).json({
+          message: 'Alerte créée avec succès',
+          alerte: {
+            id: nouvelleAlerte._id,
+            statut: nouvelleAlerte.statut,
+            adresse: nouvelleAlerte.adresse,
+          }
+        });
+      } else {
+        return res.status(400).json({
+          message: 'Impossible de récupérer le lieu à partir des coordonnées fournies.'
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'alerte:', error);
+      res.status(500).json({
+        message: 'Erreur lors de la création de l\'alerte',
+        error: error.message
+      });
     }
+  }
+  
+
+//pour lister les alerte
+static async getAlertes(req, res) {
+try {
+  const { statut, priorite, page = 1, limit = 10, startDate, endDate } = req.query;
+  const filter = {};
+
+  // Appliquer les filtres si fournis
+  if (statut) filter.statut = statut;
+  if (priorite) filter.priorite = priorite;
+
+  // Filtrage basé sur le rôle de l'utilisateur
+  if (req.utilisateur.role === 'utilisateur') {
+    filter.declarant = req.utilisateur.userId;
+  } else if (req.utilisateur.role === 'videur') {
+    filter.chauffeurAssigne = req.utilisateur.userId;
+  }
+
+  // Filtrer par date
+  if (startDate && endDate) {
+    filter.dateCreation = {
+      $gte: new Date(startDate),
+      $lte: new Date(endDate)
+    };
+  }
+
+  // Pagination
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  // Récupération des alertes avec population des références
+  const alertes = await Alerte.find(filter)
+    .sort({ dateCreation: -1 })
+    .skip(skip)
+    .limit(parseInt(limit))
+    .populate('declarant', 'nom prenom telephone email')
+    .populate('chauffeurAssigne', 'nom prenom telephone email');
+
+  // Compter le nombre total d'alertes pour la pagination
+  const total = await Alerte.countDocuments(filter);
+
+  res.json({
+    alertes,
+    pagination: {
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  });
+} catch (error) {
+  res.status(500).json({
+    message: 'Erreur lors de la récupération des alertes',
+    error: error.message
+  });
+}
+}
+
 
  //pour lister les alerte
  static async getAlertes(req, res) {
@@ -170,7 +226,7 @@ static async getAlerteById(req, res) {
     }
 
     // Ajouter le préfixe de l'URL aux chemins des photos
-    const baseUrl = 'http://localhost:3000/api'; // Remplacez par l'URL de votre serveur
+    const baseUrl = 'http://localhost:3000'; // Remplacez par l'URL de votre serveur
     alerte.photos.forEach(photo => {
       // Assurez-vous que le chemin est correct
       photo.chemin = `${baseUrl}/uploads${photo.chemin.replace('/alertes/compressed', '/alertes')}`;
@@ -374,7 +430,7 @@ try {
   if (!alertes || alertes.length === 0) {
     return res.status(404).json({ message: "Aucune alerte trouvée pour cet utilisateur." });
   }
-  const baseUrl = "http://localhost:3000/api"; // Base URL of your server
+  const baseUrl = "http://localhost:3000"; // Base URL of your server
   alertes.forEach((alerte) => {
     if (alerte.photos && Array.isArray(alerte.photos)) {
       alerte.photos = alerte.photos.map((photo) => ({

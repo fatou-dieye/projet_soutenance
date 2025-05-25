@@ -150,17 +150,11 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
         this.errorMessage = 'Veuillez ajouter au moins une photo pour continuer.';
         return;
       }
-    } else if (this.currentStep === 3) {
-      if (!this.description.trim()) {
-        this.errorMessage = 'Veuillez entrer une description avant de continuer';
-        return;
+    } 
+      if (this.currentStep < 3) {
+        this.currentStep++;
+        this.updateProgress();
       }
-    }
-
-    if (this.currentStep < 3) {
-      this.currentStep++;
-      this.updateProgress();
-    }
   }
 
   prevStep() {
@@ -170,6 +164,7 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
       this.errorMessage = '';
     }
   }
+  
 
   updateProgress() {
     const progress = (this.currentStep - 1) * 33;
@@ -180,12 +175,9 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
     }
   }
 
-  finishStep() {
-    if (!this.description.trim()) {
-      this.errorMessage = 'Veuillez entrer une description avant de continuer';
-      return;
-    }
+  
 
+  finishStep() {
     const alerte = {
       description: this.description,
       adresse: `Latitude: ${this.latitude}, Longitude: ${this.longitude}`,
@@ -193,6 +185,8 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
       longitude: this.longitude,
       photos: this.photos
     };
+
+ 
 
     this.utilisateurService.createAlerte(alerte)
       .then(response => {
@@ -214,6 +208,10 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
         this.errorMessage = `Erreur: ${error.message}`;
       });
   }
+
+
+
+  
 
   openSuccessModal(message: string): void {
     this.successModalMessage = message;
@@ -265,7 +263,7 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
 
     this.showErrorMessage = false;
   }
-
+  
   fetchAlertes() {
     this.utilisateurService.getAlertesUtilisateur()
       .then(data => {

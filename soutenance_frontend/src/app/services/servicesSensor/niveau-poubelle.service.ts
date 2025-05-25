@@ -12,7 +12,7 @@ export class NiveauPoubelleService {
 
   constructor() {
     // Connexion au serveur WebSocket
-    this.socket = io('http://localhost:3000/api', {
+    this.socket = io('http://localhost:3000', {
       withCredentials: true
     });
 
