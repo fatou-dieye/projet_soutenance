@@ -70,6 +70,7 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
      this.subscription.unsubscribe();
    }
  }
+ 
 
   fetchStatistics(): void {
     this.DasbordadminService .getUserStatistics().subscribe(
@@ -116,7 +117,7 @@ export class DasbordadminComponent  implements OnInit , OnDestroy {
     setTimeout(() => {
       this.initAlertChart();
       this.initGarbageLevelCharts();
-    }, 100);
+    }, 500);
   }
   
   fetchAlertesLast7Days(): void {

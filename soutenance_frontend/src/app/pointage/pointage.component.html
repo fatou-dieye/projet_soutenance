@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let gardien of gardiens; let i = index">
+          <tr *ngFor="let gardien of pagedGardiens; let i = index">
             <td>
               <img [src]="gardien.photo ||'avatar.png'" alt="Photo">
             </td>
@@ -38,9 +38,14 @@
             >
 
               <!-- Icônes pour bloquer/débloquer la carte -->
-              <button *ngIf="gardien.carte_etat === 'active'" (click)="blockRFID(gardien)" class="lock-btn">
-                <i class="fas fa-lock" title="Bloquer la carte"></i>
-              </button>
+              <button 
+              (click)="blockRFID(gardien)" 
+              class="lock-btn" 
+              [disabled]="!gardien.carte_rfid || gardien.carte_etat !== 'active'"
+              [ngClass]="{'disabled-btn': !gardien.carte_rfid || gardien.carte_etat !== 'active'}">
+              <i class="fas fa-lock" title="Bloquer la carte"></i>
+            </button>
+            
               <button *ngIf="gardien.carte_etat === 'bloqué'" (click)="unblockRFID(gardien)" class="unlock-btn">
                 <i class="fas fa-lock-open" title="Débloquer la carte"></i>
               </button>

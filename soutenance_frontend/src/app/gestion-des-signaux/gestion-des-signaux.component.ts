@@ -44,12 +44,17 @@ export class GestionDesSignauxComponent  implements OnInit {
   loadAlertes(): void {
     this.signalService.getAlertes().then(response => {
       this.alertes = response.data.alertes;
+  
+      // Trier par dateCreation décroissante (du plus récent au plus ancien)
+      this.alertes.sort((a, b) => new Date(b.dateCreation).getTime() - new Date(a.dateCreation).getTime());
+  
       this.paginateAlertes();
       this.filterAlertesByDate();
     }).catch(error => {
       console.error('Erreur lors de la récupération des alertes:', error);
     });
   }
+  
   
   testAlertModal() {
     console.log('Test: Affichage de la modale');

@@ -23,6 +23,9 @@ class SensorService {
 
           this.parser = this.port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
           this.setupDataListener();
+
+          // Démarrer l’émission périodique toutes les 2 secondes
+          this.startPeriodicEmit();
         } else {
           console.warn('Le port USB /dev/ttyUSB0 n\'est pas branché.');
         }
@@ -40,7 +43,7 @@ class SensorService {
         console.log('Données reçues du capteur :', data);
         const parsedData = this.parseAndEmitData(data);
 
-        // Émettre les données via Socket.IO
+        // Émettre les données via Socket.IO immédiatement
         if (parsedData && parsedData.pourcentage !== undefined) {
           console.log('Émission des données via Socket.IO :', parsedData.pourcentage);
 
@@ -55,7 +58,7 @@ class SensorService {
   parseAndEmitData(rawData) {
     try {
       const parsedData = this.parseArduinoData(rawData);
-      this.latestData = parsedData;
+      this.latestData = parsedData;  // Stocker la dernière donnée reçue
       return parsedData;
     } catch (error) {
       console.error('Erreur de parsing :', error);
@@ -78,6 +81,18 @@ class SensorService {
     }
 
     return dataObj;
+  }
+
+  // Nouvelle méthode pour émettre périodiquement la dernière donnée toutes les 2 secondes
+  startPeriodicEmit() {
+    setInterval(() => {
+      if (this.latestData && this.latestData.pourcentage !== undefined) {
+        console.log('Emission périodique niveau poubelle:', this.latestData.pourcentage);
+        this.io.emit('sensorData', { pourcentage: this.latestData.pourcentage });
+      } else {
+        console.log('Pas encore de donnée capteur reçue');
+      }
+    }, 2000);
   }
 
   getLatestData() {

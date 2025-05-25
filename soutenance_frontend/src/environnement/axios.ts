@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // Configurer Axios avec l'URL de l'API et les en-têtes par défaut
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api',  // Remplacez par l'URL de votre API
+  // baseURL: 'http://backend:3000/api',
+
+ baseURL: 'http://localhost:3000/api',  // Remplacez par l'URL de votre API
   headers: {
     'Content-Type': 'application/json',
     // Vous pouvez ajouter d'autres en-têtes ici
