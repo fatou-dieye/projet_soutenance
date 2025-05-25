@@ -106,6 +106,7 @@ export class AuthService {
   // Récupérer l'utilisateur connecté
   getCurrentUser(): any {
     const user = localStorage.getItem('user');
+    
     return user ? JSON.parse(user) : null;
   }
 

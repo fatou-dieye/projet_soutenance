@@ -12,7 +12,18 @@
           <button class="btn-add" (click)="ouvrirModalAjoutPersonnel()">Ajouter personnel</button>
           
           <div class="search-container">
+            <div class="filter-container">
+              <label for="roleFilter">Filtrer par rôle :</label>
+              <select id="roleFilter" (change)="filterByRole($event)">
+                <option value="">Tous</option>
+                <option value="administrateur">Administrateur</option>
+                <option value="gardient">Gardient</option>
+                <option value="videur">Videur</option>
+              </select>
+            </div>
             <div class="search-wrapper">
+            
+              
               <input 
                 type="text" 
                 placeholder="Recherche..." 
