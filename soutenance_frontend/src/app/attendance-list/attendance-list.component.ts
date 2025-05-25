@@ -1,10 +1,11 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PointageService } from '../services/pointage.service';
 import { WebSocketService } from '../services/websocket.service';
 import { AlertModalComponent } from '../alertemodale/alertemodale.component';
+import { FormsModule } from '@angular/forms';
+
 // Définition du modèle de données pour un pointage (Record)
 interface Record {
   carte_rfid: string;
@@ -19,9 +20,9 @@ interface Record {
 
 @Component({
   selector: 'app-attendance-list',
-  imports: [CommonModule, ReactiveFormsModule,  AlertModalComponent],
+  imports: [CommonModule, ReactiveFormsModule, AlertModalComponent, FormsModule],
   templateUrl: './attendance-list.component.html',
-  styleUrls: ['./attendance-list.component.css'] // Notez le pluriel ici: styleUrls
+  styleUrls: ['./attendance-list.component.css']
 })
 export class AttendanceListComponent implements OnInit {
   records: Record[] = [];  // Tableau des enregistrements de pointage
@@ -45,9 +46,13 @@ export class AttendanceListComponent implements OnInit {
       location: [''],
       status: ['']
     });
-  } ngOnInit(): void {
+    const today = new Date();
+    this.selectedDate = today.toISOString().split('T')[0];
+  }
+
+  ngOnInit(): void {
     // Charger les pointages pour la date sélectionnée
-    this.loadAttendanceRecords(); // Affiche tous les pointages au début
+    this.loadAttendance(this.selectedDate); // Affiche les pointages pour la date sélectionnée
 
     // Écouter la réponse du serveur pour afficher les données de pointage dans le tableau
     this.websocketService.receiveRFIDStatus().subscribe(
@@ -85,6 +90,14 @@ export class AttendanceListComponent implements OnInit {
     );
   }
 
+  loadTodayAttendance(): void {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+    this.selectedDate = formattedDate;
+    this.loadAttendance(this.selectedDate); // Recharge les pointages pour aujourd’hui
+  }
+
   // Fonction pour récupérer les pointages de la journée
   loadAttendance(date: string): void {
     this.pointageService.getAttendanceByDate(date).subscribe(
@@ -104,28 +117,6 @@ export class AttendanceListComponent implements OnInit {
       }
     );
   }
-
-  // Fonction pour récupérer tous les enregistrements de pointage
-  loadAttendanceRecords(): void {
-    this.pointageService.getAttendanceRecords().subscribe(
-      (response) => {
-        
-        // Vérification que response.data est un tableau
-        if (response && Array.isArray(response.data)) {
-          this.records = response.data;  // Charger les enregistrements si validé
-          this.updatePagination();  // Mettre à jour la pagination
-        } else {
-          this.records = [];  // S'assurer que records est toujours un tableau
-          console.error('Aucun enregistrement trouvé ou réponse invalide');
-        }
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des enregistrements:', error);
-        this.records = [];  // S'assurer que records est toujours un tableau vide en cas d'erreur
-      }
-    );
-  }
-  
 
   // Mettre à jour les informations de la pagination
   updatePagination(): void {
@@ -161,7 +152,7 @@ export class AttendanceListComponent implements OnInit {
   }
 
   // Récupérer les records de la page actuelle
-  getPagedRecords(): Record[] {
+  getPagedRecords(): any[] {
     const startIndex = (this.currentPage - 1) * this.recordsPerPage;
     const endIndex = startIndex + this.recordsPerPage;
     return this.records.slice(startIndex, endIndex);  // Retourner les records pour la page actuelle
@@ -174,4 +165,6 @@ export class AttendanceListComponent implements OnInit {
     this.loadAttendance(this.selectedDate);  // Recharger les pointages pour la nouvelle date
   }
 }
+
+
 
