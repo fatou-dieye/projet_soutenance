@@ -26,7 +26,7 @@ const upload = multer({ storage: storage });
 exports.register = async (req, res) => {
   try {
     const { nom, prenom, email, mot_passe, adresse, telephone, role, statut } = req.body;
-    const photoPath = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null;
+    const photoPath = req.file ? `http://https://projet-soutenance-y3d8.onrender.com/api/uploads/${req.file.filename}` : null;
     
     // Vérifier si l'email ou le téléphone existe déjà
     const utilisateurExistant = await Utilisateur.findOne({ $or: [{ email }, { telephone }] });
@@ -204,7 +204,7 @@ const updateUsersStatus = async (req, res) => {
   
       // Si un fichier est téléchargé, mettre à jour le chemin de la photo avec l'URL complète
       if (req.file) {
-        utilisateur.photo = `http://localhost:3000/uploads/${req.file.filename}`;
+        utilisateur.photo = `http://https://projet-soutenance-y3d8.onrender.com/api/uploads/${req.file.filename}`;
       }
   
       // Mettre à jour les autres champs de l'utilisateur
