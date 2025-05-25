@@ -1,0 +1,5 @@
+{
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/dist/soutenance_frontend/index.html" }
+    ]
+  }

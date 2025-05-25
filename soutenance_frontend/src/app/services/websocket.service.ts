@@ -18,7 +18,7 @@ export class WebSocketService {
 
   constructor() {
     // Connectez-vous au serveur WebSocket
-    this.socket = io('https://projet-soutenance-y3d8.onrender.com', {
+    this.socket = io('http://localhost:3000', {
       transports: ['websocket'], // Utilisation exclusive de WebSocket
     });
 
