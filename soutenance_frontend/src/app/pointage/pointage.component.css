@@ -305,3 +305,10 @@ button {
       
         margin-left: 80px; /* Space for sidebar */
       }}
+
+      .disabled-btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none; /* optionnel : empêche même le clic */
+      }
+      

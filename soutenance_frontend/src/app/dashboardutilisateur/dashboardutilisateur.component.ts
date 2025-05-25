@@ -172,15 +172,17 @@ export class DashboardutilisateurComponent implements OnInit {
      
     }
   
-    loadDepots(): void {
-      console.log('Début de chargement des dépôts');
+    async loadDepots(): Promise<void> {
+    console.log('Début de chargement des dépôts');
+    try {
       this.depotService.getDepots().subscribe({
-        next: (depots) => {
+        next: async (depots) => {
           console.log('Dépôts récupérés:', depots);
           this.depots = depots;
           if (this.map) {
             console.log('Ajout des dépôts à la carte');
-            this.addDepotsToMap(require('leaflet'));
+            const L = await import('leaflet');
+            this.addDepotsToMap(L);
           } else {
             console.error('Carte non initialisée');
           }
@@ -189,7 +191,10 @@ export class DashboardutilisateurComponent implements OnInit {
           console.error('Erreur lors de la récupération des dépôts:', error);
         }
       });
+    } catch (error) {
+      console.error('Erreur lors du chargement des dépôts:', error);
     }
+  }
    //recupere le nombre de depos
    chargerNombreDepots(): void {
     this.alertService.getDepotsCount().subscribe({

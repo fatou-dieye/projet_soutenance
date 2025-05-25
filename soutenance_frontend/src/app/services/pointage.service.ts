@@ -13,14 +13,13 @@ import { catchError, tap } from 'rxjs/operators';
     constructor(private router: Router) {}
 
 
-    getAllGardiens(page: number, limit: number): Observable<any> {
-        return from(axiosInstance.get('/all-gardiens', {
-          params: { page, limit },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Vérifie si le token est bien stocké
-          }
-        }));
-      }
+      getAllGardiens(): Observable<any> {
+      return from(axiosInstance.get('/all-gardiens', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }));
+    }
       
       assignRFID(carte_rfid: string, guard_id: string): Observable<any> {
         console.log('Valeur de carte_rfid:', carte_rfid); // Logge la valeur de carte_rfid

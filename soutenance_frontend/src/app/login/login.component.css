@@ -160,10 +160,71 @@ a {
 }
 
 /* Responsive Design */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .login-container {
+    flex-direction: row;
+    height: auto;
+    max-height: none;
+  }
+
+  .image-section, .form-section {
+    width: 50%;
+  }
+
+  .image-section img {
+    border-radius: 15px 0 0 15px;
+  }
+
+  .form-section {
+    padding: 30px;
+  }
+
+  .form-group {
+    width: 90%;
+    margin-left: 20px;
+  }
+
+  button {
+    width: 50%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .login-container {
+    flex-direction: row;
+    height: auto;
+    max-height: none;
+  }
+
+  .image-section, .form-section {
+    width: 50%;
+  }
+
+  .image-section img {
+    border-radius: 15px 0 0 15px;
+  }
+
+  .form-section {
+    padding: 30px;
+  }
+
+  .form-group {
+    width: 90%;
+    margin-left: 20px;
+  }
+
+  button {
+    width: 50%;
+    max-width: 200px;
+  }
+}
+
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;
     height: auto;
+    max-height: none;
   }
 
   .image-section, .form-section {
@@ -178,5 +239,34 @@ a {
     padding: 20px;
   }
 
-  
+  .form-group {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  button {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  .form-section {
+    padding: 15px;
+  }
+
+  .form-group input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 8px;
+    font-size: 14px;
+  }
 }

@@ -37,34 +37,43 @@ export class UtilisateurService {
       });
   }
 
-  createAlerte(alerte: Alerte) {
-    const formData = new FormData();
-    formData.append('description', alerte.description);
-    formData.append('adresse', alerte.adresse);
-    formData.append('latitude', alerte.latitude.toString());
-    formData.append('longitude', alerte.longitude.toString());
-  
-    if (alerte.photos) {
-      alerte.photos.forEach(photo => {
-        formData.append('photos', photo);
-        console.log('Photo:', photo.name, photo.type, photo.size);
-      });
-    }
-  
-    console.log('FormData envoyé :', formData);
-  
-    return axiosInstance.post('/alertes/create', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then(response => response.data)
-    .catch(error => {
-      console.error('Erreur lors de la création de l\'alerte :', error);
-      throw error;
+ createAlerte(alerte: Alerte) {
+  const formData = new FormData();
+
+  formData.append('description', alerte.description || '');
+  formData.append('adresse', alerte.adresse);
+  formData.append('latitude', alerte.latitude.toString());
+  formData.append('longitude', alerte.longitude.toString());
+
+  if (alerte.photos) {
+    alerte.photos.forEach(photo => {
+      formData.append('photos', photo);
+      console.log('Photo:', photo.name, photo.type, photo.size);
     });
   }
+
+  // Journalisation des données envoyées
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
+  return axiosInstance.post('/alertes/create', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  .then(response => response.data)
+  .catch(error => {
+    console.error('Erreur lors de la création de l\'alerte :', error.response ? error.response.data : error.message);
+    throw error;
+  });
+}
+
+
+
+  
+
   
   getHistoriqueUtilisateur(): Promise<any> {
     const token = localStorage.getItem('token');
@@ -105,7 +114,7 @@ export class UtilisateurService {
       }
     })
     .then(response => {
-      console.log('Réponse de l\'API:', response.data); // Log the response data
+     // console.log('Réponse de l\'API:', response.data); // Log the response data
       return response.data;
     })
     .catch(error => {

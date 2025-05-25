@@ -44,7 +44,7 @@ interface ApiResponse {
 export class PointageComponent implements OnInit {
   gardiens: Gardien[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 1; // Nombre d'éléments à afficher par page
+  itemsPerPage: number = 8; // Nombre d'éléments à afficher par page
   totalPages: number = 0;
   showModal: boolean = false;
   selectedGardien: Gardien | null = null;
@@ -84,11 +84,12 @@ export class PointageComponent implements OnInit {
   
 
   loadAllGardiens(): void {
-    this.pointageService.getAllGardiens(this.currentPage, this.itemsPerPage).subscribe(
-      (data: ApiResponse) => {
-        console.log('Données reçues:', data);
+    // Supposons que ton endpoint accepte maintenant une requête sans page/limit
+    this.pointageService.getAllGardiens().subscribe(
+      (data: { data: Gardien[] }) => {
         this.gardiens = data.data || [];
-        this.totalPages = data.totalPages || 1;
+        this.totalPages = Math.ceil(this.gardiens.length / this.itemsPerPage);
+        this.updatePageItems();
       },
       error => {
         console.error('Erreur lors de la récupération des gardiens', error);
@@ -96,35 +97,44 @@ export class PointageComponent implements OnInit {
       }
     );
   }
+  pagedGardiens: Gardien[] = [];
+
+updatePageItems(): void {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  this.pagedGardiens = this.gardiens.slice(startIndex, endIndex);
+}
+
 
   // Fonction pour changer de page
   goToPage(page: number): void {
-    if (page !== this.currentPage) {
+    if (page !== this.currentPage && page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadAllGardiens();
+      this.updatePageItems();
     }
   }
-
-  // Cette méthode permet de naviguer vers la page précédente
+  
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.loadAllGardiens();
+      this.updatePageItems();
     }
   }
-
-  // Cette méthode permet de naviguer vers la page suivante
+  
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.loadAllGardiens();
+      this.updatePageItems();
     }
   }
-   // Méthode pour changer le nombre d'éléments par page
-   changeItemsPerPage(newLimit: number): void {
+  
+  changeItemsPerPage(newLimit: number): void {
     this.itemsPerPage = newLimit;
-    this.loadAllGardiens();
+    this.totalPages = Math.ceil(this.gardiens.length / this.itemsPerPage);
+    this.currentPage = 1;
+    this.updatePageItems();
   }
+  
 
   openAssignModal(gardien: Gardien): void {
     this.selectedGardien = gardien;

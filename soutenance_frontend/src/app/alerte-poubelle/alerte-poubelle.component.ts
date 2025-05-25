@@ -71,17 +71,19 @@ dakarLimits = {
   loadAlerts() {
     this.alertService.getAlerts().subscribe(
       (alerts) => {
-        this.alerts = alerts;
-        this.filteredAlerts = alerts; // Initialiser filteredAlerts avec toutes les alertes
-      this.calculateTotalPages(); // Recalculer le nombre total de pages
-       
+        // Trier les alertes par date décroissante (du plus récent au plus ancien)
+        this.alerts = alerts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
+        this.filteredAlerts = [...this.alerts]; // Initialiser filteredAlerts avec toutes les alertes triées
+        this.calculateTotalPages(); // Recalculer le nombre total de pages
       },
       (error) => {
         console.error('Erreur lors de la récupération des alertes', error);
       }
     );
-   
   }
+  
+
   loadVideurs(): void {
     this.alertService.getVideurs().subscribe(
       (videurs) => {

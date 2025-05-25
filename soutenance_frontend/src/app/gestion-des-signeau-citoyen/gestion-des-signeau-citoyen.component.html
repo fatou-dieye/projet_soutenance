@@ -20,7 +20,8 @@
             <p>Nous avons besoin de votre position pour localiser le problème.</p>
             <button class="share-location" (click)="shareLocation()">Partager</button>
           </div>
-          <div id="map" class="map-container"></div>
+            <div id="map" class="map-container" style="height: 250px; width: 100%;"></div>
+
         </div>
 
         <!-- Étape 2 : Photos -->
@@ -44,9 +45,11 @@
             </div>
           </div>
           <p class="subtext">Vous pouvez ajouter jusqu'à 4 photos.</p>
-          <div class="photo-preview">
-            <div *ngFor="let photoUrl of photoUrls">
-              <img [src]="photoUrl" alt="Preview" width="130px" />
+          <div class="photo-preview-container">
+            <div class="photo-preview">
+              <div *ngFor="let photoUrl of photoUrls" class="photo-item">
+                <img [src]="photoUrl" alt="Preview" />
+              </div>
             </div>
           </div>
         </div>
@@ -54,7 +57,7 @@
         <!-- Étape 3 : Description -->
         <div class="step" [class.active]="currentStep === 3">
           <div class="step-header">
-            <p>Décrire la situation</p>
+            <p>Décrire la situation<small>(facultatif)</small></p>
           </div>
           <div class="description-box">
             <textarea [(ngModel)]="description" placeholder="Décrivez la situation (type de déchets, quantité, urgence...)"></textarea>
@@ -72,34 +75,41 @@
     <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 
     <!-- Nouvelle section pour les dépôts signalés -->
-    <div class="depots-sauvage">
-      <h3 class="title">Les Dépôts Signalés</h3>
-      <div class="depots-grid" id="depots-grid">
-        <div *ngFor="let alerte of alertes" class="depot-item">
-          <div class="depot-info">
-            <p class="depot-date">{{ alerte.dateCreation | date: 'dd/MM/yyyy' }}</p>
-            <p class="depot-time">{{ alerte.dateCreation | date: 'HH:mm' }}</p>
-            <p class="depot-location">{{ alerte.adresse }}</p>
-          </div>
-          <div class="depot-icon" (click)="showDetails(alerte)">
-            <i class="fas fa-eye"></i>
-          </div>
+   <div class="depots-sauvage">
+  <h3 class="title">Vos Dépôts Signalés</h3>
+
+  <!-- Si la liste alertes est vide, affiche le message -->
+  <div *ngIf="alertes.length === 0; else alertesList">
+    <p>« Aucun dépôt sauvage signalé pour le moment. Soyez le premier à signaler une zone problématique ! »</p>
+  </div>
+
+  <!-- Sinon, affiche la liste des alertes -->
+  <ng-template #alertesList>
+    <div class="depots-grid" id="depots-grid">
+      <div *ngFor="let alerte of alertes" class="depot-item">
+        <div class="depot-info">
+          <p class="depot-date">{{ alerte.dateCreation | date: 'dd/MM/yyyy' }}</p>
+          <p class="depot-time">{{ alerte.dateCreation | date: 'HH:mm' }}</p>
+          <p class="depot-location">{{ alerte.adresse }}</p>
+        </div>
+        <div class="depot-icon" (click)="showDetails(alerte)">
+          <i class="fas fa-eye"></i>
         </div>
       </div>
-      <ng-template #noAlertes>
-        <p>Aucune alerte disponible.</p>
-      </ng-template>
-      <div class="pagination" id="pagination">
-        <button (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Page précédente">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <span> {{ currentPage }} sur {{ totalPages }}</span>
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Page suivante">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
     </div>
+  </ng-template>
+
+  <div class="pagination" id="pagination" *ngIf="alertes.length > 0">
+    <button (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Page précédente">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <span> {{ currentPage }} sur {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Page suivante">
+      <i class="fas fa-chevron-right"></i>
+    </button>
   </div>
+</div>
+
 
 
 <!-- Modale pour afficher les détails de l'alerte -->
