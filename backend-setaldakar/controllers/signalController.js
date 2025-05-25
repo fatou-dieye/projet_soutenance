@@ -1,6 +1,5 @@
 
-//controller/alertecontroller.js
-// controllers/alerte.controller.js
+//controllers/signalController.js
 const Alerte = require('../models/Signal');
 const Utilisateur = require('../models/Utilisateur');
 const PhotoService = require('../services/photo.service');
@@ -405,9 +404,6 @@ static deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-// ... autres méthodes ...
-
-
 
 
 // Lister les alertes de l'utilisateur connecté sous forme de méthode statique
@@ -453,8 +449,58 @@ try {
   });
 }
 }
+static async confirmerIntervention(req, res) {
+  const { alerteId, videurId } = req.params;
 
+  try {
+    const alerte = await Alerte.findById(alerteId);
+    if (!alerte) {
+      return res.status(404).send('<h2>❌ Alerte non trouvée</h2>');
+    }
 
+    if (!alerte.chauffeurAssigne || alerte.chauffeurAssigne.toString() !== videurId) {
+      return res.status(403).send('<h2>⚠️ Accès non autorisé</h2>');
+    }
+
+    alerte.statut = 'Traité';
+    alerte.dateTraitement = new Date();
+    await alerte.save();
+
+    res.send(`
+      <html>
+        <head>
+          <title>Confirmation</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              text-align: center;
+              margin-top: 50px;
+              background-color: #f9f9f9;
+            }
+            .message {
+              padding: 20px;
+              border: 1px solid #ccc;
+              background-color: #e6ffe6;
+              display: inline-block;
+              border-radius: 8px;
+              color: green;
+              font-size: 18px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="message">
+            ✅ Intervention confirmée avec succès.<br />
+            Le statut de l'alerte est maintenant <strong>"Traité"</strong>.
+          </div>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('Erreur lors de la confirmation:', error);
+    res.status(500).send('<h2>❌ Erreur lors de la confirmation</h2><p>' + error.message + '</p>');
+  }
+}
 
 
   }
