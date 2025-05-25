@@ -376,7 +376,7 @@ try {
   if (!alertes || alertes.length === 0) {
     return res.status(404).json({ message: "Aucune alerte trouvée pour cet utilisateur." });
   }
-  const baseUrl = "https://projet-soutenance-y3d8.onrender.com/api"; // Base URL of your server
+  const baseUrl = "http:localhost:3000/api"; // Base URL of your server
   alertes.forEach((alerte) => {
     if (alerte.photos && Array.isArray(alerte.photos)) {
       alerte.photos = alerte.photos.map((photo) => ({
