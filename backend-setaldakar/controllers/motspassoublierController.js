@@ -20,13 +20,7 @@ const sendResetEmail = async (email, utilisateur, token) => {
     from: process.env.EMAIL_USER_1,
     to: email,
     subject: 'Réinitialisation de votre mot de passe',
-    html: `
-      <p>Bonjour <strong>${nomComplet}</strong>,</p>
-      <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
-      <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
-      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #00A86B; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
-      <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
-    `
+    html:  generatePasswordResetEmailHTML(nomComplet, resetLink)
   };
 
   try {
@@ -159,4 +153,80 @@ exports.requestResetPassword = async (req, res) => {
 });
 
 
- 
+ const generatePasswordResetEmailHTML = (nomComplet, resetLink) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Réinitialisation de mot de passe</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+          text-align: center;
+          padding: 20px 0;
+          border-bottom: 1px solid #eeeeee;
+        }
+        .header h1 {
+          color: #00A86B;
+        }
+        .content {
+          padding: 20px;
+        }
+        .content p {
+          margin-bottom: 15px;
+          line-height: 1.5;
+        }
+        .button {
+          display: inline-block;
+          padding: 10px 20px;
+          background-color: #00A86B;
+          color: white;
+          text-decoration: none;
+          border-radius: 5px;
+          margin: 20px 0;
+        }
+        .footer {
+          text-align: center;
+          padding: 20px 0;
+          border-top: 1px solid #eeeeee;
+          font-size: 12px;
+          color: #777777;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Réinitialisation de mot de passe</h1>
+        </div>
+        <div class="content">
+          <p>Bonjour <strong>${nomComplet}</strong>,</p>
+          <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
+          <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
+          <a href="${resetLink}" class="button">Réinitialiser le mot de passe</a>
+          <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
+        </div>
+        <div class="footer">
+          <p>&copy; 2025 SETAL DAKAR.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};
+

@@ -12,6 +12,7 @@ const axios = require('axios');
 const { enregistrerAction } = require('./historiqueController');
 const jwt = require('jsonwebtoken');
 
+
 class AlerteController {
 
 
