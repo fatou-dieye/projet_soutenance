@@ -40,6 +40,44 @@ body{
   position: relative;
 }
 
+/* Media query pour les écrans de taille moyenne */
+@media (max-width: 768px) {
+  .step-labels p {
+    width: 80%;
+    max-width: 90%;
+    font-size: 1.2rem;
+    margin-left: 100px;
+  }
+}
+
+/* Media query pour les petits écrans */
+@media (max-width: 480px) {
+  .step-labels p {
+    width: 90%;
+    max-width: 95%;
+    font-size: 1rem;
+    margin-left: 20px;
+  }
+
+  .step-labels {
+    margin-bottom: 10px;
+  }
+}
+
+/* Media query pour les très petits écrans */
+@media (max-width: 320px) {
+  .step-labels p {
+    width: 95%;
+    max-width: 100%;
+    font-size: 0.9rem;
+    margin-left: 10px;
+  }
+
+  .step-labels {
+    margin-bottom: 5px;
+  }
+}
+
 .signal-container {
   width: 90%;
   max-width: 1000px;
@@ -304,7 +342,6 @@ button.next-step {
   margin-top: 10px;
   text-align: center;
 }
-
 /* Garbage levels */
 .depots-sauvage {
   background-color: white;
@@ -312,12 +349,15 @@ button.next-step {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 20px;
   margin-top: 65px;
+  width: 100%;
+  box-sizing: border-box; /* Ajouté pour s'assurer que le padding est inclus dans la largeur */
 }
 
 .depots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 112px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
 }
 
 .depot-item {
@@ -327,14 +367,14 @@ button.next-step {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 405px;
-
+  width: 100%; /* Modifié pour s'adapter à la largeur du conteneur */
+  box-sizing: border-box; /* Ajouté pour s'assurer que le padding est inclus dans la largeur */
 }
 
 .depot-info {
   display: flex;
-  gap: 30px;
-
+  flex-direction: column; /* S'empile sur petits écrans */
+  gap: 8px;
 }
 
 .depot-date, .depot-time, .depot-location {
@@ -353,6 +393,26 @@ button.next-step {
   color: #000000;
   font-size: 24px;
   cursor: pointer;
+}
+
+/* Media query pour les petits écrans */
+@media (max-width: 768px) {
+  .depots-grid {
+    grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+  }
+
+  .depot-item {
+    flex-direction: column; /* Empile les éléments verticalement */
+    align-items: flex-start; /* Aligne les éléments au début */
+  }
+
+  .depot-info {
+    width: 100%; /* Prend toute la largeur disponible */
+  }
+
+  .depot-icon {
+    margin-top: 10px; /* Ajoute un espace entre l'icône et les informations */
+  }
 }
 
 /* Pagination */
@@ -577,4 +637,7 @@ button.next-step {
   .description-box textarea {
     height: 100px;
   }
+
+  
 }
+
