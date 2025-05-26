@@ -205,7 +205,7 @@ exports.confirmVidange = async (req, res) => {
 const sendTaskEmail = (alert, employee_email, itineraire) => {
   return new Promise((resolve, reject) => {
     // Construire l'URL de confirmation avec l'ID de l'alerte
-    const confirmationUrl = `${process.env.API_BASE_URL || 'http://localhost:3000/api'}/api/confirm-vidange/${alert._id}`;
+    const confirmationUrl = `${process.env.API_BASE_URL || 'https://projet-soutenance-y3d8.onrender.com/api'}/api/confirm-vidange/${alert._id}`;
     
     let transporter = nodemailer.createTransport({
       service: 'gmail',

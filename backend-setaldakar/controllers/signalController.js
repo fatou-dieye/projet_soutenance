@@ -225,7 +225,7 @@ static async getAlerteById(req, res) {
     }
 
     // Ajouter le préfixe de l'URL aux chemins des photos
-    const baseUrl = 'http://localhost:3000'; // Remplacez par l'URL de votre serveur
+    const baseUrl = 'https://projet-soutenance-y3d8.onrender.com'; // Remplacez par l'URL de votre serveur
     alerte.photos.forEach(photo => {
       // Assurez-vous que le chemin est correct
       photo.chemin = `${baseUrl}/uploads${photo.chemin.replace('/alertes/compressed', '/alertes')}`;
@@ -426,7 +426,7 @@ try {
   if (!alertes || alertes.length === 0) {
     return res.status(404).json({ message: "Aucune alerte trouvée pour cet utilisateur." });
   }
-  const baseUrl = "http://localhost:3000"; // Base URL of your server
+  const baseUrl = "https://projet-soutenance-y3d8.onrender.com"; // Base URL of your server
   alertes.forEach((alerte) => {
     if (alerte.photos && Array.isArray(alerte.photos)) {
       alerte.photos = alerte.photos.map((photo) => ({
