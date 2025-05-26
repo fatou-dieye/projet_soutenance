@@ -632,6 +632,39 @@ button.next-step {
 .photo-container:hover {
   transform: scale(1.05);
 }
+/* Ajout de règles pour les petits écrans */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%; /* Largeur pour les petits écrans */
+    padding: 15px; /* Réduire le padding pour les petits écrans */
+  }
+
+  .modal-header h2 {
+    font-size: 20px; /* Réduire la taille de la police pour les petits écrans */
+  }
+
+  .photo-container {
+    width: 150px; /* Réduire la taille des photos pour les petits écrans */
+    height: 150px;
+  }
+}
+
+/* Ajout de règles pour les très petits écrans */
+@media (max-width: 480px) {
+  .modal-container {
+    width: 98%; /* Largeur pour les très petits écrans */
+    padding: 10px; /* Réduire encore le padding pour les très petits écrans */
+  }
+
+  .modal-header h2 {
+    font-size: 18px; /* Réduire encore la taille de la police pour les très petits écrans */
+  }
+
+  .photo-container {
+    width: 120px; /* Réduire encore la taille des photos pour les très petits écrans */
+    height: 120px;
+  }
+}
 /*responsibiter
 /////////////////////////////////////////////*/
 @media (max-width: 768px) {
