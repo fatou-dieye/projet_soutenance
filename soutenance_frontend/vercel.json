@@ -1,5 +1,9 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/dist/soutenance_frontend/index.html" }
-    ]
-  }
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
