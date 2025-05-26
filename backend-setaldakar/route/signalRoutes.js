@@ -14,7 +14,6 @@ const Utilisateur = require('../models/Utilisateur');
 const AlerteController = require('../controllers/signalController');
 const  getNearbyDepots  = require('../controllers/signalController');
 const getAlertesByUser  = require('../controllers/signalController');
-
 // Configuration de multer pour l'upload des photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -142,6 +141,8 @@ router.get('/nearby-depots', verifyToken, AlerteController.getNearbyDepots);
 
 // Route pour récupérer les alertes par utilisateur
 router.get('/alertesbyuser', verifyToken, AlerteController.getAlertesByUser);
+
+router.get('/alertes/confirmation/:alerteId/:videurId', AlerteController.confirmerIntervention);
 
 
 module.exports = router;
