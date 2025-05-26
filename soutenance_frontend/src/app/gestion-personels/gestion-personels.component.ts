@@ -40,6 +40,9 @@ export class GestionPersonelsComponent implements OnInit {
   actionType: string = '';
   selectedUser!: User;
   selectedUserIds: string[] = []; 
+  selectedRole: string = '';
+searchTerm: string = '';
+
   constructor(
     private GestionpersonnelService: GestionpersonnelService, 
     private authService: AuthService,
@@ -75,28 +78,36 @@ export class GestionPersonelsComponent implements OnInit {
   loadUsers(): void {
     this.GestionpersonnelService.getAllUsers().subscribe({
       next: (data) => {
-        // Filter users by roles: administrateur, gardient, videur
-        this.users = data.filter(user => 
-          ['administrateur', 'gardient', 'videur'].includes(user.role)
+        const currentUser = this.authService.getCurrentUser();
+        console.log('Utilisateur connecté :', currentUser);
+  
+        if (!currentUser || !currentUser.id) {
+          console.error('Aucun utilisateur connecté ou ID manquant');
+          return;
+        }
+  
+        this.users = data.filter(user =>
+          ['administrateur', 'gardient', 'videur'].includes(user.role) &&
+          user._id.toString() !== currentUser.id.toString()
         );
+  
+        console.log('Utilisateurs filtrés :', this.users);
         this.filteredUsers = [...this.users];
         this.calculatePages();
-     
       },
       error: (error) => {
-        console.error('Error fetching users:', error);
-        
-        // If unauthorized, token might be expired or invalid
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
         if (error.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-
           this.router.navigate(['/login']);
-
         }
       }
     });
   }
+  
+
+  
   testAlertModal() {
     console.log('Test: Affichage de la modale');
     this.alertModalService.showModal('Ceci est un test de modale d\'alerte', 95);
@@ -402,4 +413,29 @@ updateMultipleUserStatus(statut: string): void {
     }
   }
 
+
+  filterByRole(event: Event): void {
+    this.selectedRole = (event.target as HTMLSelectElement).value;
+    this.applyFilters();
+  }
+  
+  applyFilters(): void {
+    this.filteredUsers = this.users.filter(user => {
+      const matchesSearch =
+        user.nom.toLowerCase().includes(this.searchTerm) ||
+        user.prenom.toLowerCase().includes(this.searchTerm) ||
+        user.email.toLowerCase().includes(this.searchTerm) ||
+        user.telephone.includes(this.searchTerm) ||
+        user.role.toLowerCase().includes(this.searchTerm) ||
+        user.statut.toLowerCase().includes(this.searchTerm);
+  
+      const matchesRole = this.selectedRole ? user.role === this.selectedRole : true;
+  
+      return matchesSearch && matchesRole;
+    });
+  
+    this.currentPage = 1;
+    this.calculatePages();
+  }
+  
 }

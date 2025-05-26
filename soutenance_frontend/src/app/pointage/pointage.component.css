@@ -63,7 +63,7 @@
 }
 
 .pagination button {
-    padding: 8px 12px;
+    padding: 4px 8px;
     background-color: #00A551;
     color: white;
     border: none;
@@ -71,6 +71,8 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
+    width: 40px; /* Limite la taille des images */
+
 }
 
 .pagination button:hover {

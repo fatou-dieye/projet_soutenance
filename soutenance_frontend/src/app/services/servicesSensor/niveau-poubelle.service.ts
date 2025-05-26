@@ -12,7 +12,7 @@ export class NiveauPoubelleService {
 
   constructor() {
     // Connexion au serveur WebSocket
-    this.socket = io('http://localhost:3000', {
+    this.socket = io('https://projet-soutenance-y3d8.onrender.com', {
       withCredentials: true
     });
 

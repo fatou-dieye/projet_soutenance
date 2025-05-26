@@ -341,7 +341,7 @@ export class  GestionDesSigneauCitoyenComponent implements AfterViewInit {
  
   
   getPhotoUrl(photo: { chemin: string }): string {
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = 'https://projet-soutenance-y3d8.onrender.com';
   
     // Si le chemin contient déjà 'compressed', nous renvoyons directement l'URL complète
     if (photo.chemin.includes('uploads/alertes/compressed/')) {

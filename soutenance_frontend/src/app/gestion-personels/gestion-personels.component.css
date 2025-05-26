@@ -112,6 +112,33 @@ body{
   color: #6c757d;
 }
 
+
+.filter-container label {
+  font-size: 1rem;
+  color: #FFFFFF;
+  font-weight: 500;
+  background-color: #269d4e;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+
+}
+/* ✅ Sélecteur de rôle (comme la search bar) */
+.filter-container select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #F9FBFF;
+  border-radius: 5px;
+  background-color: #F9FBFF;
+  width: 250px;
+  color: #333;
+  font-size: 0.95rem;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%236c757d' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 10px;
+}
 /* Actions */
 .btn-action {
   background-color:#F9FBFF;

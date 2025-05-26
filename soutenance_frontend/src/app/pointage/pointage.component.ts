@@ -152,7 +152,7 @@ confirmAssignRFID(): void {
       this.errorMessage = 'Numéro de carte RFID invalide';
     }
   } else {
-    this.errorMessage = 'Numéro de carte RFID ou gardien non sélectionné';
+    this.errorMessage = 'Veillez scanner une carte';
     console.error(this.errorMessage);
   }
 }

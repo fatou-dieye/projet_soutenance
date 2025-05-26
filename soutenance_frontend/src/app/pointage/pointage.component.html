@@ -9,7 +9,6 @@
             <th>Photo</th>
             <th>Nom</th>
             <th>Email</th>
-            <th>Téléphone</th>
             <th>Carte</th>
             <th>Status</th>
             <th>Action</th>
@@ -22,7 +21,6 @@
             </td>
             <td>{{ gardien.prenom }} {{ gardien.nom }}</td>
             <td>{{ gardien.email || 'Non renseigné' }}</td>
-            <td>{{ gardien.telephone || 'Non renseigné' }}</td>
             <td>{{ gardien.carte_rfid || 'Non attribuée' }}</td>
             <td [ngClass]="{'status-active': gardien.carte_etat === 'active', 'status-blocked': gardien.carte_etat === 'bloqué'}">
               {{ gardien.carte_rfid ? (gardien.carte_etat || 'Non attribuée') : '-' }}

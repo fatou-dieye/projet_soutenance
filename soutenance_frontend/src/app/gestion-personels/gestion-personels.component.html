@@ -1,3 +1,4 @@
+
 <div class="gestion">
 <div class="container">
   <app-alertemodale></app-alertemodale>
@@ -12,7 +13,18 @@
           <button class="btn-add" (click)="ouvrirModalAjoutPersonnel()">Ajouter personnel</button>
           
           <div class="search-container">
+            <div class="filter-container">
+              <label for="roleFilter">Filtrer par rôle :</label>
+              <select id="roleFilter" (change)="filterByRole($event)">
+                <option value="">Tous</option>
+                <option value="administrateur">Administrateur</option>
+                <option value="gardient">Gardient</option>
+                <option value="videur">Videur</option>
+              </select>
+            </div>
             <div class="search-wrapper">
+            
+              
               <input 
                 type="text" 
                 placeholder="Recherche..." 
@@ -80,9 +92,15 @@
                   <button class="btn-edit" title="Modifier" (click)="openModifyModal(user)">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn-user" title="Changer statut" (click)="openConfirmModal(user, 'status')">
-                    <i class="fas fa-user"></i>
+        
+                  <button class="btn-user"
+                          [title]="user.statut === 'bloquer' ? 'Débloquer l\'utilisateur' : 'Bloquer l\'utilisateur'"
+                          (click)="openConfirmModal(user, 'status')">
+                    <i [ngClass]="user.statut === 'bloquer' ? 'fas fa-user-lock text-danger' : 'fas fa-user-check text-success'"></i>
                   </button>
+
+
+
                   <button class="btn-delete-single" title="Supprimer" (click)="openConfirmModal(user, 'delete')">
                     <i class="fas fa-trash"></i>
                   </button>
