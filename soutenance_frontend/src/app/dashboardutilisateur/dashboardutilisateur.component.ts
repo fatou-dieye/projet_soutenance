@@ -219,12 +219,15 @@ export class DashboardutilisateurComponent implements OnInit {
         }
       });
     }
+
+
+    
   
     addUserMarker(L: any): void {
       if (this.userLocation) {
         const userIcon = L.icon({
-          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-          iconSize: [25, 41],
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+          iconSize: [25, 80],
           iconAnchor: [12, 41],
           popupAnchor: [1, -34],
         });
@@ -242,12 +245,13 @@ export class DashboardutilisateurComponent implements OnInit {
     iconSize: [14, 22], // Taille plus petite
     iconAnchor: [12, 42], // Ancrage centré et en bas
     popupAnchor: [1, -34],
+    className: 'depot-icon' // Ajoutez une classe pour le style CSS
   });
 
   // Appliquer un filtre CSS pour colorier l'icône des dépôts en vert
   const style = document.createElement('style');
   style.innerHTML = `
-    .leaflet-marker-icon.depot-icon {
+    .depot-icon {
       filter: hue-rotate(90deg) saturate(2) brightness(1.2);
     }
   `;
@@ -275,74 +279,51 @@ export class DashboardutilisateurComponent implements OnInit {
   });
 }
 
+calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Rayon de la Terre en kilomètres
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c;
+  return distance;
+}
 
-    findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
-  if (!L.Routing) {
-    console.error('Leaflet Routing Machine non chargé.');
-    marker.getPopup()?.setContent(`
-      <b>Dépôt: ${depot.lieu}</b><br>
-      <span style="color:red;">Service de routage non disponible</span>
-    `);
-    marker.openPopup();
-    return;
-  }
-
+findRouteAndDisplayInfo(depot: Depot, marker: any, L: any): void {
   if (!this.userLocation) {
     console.error('Position utilisateur non disponible');
     return;
   }
 
-  // Supprime les anciens contrôles de routing
-  this.map.eachLayer((layer: any) => {
-    if (layer._container && layer._container.classList.contains('leaflet-routing-container')) {
-      this.map.removeControl(layer);
-    }
-  });
+  // Calculer la distance entre la position de l'utilisateur et le dépôt
+  const distanceKm = this.calculateDistance(
+    this.userLocation.latitude,
+    this.userLocation.longitude,
+    depot.coordonnees.latitude,
+    depot.coordonnees.longitude
+  );
 
-  const routingControl = L.Routing.control({
-    waypoints: [
-      L.latLng(this.userLocation.latitude, this.userLocation.longitude),
-      L.latLng(depot.coordonnees.latitude, depot.coordonnees.longitude)
-    ],
-    router: new L.Routing.OSRMv1({
-      serviceUrl: 'https://router.project-osrm.org/route/v1'
-    }),
-    createMarker: () => null,
-    addWaypoints: false,
-    routeWhileDragging: false,
-    show: false,
-    fitSelectedRoutes: false
-  }).addTo(this.map);
+  // Supposons une vitesse moyenne de 30 km/h pour estimer la durée du trajet (plus réaliste en milieu urbain)
+  const averageSpeedKmPerHour = 30;
+  const durationHours = distanceKm / averageSpeedKmPerHour;
+  const durationMinutes = Math.round(durationHours * 60);
 
-  routingControl.on('routesfound', (e: any) => {
-    const route = e.routes[0];
-    const distanceKm = (route.summary.totalDistance / 1000).toFixed(2);
-    const durationMin = Math.round(route.summary.totalTime / 60);
+  // Ajouter une marge de 10% pour les imprévus (trafic, feux de signalisation, etc.)
+  const contingencyMargin = 0.1;
+  const totalDurationMinutes = Math.round(durationMinutes * (1 + contingencyMargin));
 
-    marker.getPopup()?.setContent(`
-      <b>Dépôt: ${depot.lieu}</b><br>
-      Distance: ${distanceKm} km<br>
-      Durée estimée: ${durationMin} min
-    `);
-    marker.openPopup();
-
-    this.map.fitBounds(L.latLngBounds(route.coordinates));
-
-    // Supprimer le tracé après affichage
-    this.map.removeControl(routingControl);
-  });
-
-  routingControl.on('routingerror', (error: any) => {
-    console.error('Erreur de routage :', error);
-    marker.getPopup()?.setContent(`
-      <b>Dépôt: ${depot.lieu}</b><br>
-      <span style="color:red;">Erreur de calcul du trajet</span>
-    `);
-    marker.openPopup();
-
-    this.map.removeControl(routingControl);
-  });
+  // Afficher la distance et la durée estimée dans le popup du marqueur
+  marker.getPopup()?.setContent(`
+    <b>Dépôt: ${depot.lieu}</b><br>
+    Distance: ${distanceKm.toFixed(2)} km<br>
+    Durée estimée:<span style="color:orange;"> ${totalDurationMinutes} minutes
+  `);
+  marker.openPopup();
 }
+
 
 
   
