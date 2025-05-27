@@ -31,7 +31,7 @@
 .pointage-table th,
 .pointage-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 6px;
     text-align: left;
     word-wrap: break-word; /* Permet le retour à la ligne dans les cellules */
 }
@@ -89,6 +89,15 @@
     font-weight: bold;
     color: #333;
 }
+
+.pagination span.active {
+  background-color: #00A551;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: default;
+}
+
 
 
 /* Style de l'icône pour l'assignation de carte */
