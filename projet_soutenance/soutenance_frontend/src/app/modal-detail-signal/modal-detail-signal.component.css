@@ -1,0 +1,248 @@
+/* --- Styles généraux du modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border :none;
+}
+
+.modal-container {
+  background-color: white;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
+  max-height: 90vh;
+ padding: 10px;
+
+ border: none;
+}
+
+
+/* --- En-tête du modal --- */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* --- Localisation Section --- */
+.location-container {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
+
+.location-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: #00a86b;
+}
+
+.localisation {
+  background: none;
+  border: none;
+  color: #00a86b;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.localisation:hover {
+  color: #008b5e;
+  text-decoration: underline;
+}
+
+.coordinates {
+  color: #666;
+  font-size: 14px;
+}
+
+/* --- Section des images --- */
+.photos-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.photos-grid {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.photo-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-container:hover {
+  transform: scale(1.05);
+}
+
+/* --- Section Description --- */
+.description-section h3 {
+  color: #00a86b;
+  font-size: 20px;
+}
+
+.description-section p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* --- Section de sélection du videur --- */
+.assignment-section h5 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.videur-select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
+
+.videur-select:hover {
+  border-color: #00a86b;
+}
+
+/* --- Boutons d'action --- */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  background-color: #f4f4f4;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-assign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00a86b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  max-width: 250px;
+  transition: background 0.3s ease;
+}
+
+.btn-assign:disabled {
+  background-color: #a5d6c7;
+  cursor: not-allowed;
+}
+
+.btn-assign .icon {
+  margin-right: 8px;
+}
+
+/* --- Agrandissement des photos --- */
+.expanded-photo-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.expanded-photo-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+.modal-content{
+  border: none;
+}
+
+/* --- Section de filtrage par adresse --- */
+
+
+.address-filter label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+.address-select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.address-select:hover {
+  border-color: #00a86b;
+}
+
+.address-select:focus {
+  outline: none;
+  border-color: #00a86b;
+  box-shadow: 0 0 4px rgba(0, 168, 107, 0.2);
+}

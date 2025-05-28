@@ -1,0 +1,66 @@
+<app-alertemodale></app-alertemodale>
+
+<div class="utilisateur-main">
+  <div>
+    <h1>Pointages </h1>
+<input type="date" [(ngModel)]="selectedDate" (change)="onDateChange($event)" name="date" />
+    <div *ngIf="records && records.length > 0">
+      <!-- Votre code d'affichage ici -->
+    </div>
+    <div *ngIf="!records || records.length === 0">
+      <p>Pas de pointages pour cette date.</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Premier Pointage</th>
+          <th>Deuxième Pointage</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of getPagedRecords()">
+          <td>{{ record.name }}</td>
+          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+          <td [ngClass]="{'retard': record.status === 'retard', 'present': record.status === 'présent'}">{{ record.status }}</td>
+          <td>{{ record.check_in_time }}</td>
+          <td>{{ record.check_out_time | date: 'HH:mm:ss' }}</td>
+          <td>{{ record.location }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    
+      <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
+      <span *ngIf="currentPage > 3" class="page-dots">...</span>
+    
+      <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
+        {{currentPage - 1}}
+      </span>
+    
+      <span class="page-number active">{{currentPage}}</span>
+    
+      <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
+        {{currentPage + 1}}
+      </span>
+    
+      <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
+      <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
+        {{totalPages}}
+      </span>
+    
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

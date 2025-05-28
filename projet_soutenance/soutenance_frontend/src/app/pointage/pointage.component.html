@@ -1,0 +1,118 @@
+<app-alertemodale></app-alertemodale>
+
+<div class="admin-main">
+  <div class="content-container">
+    <div class="pointage-container">
+      <table class="pointage-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Carte</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let gardien of pagedGardiens; let i = index">
+            <td>
+              <img [src]="gardien.photo ||'avatar.png'" alt="Photo">
+            </td>
+            <td>{{ gardien.prenom }} {{ gardien.nom }}</td>
+            <td>{{ gardien.email || 'Non renseigné' }}</td>
+            <td>{{ gardien.carte_rfid || 'Non attribuée' }}</td>
+            <td [ngClass]="{'status-active': gardien.carte_etat === 'active', 'status-blocked': gardien.carte_etat === 'bloqué'}">
+              {{ gardien.carte_rfid ? (gardien.carte_etat || 'Non attribuée') : '-' }}
+            </td>
+            <td>
+              <img
+              [src]="gardien.carte_rfid ? '/assigner.png'  : '/nonassigner.png'"
+              alt="Assignation Carte"
+              title="Assigner une carte"
+              class="assign-card"
+              (click)=" gardien.carte_rfid ? null : openAssignModal(gardien)"
+              [ngClass]="{'assign-card-disabled': gardien.carte_rfid}" 
+            >
+
+              <!-- Icônes pour bloquer/débloquer la carte -->
+              <button 
+              (click)="blockRFID(gardien)" 
+              class="lock-btn" 
+              [disabled]="!gardien.carte_rfid || gardien.carte_etat !== 'active'"
+              [ngClass]="{'disabled-btn': !gardien.carte_rfid || gardien.carte_etat !== 'active'}">
+              <i class="fas fa-lock" title="Bloquer la carte"></i>
+            </button>
+            
+              <button *ngIf="gardien.carte_etat === 'bloqué'" (click)="unblockRFID(gardien)" class="unlock-btn">
+                <i class="fas fa-lock-open" title="Débloquer la carte"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+
+      <div class="pagination">
+        <button (click)="prevPage()" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      
+        <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
+        <span *ngIf="currentPage > 3" class="page-dots">...</span>
+      
+        <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
+          {{currentPage - 1}}
+        </span>
+      
+        <span class="page-number active">{{currentPage}}</span>
+      
+        <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
+          {{currentPage + 1}}
+        </span>
+      
+        <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
+        <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
+          {{totalPages}}
+        </span>
+      
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmation pour bloquer ou débloquer -->
+<div *ngIf="showConfirmationModal" class="modal">
+  <div class="modal-content">
+    <p>Êtes-vous sûr de vouloir {{ confirmationAction === 'bloquer' ? 'bloquer' : 'débloquer' }} cette carte RFID ?</p>
+    <div class="button-container">
+      <button (click)="confirmAction(true)" class="bouton oui">Oui</button>
+      <button (click)="confirmAction(false)" class="bouton non">Non</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal pour l'assignation de la carte RFID -->
+<div *ngIf="showModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>Assigner une carte RFID</h2>
+    <p>Veuillez scanner la carte RFID</p>
+    <input type="text" [(ngModel)]="rfidCardNumber" readonly>
+    <button (click)="confirmAssignRFID()">Assigner</button>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p> <!-- Affiche l'erreur dans le modal -->
+  </div>
+</div>
+
+
+<!-- Modal de succès -->
+<div *ngIf="showSuccessModal" class="success-modal">
+  <div class="message success">
+    {{ successModalMessage }}
+  </div>
+</div>

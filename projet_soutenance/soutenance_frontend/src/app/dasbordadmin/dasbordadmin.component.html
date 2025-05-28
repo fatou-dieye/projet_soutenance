@@ -1,0 +1,89 @@
+<div class="dasbord">
+  
+  <div class="dashboard-main">
+    <app-alertemodale></app-alertemodale>
+
+    <div class="content-container">
+      <!-- Stats cards row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ totalCitoyens }}</h2>
+            <p class="stat-label">Citoyen Inscrit</p>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ totalPersonnel }}</h2>
+            <p class="stat-label">Total Personnel</p>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ dailyAlertCount }}</h2>
+            
+            <a routerLink="/alerte-poubelle" class="nav-link" routerLinkActive="active" >
+              <p class="stat-label">Alert Journalier</p>
+            </a>
+          </div>
+        </div>
+  
+        <div class="stat-card" (click)="navigateToAttendanceList()">
+          <div class="stat-icon green">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-number">{{ totalRecords }}</h2>
+            <p class="stat-label">Pointage Journalier</p>
+          </div>
+        </div>
+      </div>
+      <div>
+    <!--Niveau poubelle = {{ niveauPoubelle }}% -->
+      </div>
+      <!-- Charts section with modified layout -->
+      <div class="charts-container">
+        <!-- Alert history chart - now wider (2/3) -->
+        <div class="chart-box alert-chart">
+          <h3 class="chart-title">Historique des Signaux</h3>
+          <div class="chart-wrapper">
+            <canvas id="alertChart"></canvas>
+          </div>
+        </div>
+  
+  
+        
+        <!-- Garbage levels section - now smaller (1/3) -->
+       <!-- dasbordadmin.component.html -->
+      <!-- dasbordadmin.component.html -->
+  <div class="garbage-levels-box">
+    <h3 class="chart-title">Niveau des poubelles</h3>
+    <div class="garbage-levels-scrollable">
+      <div class="garbage-levels-grid">
+        <div *ngFor="let depot of depots; let i = index" class="garbage-level-card" [ngClass]="{'first-depot': i === 0}">
+          <div class="chart-container">
+            <canvas [id]="'depotChart' + i"></canvas>
+            <div class="percentage">
+              {{ i === 0 ? (niveauPoubelle !== null ? niveauPoubelle : 'N/A') : (depot.percentage !== undefined ? depot.percentage : 'N/A') }}<span class="percent-sign">%</span>
+            </div>
+          </div>
+          <p class="location">{{ depot.lieu }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    </div>
+  </div>
+  </div>

@@ -1,0 +1,129 @@
+<div class="modal-overlay" *ngIf="selectedUser">
+  <div class="modal">
+    <span class="close-icon" (click)="close()">&times;</span>
+    <div class="modal-title">
+      <img src="logosetal.png" alt="Logo" width="170" height="170">
+    </div>
+    <div class="forme">
+      <h2>Modifier Utilisateur</h2>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-container">
+          <div class="form-group">
+            <label for="prenom">Prénom <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="prenom" 
+              [(ngModel)]="prenom" 
+              name="prenom" 
+              [ngClass]="{'input-error': touchedFields.prenom && validationErrors.prenom}"
+              (focus)="onFieldFocus('prenom')"
+              (input)="validateField('prenom')"
+              required>
+            <div *ngIf="touchedFields.prenom && validationErrors.prenom" class="error-message">
+              {{ validationErrors.prenom }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nom">Nom <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="nom" 
+              [(ngModel)]="nom" 
+              name="nom" 
+              [ngClass]="{'input-error': touchedFields.nom && validationErrors.nom}"
+              (focus)="onFieldFocus('nom')"
+              (input)="validateField('nom')"
+              required>
+            <div *ngIf="touchedFields.nom && validationErrors.nom" class="error-message">
+              {{ validationErrors.nom }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email <span class="required">*</span></label>
+            <input 
+              type="email" 
+              id="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              [ngClass]="{'input-error': touchedFields.email && validationErrors.email}"
+              (focus)="onFieldFocus('email')"
+              (input)="validateField('email')"
+              required>
+            <div *ngIf="touchedFields.email && validationErrors.email" class="error-message">
+              {{ validationErrors.email }}
+            </div>
+            <small *ngIf="touchedFields.email && !validationErrors.email" class="valid-message">
+              Format d'email valide
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="telephone">Téléphone <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="telephone" 
+              [(ngModel)]="telephone" 
+              name="telephone" 
+              [ngClass]="{'input-error': touchedFields.telephone && validationErrors.telephone}"
+              (focus)="onFieldFocus('telephone')"
+              (input)="validateField('telephone')"
+              required>
+            <div *ngIf="touchedFields.telephone && validationErrors.telephone" class="error-message">
+              {{ validationErrors.telephone }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="adresse">Adresse <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="adresse" 
+              [(ngModel)]="adresse" 
+              name="adresse" 
+              [ngClass]="{'input-error': touchedFields.adresse && validationErrors.adresse}"
+              (focus)="onFieldFocus('adresse')"
+              (input)="validateField('adresse')"
+              required>
+            <div *ngIf="touchedFields.adresse && validationErrors.adresse" class="error-message">
+              {{ validationErrors.adresse }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="role">Rôle <span class="required">*</span></label>
+            <select 
+              id="role" 
+              [(ngModel)]="role" 
+              name="role" 
+              [ngClass]="{'input-error': touchedFields.role && validationErrors.role}"
+              (focus)="onFieldFocus('role')"
+              (change)="validateField('role')"
+              required>
+              <option value="">Sélectionner un rôle</option>
+              <option value="administrateur">Administrateur</option>
+              <option value="videur">Videur</option>
+              <option value="gardient">Gardien</option>
+            </select>
+            <div *ngIf="touchedFields.role && validationErrors.role" class="error-message">
+              {{ validationErrors.role }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Photo</label>
+            <input type="file" (change)="onFileSelected($event)">
+            <div *ngIf="photo">
+              <img [src]="photo" alt="Photo de l'utilisateur" width="100" height="100">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="modifi">
+          Modifier
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

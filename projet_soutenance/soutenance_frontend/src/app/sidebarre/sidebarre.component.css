@@ -1,0 +1,228 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 5.3); /* plus grand et plus visible */
+
+
+}
+
+/* Logo Section */
+.navbar-brand span {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00A551; /* Vert */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),  /* Ombre noire avec flou léger */
+    0px 0px 8px rgba(255, 255, 255, 1);
+  opacity: 80%;
+}
+
+/* Modifications pour le bouton triangle */
+.triangle-btn {
+  background-color: transparent; /* Pas de fond */
+  border: none; /* Pas de bordure */
+  cursor: pointer; /* Curseur pointer pour montrer que c'est cliquable */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .navbar-brand span {
+    font-size: 28px; /* Réduire la taille du texte si nécessaire */
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-brand span {
+    font-size: 24px; /* Réduire davantage si nécessaire */
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand span {
+    font-size: 20px; /* Réduire davantage si nécessaire */
+  }
+   .custom-navbar {
+    margin-left: 90px !important;
+  }
+}
+
+
+
+/* sidebar.component.css */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #FFFFFF;
+  color: #3C3C3C;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-bottom: -20px;
+}
+
+.logo-img {
+
+  width: 150px;
+  height: 150px;
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+  padding-top: 20px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  color: #3C3C3C;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease;
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  background-color: #F0F0F0;
+  color: #00A551;
+}
+
+.nav-link i {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  margin-top: auto;
+  gap: 8px;
+}
+
+.logout-icon {
+  color: red;
+  font-size: 20px;
+}
+
+/* Le bouton garde le style */
+.logout button {
+  color: #FF0000;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Par défaut, texte visible */
+.logout-text {
+  display: inline;
+}
+
+
+
+
+/* sidebar.component.css */
+.nav-link.active {
+  color: #00A551; /* Couleur de fond pour le lien actif */
+ 
+}
+
+.nav-link.active i {
+  color: #00A551; /* Changer la couleur de l'icône pour le lien actif */
+}
+
+/* ========================= */
+/* ===== Media Queries ===== */
+/* ========================= */
+
+/* Pour les tablettes et petits écrans (max 1024px) */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px; /* Réduction modérée de la largeur */
+  }
+  
+  .navbar {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  main {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+}
+
+/* Pour les smartphones (max 768px) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px; /* Réduction importante de la largeur */
+  
+   
+  }
+
+  
+  .logo-img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .sidebar-nav {
+    padding-top: 10px;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 10px 0;
+    font-size: 0; /* Cache le texte des liens */
+  }
+
+  .nav-link i {
+    font-size: 22px;
+  }
+  
+  .logout-text {
+    display: none;
+  }
+  
+  .logout {
+    justify-content: center;
+  }
+  
+  /* Eventuellement ajuster taille icône */
+  .logout-icon {
+    font-size: 24px;
+  }
+  /* Le contenu s'ajuste en conséquence */
+ 
+    /* Navbar prend toute la largeur */
+   
+  main {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+}

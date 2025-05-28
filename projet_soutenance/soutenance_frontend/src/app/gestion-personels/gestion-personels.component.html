@@ -1,0 +1,171 @@
+<div class="gestion">
+<div class="container">
+  <app-alertemodale></app-alertemodale>
+
+    <div class="content">
+      <!-- Header avec le logo et les infos admin -->
+      <div class="header">
+       
+      
+      <div class="table-container">
+        <div class="table-header">
+          <button class="btn-add" (click)="ouvrirModalAjoutPersonnel()">Ajouter personnel</button>
+          
+          <div class="search-container">
+            <div class="filter-container">
+              <label for="roleFilter">Filtrer par rôle :</label>
+              <select id="roleFilter" (change)="filterByRole($event)">
+                <option value="">Tous</option>
+                <option value="administrateur">Administrateur</option>
+                <option value="gardient">Gardient</option>
+                <option value="videur">Videur</option>
+              </select>
+            </div>
+            <div class="search-wrapper">
+            
+              
+              <input 
+                type="text" 
+                placeholder="Recherche..." 
+                class="search-input"
+                (input)="searchUsers($event)"
+              >
+              <i class="fas fa-search search-icon"></i>
+            </div>
+            <button 
+              class="btn-action btn-delete-multiple" 
+              [class.visible]="selectedUserIds.length > 0"
+              (click)="deleteMultipleUsers()">
+              Supprimer plusieurs
+            </button>
+            <button 
+              class="btn-action btn-block-multiple" 
+              [class.visible]="selectedUserIds.length > 0"
+              (click)="blockMultipleUsers()">
+              Bloquer plusieurs
+            </button>
+            <button 
+              class="btn-action btn-unblock-multiple" 
+              [class.visible]="selectedUserIds.length > 0"
+              (click)="unblockMultipleUsers()">
+              Débloquer plusieurs
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th class="checkbox-column"><input type="checkbox" (change)="selectAll($event)"></th>
+                <th>Nom Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Rôle</th>
+                <th>État</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of paginatedUsers">
+                <td class="checkbox-column">
+                  <input type="checkbox" 
+                    [checked]="isSelected(user._id)" 
+                    (change)="toggleSelection(user._id)">
+                </td>
+                <td class="user-info">
+                  <div class="avatar">
+                    <img [src]="user.photo || 'avatar.png'" alt="User">
+                  </div>
+                  <span>{{ user.prenom }} {{ user.nom }}</span>
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.telephone }}</td>
+                <td>{{ user.role | titlecase }}</td>
+                <td>
+                  <span [ngClass]="{'status-active': user.statut === 'active', 'status-blocked': user.statut === 'bloquer'}">
+                    {{ user.statut | titlecase }}
+                  </span>
+                </td>
+                <td class="actions">
+                  <button class="btn-edit" title="Modifier" (click)="openModifyModal(user)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                   <button class="btn-user"
+                          [title]="user.statut === 'bloquer' ? 'Débloquer l\'utilisateur' : 'Bloquer l\'utilisateur'"
+                          (click)="openConfirmModal(user, 'status')">
+                    <i [ngClass]="user.statut === 'bloquer' ? 'fas fa-user-lock text-danger' : 'fas fa-user-check text-success'"></i>
+                  </button>
+
+                  <button class="btn-delete-single" title="Supprimer" (click)="openConfirmModal(user, 'delete')">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="pagination">
+          <button (click)="previousPage()" [disabled]="currentPage === 1">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <span *ngIf="currentPage > 2" (click)="goToPage(1)" class="page-number">1</span>
+          <span *ngIf="currentPage > 3" class="page-dots">...</span>
+          
+          <span *ngIf="currentPage > 1" (click)="goToPage(currentPage - 1)" class="page-number">
+            {{currentPage - 1}}
+          </span>
+          
+          <span class="page-number active">{{currentPage}}</span>
+          
+          <span *ngIf="currentPage < totalPages" (click)="goToPage(currentPage + 1)" class="page-number">
+            {{currentPage + 1}}
+          </span>
+          
+          <span *ngIf="currentPage < totalPages - 2" class="page-dots">...</span>
+          <span *ngIf="currentPage < totalPages - 1" (click)="goToPage(totalPages)" class="page-number">
+            {{totalPages}}
+          </span>
+          
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Modal de confirmation (inchangé) -->
+  <div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'">
+    <div class="modal-content">
+      <h3>Confirmation</h3>
+      <p>{{ modalMessage }}</p>
+      <div class="modal-buttons">
+        <button (click)="confirmAction()" class="btn-confirm">Confirmer</button>
+        <button (click)="closeModal()" class="btn-cancel">Annuler</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Overlay pour le modal -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()"></div>
+
+<!-- Inclusion du composant enfant pour l'ajout de personnel -->
+
+  <app-ajouter-personnels *ngIf="showAddPersonnelModal" (fermer)="fermerModalAjoutPersonnel()" (userAdded)="onUserAdded()"></app-ajouter-personnels>
+  <!-- Inclusion du composant enfant pour la modification de personnel -->
+<app-modifier-personnels *ngIf="showModifyPersonnelModal"
+[selectedUser]="selectedUser"
+(closeModal)="closeModifyModal()" (userModified)="onUserModified()"></app-modifier-personnels>
+
+<!-- SuccessModal  modal de confirmation -->
+<!-- Modal spécifique pour succès -->
+<div *ngIf="showSuccessModal" class="status-change-success-modal-overlay" [ngClass]="{'show': showSuccessModal}">
+  <div class="status-change-success-modal-content">
+    <h2>Succès</h2>
+    <p>{{ successModalMessage }}</p>
+   
+  </div>
+</div>

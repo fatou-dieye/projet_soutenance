@@ -1,0 +1,316 @@
+.admin-main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 240px; /* Space for sidebar */
+    padding: 20px;
+    overflow-y: auto;
+    
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.pointage-container {
+    padding: 20px;
+    overflow-x: auto; /* Permet le défilement horizontal si nécessaire */
+}
+
+.pointage-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Pour garantir que les colonnes ont une largeur fixe */
+}
+
+.pointage-table thead {
+    background-color: #00A551;
+}
+
+.pointage-table th,
+.pointage-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word; /* Permet le retour à la ligne dans les cellules */
+}
+
+.pointage-table th {
+    background-color: #00A551;
+    color: white;
+}
+
+.pointage-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.pointage-table tr:hover {
+    background-color: #ddd;
+}
+
+.pointage-table img {
+    max-width: 50px; /* Limite la taille des images */
+    border-radius: 50%; /* Pour des images circulaires */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 4px 8px;
+    background-color: #00A551;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    width: 40px; 
+
+}
+
+.pagination button:hover {
+    background-color: #008040;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+/* Style de l'icône pour l'assignation de carte */
+.assign-card {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+.assign-card:hover {
+    transform: scale(1.1);
+}
+
+
+/* Style général pour les images assignées ou non assignées */
+.assign-card {
+    width: 30px; /* Taille de l'image, ajustez selon vos besoins */
+    height: 30px; /* Taille de l'image, ajustez selon vos besoins */
+    cursor: pointer; /* Change le curseur au survol pour indiquer que l'image est cliquable */
+    transition: transform 0.3s ease; /* Ajout d'une animation pour l'effet de survol */
+  }
+  
+  /* Effet au survol de l'image */
+  .assign-card:hover {
+    transform: scale(1.1); /* L'image grossit légèrement lorsqu'on passe la souris dessus */
+  }
+  
+  .modal {
+    display: block; /* Visible lorsque showModal est vrai */
+    position: fixed; /* Reste en place même en scrollant */
+    z-index: 1; /* Par-dessus le reste du contenu */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur totale */
+    height: 100%; /* Hauteur totale */
+    overflow: auto; /* Activer le scroll si nécessaire */
+    background-color: rgba(0, 0, 0, 0.4); /* Fond noir semi-transparent */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centré avec un décalage de 15% du haut */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Largeur du modal (modifiable) */
+    border-radius: 8px; /* Coins arrondis */
+  }
+  
+  .close {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  /* Styles pour le bouton de blocage */
+.lock-btn {
+  border: none;      /* Enlever la bordure */
+  padding: 8px;        /* Retirer le padding */
+  cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
+  border-radius: 5px;
+  width: 30px;
+
+
+}
+
+/* Styles pour le bouton de déblocage */
+.unlock-btn {
+  border: none;      /* Enlever la bordure */
+  padding: 8px;        /* Retirer le padding */
+  cursor: pointer;   /* Changer le curseur pour indiquer que c'est cliquable */
+  border-radius: 5px;
+  width: 30px;
+
+
+}
+
+/* Style pour l'icône de verrouillage (fa-lock) */
+.lock-btn i {
+  color: white; /* Icône de couleur blanche */
+}
+
+/* Style pour l'icône de déverrouillage (fa-lock-open) */
+.unlock-btn i {
+  color: white; /* Icône de couleur blanche */
+}
+
+/* Styles spécifiques pour le bouton de verrouillage */
+.lock-btn {
+  background-color: #4CAF50; /* Fond vert pour le bouton de verrouillage */
+}
+
+/* Styles spécifiques pour le bouton de déverrouillage */
+.unlock-btn {
+  background-color: #ff9800; /* Un fond orange pour le bouton de déverrouillage */
+}
+/* Espacement entre les boutons */
+.lock-btn + .unlock-btn,
+.unlock-btn + .lock-btn {
+  margin-left: 10px; /* Ajouter un espace entre les deux icônes */
+}
+
+/* Optionnel : ajout d'un effet au survol des boutons */
+.lock-btn:hover i,
+.unlock-btn:hover i {
+  color: #007a39;    /* Couleur de l'icône au survol */
+}
+
+       /* Conteneur des boutons */
+.button-container {
+  display: flex;
+  gap: 20px;  /* Espace entre les boutons */
+  margin-top: 10px;  /* Un peu d'espace au-dessus des boutons */
+}
+
+/* Style des boutons */
+.bouton {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+  width: 100px;
+  display: inline-block;  /* Pour que les boutons s'affichent sur la même ligne */
+}
+
+button {
+  padding: 5px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+
+
+}
+
+/* Bouton Oui */
+.oui {
+  background-color: #00A551;
+  
+}
+
+.oui:hover {
+  background-color: #008f47;
+}
+
+/* Bouton Non */
+.non {
+  background-color: red;
+}
+
+.non:hover {
+  background-color: darkred;
+}
+
+  
+  /* Styles pour les statuts */
+  .status-active {
+    color: green;
+  }
+  
+  .status-blocked {
+    color: red;
+  }
+  
+  input {
+    padding: 8px;
+    margin: 10px 0;
+    width: 85%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .success-modal {
+    position: fixed;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    color: #d4f7df;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 1px solid #c3e6cb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .admin-main{
+      
+        margin-left: 80px; /* Space for sidebar */
+      }}
+
+      .disabled-btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none; /* optionnel : empêche même le clic */
+      }
+      

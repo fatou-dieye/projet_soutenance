@@ -1,0 +1,88 @@
+<!--partie navebarre-->
+<!-- Partie navbar -->
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white custom-navbar" style="height: 130px; width: 80%; margin-left: 300px; border-radius: 30px; box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);">
+  <div class="container-fluid position-relative">
+    <!-- Logo Section -->
+    <a class="navbar-brand d-flex justify-content-center align-items-center flex-grow-1" href="#" style="font-size: 24px;">
+      <span>SETAL DAKAR</span>
+    </a>
+
+    <!-- Profile Section -->
+    <div class="d-flex flex-column align-items-center">
+      <div class="d-flex align-items-center">
+        <img *ngIf="currentUser?.photo" [src]="currentUser?.photo" alt="Profile" class="rounded-circle border border-success" style="width: 60px; height: 60px;">
+        <div *ngIf="!currentUser?.photo" class="rounded-circle border border-success d-flex justify-content-center align-items-center" style="width: 60px; height: 60px; background-color: #00A551; font-size: 20px;">
+          {{ getInitials() }}
+        </div>
+      </div>
+      <div class="text-center">
+        <span class="d-block font-weight-bold" style="font-size: 16px; color: #333;">{{ currentUser?.prenom }} {{ currentUser?.nom }}</span>
+        <span class="d-block text-muted" style="font-size: 14px;">{{ userRole }} <button class="btn p-0" style="font-size: 15px; color: #00A551;" (click)="openPasswordChangeModal()">▼</button></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- Sidebar component -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logosetal.png" alt="SETAL DAKAR" class="logo-img">
+  </div>
+  
+  <div class="sidebar-nav">
+    <!-- Liens pour l'administrateur -->
+    <ng-container *ngIf="isAdmin">
+      <a routerLink="/dasbordadmin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/gestion-des-signaux" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-bell"></i>
+        <span>Gestion des Signaux</span>
+      </a>
+      <a routerLink="/gestion-personels" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-users"></i>
+        <span>Gestion Personnel</span>
+      </a>
+      <a routerLink="/pointage" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-check-circle"></i>
+        <span>Cartes RFID</span>
+      </a>
+      <a routerLink="/historique-admin" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </a>
+    </ng-container>
+    
+    <!-- Liens pour l'utilisateur standard -->
+    <ng-container *ngIf="!isAdmin">
+      <a routerLink="/dashboardutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/gestion-des-signeau-citoyen" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-bell"></i>
+        <span>Signal</span>
+      </a>
+      <a routerLink="/historiqueutilisateur" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </a>
+    </ng-container>
+  </div>
+  
+  <div class="logout" (click)="logout()">
+    <i class="fas fa-sign-out-alt logout-icon"></i>
+    <button class="btn-logout">
+      <span class="logout-text" >Déconnecter</span>
+    </button>
+  
+    
+  </div>
+</div>
+
+<app-changement-mots-pass></app-changement-mots-pass>
