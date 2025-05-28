@@ -1,11 +1,10 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist/soutenance_front/browser",
+  "build": {
+    "env": {
+      "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
     }
-  ]
+  }
 }
-
 
